@@ -76,14 +76,7 @@ export function apply(ctx) {
 
   ctx.effect(() => {
     const onKey = (event) => {
-      if (event.key === 'Escape') {
-        if (document.querySelector('.df-modal-backdrop')) return
-        if (getState().overlayOpen) {
-          event.preventDefault()
-          closeOverlay()
-        }
-        return
-      }
+      if (event.isComposing || event.target.closest?.('[data-recording]')) return
       if (getState().config?.native?.running && !getState().config?.native?.hotkeyError) return
       if (event.defaultPrevented || event.repeat || !matchesHotkey(event, hotkey)) return
       event.preventDefault()

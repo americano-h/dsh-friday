@@ -25,6 +25,8 @@ export async function request(path, options = {}) {
 }
 
 export const api = {
+  recordShortcut: (id, active) => request('/shortcut-recording', { method: 'POST', body: JSON.stringify({ id, active }) }),
+  previewOrb: (orb) => request('/orb-preview', { method: 'POST', body: JSON.stringify(orb) }),
   showNative: (sessionId) => request('/native/show', { method: 'POST', body: JSON.stringify({ sessionId }) }),
   config: () => request('/config'),
   saveConfig: (config) => request('/config', { method: 'PUT', body: JSON.stringify(config) }),

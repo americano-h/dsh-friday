@@ -16,3 +16,9 @@ test('custom modifiers must match exactly', () => {
   assert.equal(matchesHotkey({ ...base, metaKey: true, key: 'k', code: 'KeyK' }, hotkey), false)
   assert.equal(matchesHotkey({ ...base, metaKey: true, shiftKey: true, altKey: true, key: 'k', code: 'KeyK' }, hotkey), false)
 })
+
+test('macOS Option+N matches the physical key even for dead-key input', () => {
+  const spec = parseHotkey('Alt+N')
+  assert.ok(matchesHotkey({ ...base, key: 'Dead', code: 'KeyN', altKey: true }, spec))
+  assert.ok(!matchesHotkey({ ...base, key: 'n', code: 'KeyN' }, spec))
+})

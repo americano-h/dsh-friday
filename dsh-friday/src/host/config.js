@@ -1,5 +1,6 @@
 import { homedir } from 'node:os'
 import { join } from 'node:path'
+import { defaultOrb, defaultShortcuts, normalizeOrb, normalizeShortcuts, shortcutId } from '../shared/preferences.js'
 import { JsonStore } from './store.js'
 
 export const DATA_DIR = join(process.env.DSH_HOME || join(homedir(), '.dsh'), 'dsh-friday-kimi')
@@ -8,6 +9,8 @@ export const DEFAULT_CONFIG = Object.freeze({
   defaultModel: null,
   visionModel: null,
   hotkey: 'Alt+Space',
+  orb: defaultOrb,
+  shortcuts: defaultShortcuts,
   retentionDays: 30,
 })
 
@@ -22,7 +25,7 @@ export function normalizeModel(value) {
 }
 
 export function validateHotkey(value) {
-  if (typeof value !== 'string' || !HOTKEY.test(value.trim())) {
+  if (!shortcutId(value) || !HOTKEY.test(value.trim())) {
     throw new Error('Hotkey must include a modifier and one key, for example Alt+Space or Meta+Shift+K')
   }
   const parts = value.trim().split('+')
@@ -37,11 +40,14 @@ export function normalizeConfig(input = {}) {
   if (!Number.isInteger(retentionDays) || retentionDays < 1 || retentionDays > 365) {
     throw new Error('Retention must be an integer from 1 to 365 days')
   }
+  const hotkey = validateHotkey(input.hotkey ?? DEFAULT_CONFIG.hotkey)
   return {
     version: 1,
     defaultModel: normalizeModel(input.defaultModel),
     visionModel: normalizeModel(input.visionModel),
-    hotkey: validateHotkey(input.hotkey ?? DEFAULT_CONFIG.hotkey),
+    hotkey,
+    shortcuts: normalizeShortcuts(input.shortcuts, hotkey),
+    orb: normalizeOrb(input.orb),
     retentionDays,
   }
 }
@@ -59,11 +65,20 @@ export async function readConfig(store) {
   }
 }
 
-export async function saveConfig(store, patch) {
-  const current = await readConfig(store)
-  const next = normalizeConfig({ ...current, ...patch, version: 1 })
-  await store.write(next)
-  return next
+export async function saveConfig(store, patch, apply) {
+  let rollback
+  try {
+    return await store.update(async (current) => {
+      const previous = normalizeConfig(current)
+      const next = normalizeConfig({ ...previous, ...patch, version: 1 })
+      await apply?.(next)
+      rollback = () => apply?.(previous)
+      return next
+    })
+  } catch (error) {
+    await rollback?.()
+    throw error
+  }
 }
 
 export function defaultSelection(ctx, config) {

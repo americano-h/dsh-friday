@@ -45,13 +45,14 @@ final class OrbMetalView: MTKView, MTKViewDelegate {
       a = mix(0.35, 0.0, (d - 0.34) / 0.66);
     }
     a *= in.alpha;
-    return float4(rgb * a, a);
+    return float4(rgb * u.color.a * a, a);
   }
 
   vertex VOut underlayVertex(uint vid [[vertex_id]], constant Uniforms &u [[buffer(1)]]) {
     float2 c = corners[vid];
     VOut o;
-    o.pos = float4(c * 1.08 * u.scale, 0, 1);
+    // Keep the dark feather close to the particles on light desktops.
+    o.pos = float4(c * 0.68 * u.scale, 0, 1);
     o.uv = c;
     o.alpha = u.underlay;
     return o;
@@ -60,7 +61,7 @@ final class OrbMetalView: MTKView, MTKViewDelegate {
   fragment float4 underlayFragment(VOut in [[stage_in]]) {
     float d = length(in.uv);
     if (d >= 1) discard_fragment();
-    float a = 0.55 * (1 - d) * in.alpha;
+    float a = 0.24 * (1 - d) * in.alpha;
     return float4(float3(4, 8, 18) / 255.0 * a, a);
   }
   """
@@ -81,6 +82,19 @@ final class OrbMetalView: MTKView, MTKViewDelegate {
   private var sprites: [PointSprite] = []
   private let start = CACurrentMediaTime()
   private var last: Double = 0
+
+  private var baseColor = OrbTint.cyan.simd
+  private var activeTint = OrbTint.cyan
+  private var brightness: Float = 1
+
+  func setAppearance(color: UInt32, brightness: Float) {
+    baseColor = SIMD4(Float((color >> 16) & 255) / 255, Float((color >> 8) & 255) / 255, Float(color & 255) / 255, 1)
+    self.brightness = brightness
+    if activeTint == .cyan {
+      fromColor = baseColor
+      toColor = baseColor
+    }
+  }
 
   private var fromColor = OrbTint.cyan.simd
   private var toColor = OrbTint.cyan.simd
@@ -170,7 +184,8 @@ final class OrbMetalView: MTKView, MTKViewDelegate {
       sim.setMotion(motion, t: now)
       beginTransition()
     }
-    let target = tint.simd
+    activeTint = tint
+    let target = tint == .cyan ? baseColor : tint.simd
     if target != toColor {
       fromColor = currentColor()
       toColor = target
@@ -295,7 +310,9 @@ final class OrbMetalView: MTKView, MTKViewDelegate {
       if let base = raw.baseAddress { instanceBuffer.contents().copyMemory(from: base, byteCount: raw.count) }
     }
 
-    var u = Uniforms(color: currentColor(), scale: Float(1 / ParticleSim.windowHalf), underlay: underlay)
+    var color = currentColor()
+    color.w = brightness
+    var u = Uniforms(color: color, scale: Float(1 / ParticleSim.windowHalf), underlay: underlay)
     enc.setVertexBytes(&u, length: MemoryLayout<Uniforms>.stride, index: 1)
     enc.setFragmentBytes(&u, length: MemoryLayout<Uniforms>.stride, index: 1)
     if underlay > 0.01 {

@@ -8,6 +8,8 @@ test('configuration defaults to 30 days and Option+Space', () => {
     defaultModel: null,
     visionModel: null,
     hotkey: 'Alt+Space',
+    shortcuts: { newChat: 'Alt+N', close: 'Escape', send: 'Enter', newline: 'Shift+Enter' },
+    orb: { color: '#5ce1ff', brightness: 100, opacity: 100, size: 100 },
     retentionDays: 30,
   })
 })
@@ -26,4 +28,28 @@ test('hotkeys require a primary modifier and a single supported key', () => {
   assert.throws(() => validateHotkey('Space'), /Hotkey must include/)
   assert.throws(() => validateHotkey('Alt+A+B'), /Hotkey must include/)
   assert.throws(() => validateHotkey('Alt+Space;rm'), /Hotkey must include/)
+})
+
+test('legacy global Option+N and custom model survive adding local shortcuts', () => {
+  const old = { hotkey: 'Option+N', defaultModel: { provider: 'p', model: 'm' } }
+  const config = normalizeConfig(old)
+  assert.equal(config.shortcuts.newChat, 'Alt+Shift+N')
+  assert.deepEqual(config.defaultModel, old.defaultModel)
+  assert.deepEqual(normalizeConfig(config), config)
+  assert.throws(() => normalizeConfig({ ...old, shortcuts: { newChat: 'Alt+N' } }), /assigned/)
+})
+
+test('orb controls validate their whole range and preserve defaults for missing fields', () => {
+  assert.equal(normalizeConfig({ orb: { opacity: 10 } }).orb.brightness, 100)
+  assert.throws(() => normalizeConfig({ orb: { color: 'red' } }), /color/)
+  assert.throws(() => normalizeConfig({ orb: { size: 151 } }), /size/)
+})
+
+test('failed native registration leaves the saved config intact', async () => {
+  const { saveConfig } = await import('../src/host/config.js')
+  let stored = normalizeConfig({ hotkey: 'Meta+K', retentionDays: 14 })
+  const store = { update: async (edit) => { stored = await edit(stored); return stored } }
+  await assert.rejects(saveConfig(store, { hotkey: 'Meta+J', retentionDays: 7 }, () => { throw Error('occupied') }), /occupied/)
+  assert.equal(stored.hotkey, 'Meta+K')
+  assert.equal(stored.retentionDays, 14)
 })

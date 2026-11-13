@@ -1,3 +1,10 @@
+import { recordedShortcut, shortcutId } from '../shared/preferences.js'
+
+export function actionMatches(event, spec) {
+  const id = recordedShortcut(event)
+  return Boolean(id && id === shortcutId(spec))
+}
+
 export function parseHotkey(spec = 'Alt+Space') {
   const parts = String(spec).split('+').map((part) => part.trim()).filter(Boolean)
   const key = parts.pop()?.toLowerCase() || 'space'
@@ -13,9 +20,8 @@ export function parseHotkey(spec = 'Alt+Space') {
 }
 
 export function matchesHotkey(event, hotkey) {
-  const keyMatches = hotkey.key === 'space'
-    ? event.code === 'Space'
-    : String(event.key).toLowerCase() === hotkey.key
+  const physical = recordedShortcut(event)?.split('+').pop()?.toLowerCase()
+  const keyMatches = physical === hotkey.key
   return keyMatches
     && event.altKey === hotkey.alt
     && event.ctrlKey === hotkey.ctrl

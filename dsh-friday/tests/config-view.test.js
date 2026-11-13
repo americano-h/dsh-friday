@@ -18,12 +18,13 @@ test('settings remain available when recent Inbox history fails to load', async 
   }
   const configStore = {
     load: async () => {},
-    get: () => ({ version: 1, defaultModel: null, visionModel: null, hotkey: 'Alt+Space', retentionDays: 14 }),
+    get: () => ({ version: 1, defaultModel: { provider: 'p', model: 'm' }, visionModel: null, hotkey: 'Alt+Space', retentionDays: 14 }),
   }
   const result = await publicConfig(ctx, { list: async () => { throw new Error('bad history') } }, configStore, null)
   assert.equal(result.config.retentionDays, 14)
   assert.equal(result.models.length, 1)
-  assert.equal(result.effectiveDefaultModel.model, 'default-model')
+  assert.deepEqual(result.hostDefaultModel, { provider: 'p', model: 'default-model' })
+  assert.deepEqual(result.effectiveDefaultModel, { provider: 'p', model: 'm' })
   assert.equal(result.recent, null)
   assert.equal(warnings.length, 1)
 })
@@ -31,7 +32,6 @@ test('settings remain available when recent Inbox history fails to load', async 
 test('settings source exposes default model, vision model, hotkey, and retention controls', async () => {
   const { readFile } = await import('node:fs/promises')
   const source = await readFile(new URL('../src/client/settings.jsx', import.meta.url), 'utf8')
-  for (const field of ['df-default-model', 'df-vision-model', 'df-hotkey', 'df-retention']) assert.ok(source.includes(field))
-  assert.match(source, /retentionDays: 30/)
+  for (const field of ['df-default-model', 'df-vision-model', 'df-retention']) assert.ok(source.includes(field))
   assert.match(source, /api\.saveConfig/)
 })

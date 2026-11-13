@@ -254,9 +254,9 @@ public enum Placement {
                   width: width, height: height)
   }
 
-  public static func quickBar(center: CGPoint, visible: CGRect, barSize: CGSize) -> QuickBarLayout {
+  public static func quickBar(center: CGPoint, visible: CGRect, barSize: CGSize, radius: CGFloat = orbRadius) -> QuickBarLayout {
     let side = interiorSide(center: center, visible: visible)
-    let x = side == .left ? center.x - orbRadius - barGap - barSize.width : center.x + orbRadius + barGap
+    let x = side == .left ? center.x - radius - barGap - barSize.width : center.x + radius + barGap
     var y = center.y - barSize.height / 2
     y = min(max(y, visible.minY + screenMargin), visible.maxY - screenMargin - barSize.height)
     let bar = CGRect(x: x, y: y, width: barSize.width, height: barSize.height)

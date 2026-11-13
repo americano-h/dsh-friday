@@ -40,7 +40,7 @@ __export(main_exports, {
   inject: () => inject
 });
 module.exports = __toCommonJS(main_exports);
-var import_react9 = __toESM(require("react"), 1);
+var import_react10 = __toESM(require("react"), 1);
 
 // locale/en.json
 var en_default = {
@@ -57,7 +57,7 @@ var en_default = {
     active: "Active",
     archived: "Upgraded archive",
     empty: "No conversations yet",
-    emptyHint: "Press Option + Space to ask your first quick question.",
+    emptyHint: "Press {hotkey} to start a quick conversation.",
     clear: "Clear Inbox",
     cleanup: "Clear expired",
     continue: "Continue",
@@ -90,6 +90,7 @@ var en_default = {
     defaultHint: "Used by the next new conversation. Existing conversations keep their model.",
     visionModel: "Vision model",
     visionHint: "Used automatically for image turns when the default model cannot read images.",
+    unlisted: "currently unlisted",
     inherit: "Inherit DSH default",
     none: "Not configured",
     hotkey: "Quick-open hotkey",
@@ -98,7 +99,21 @@ var en_default = {
     retentionHint: "Expired active conversations are archived and removed from the Inbox. Upgraded archives are retained.",
     save: "Save settings",
     saved: "Settings saved",
-    globalLimit: "The native Friday panel starts with DSH and supports a system-wide hotkey, free dragging, and macOS Liquid Glass."
+    globalLimit: "The native Friday panel starts with DSH and supports a system-wide hotkey, free dragging, and macOS Liquid Glass.",
+    orb: "Desktop orb",
+    preview: "Live orb preview",
+    color: "Color",
+    brightness: "Brightness",
+    opacity: "Opacity",
+    size: "Size",
+    shortcuts: "Keyboard shortcuts",
+    newChat: "New chat in quick panel",
+    close: "Close panel or dialog",
+    send: "Send message",
+    newline: "Insert line break",
+    pressKeys: "Press a shortcut\u2026",
+    invalidKey: "Press a supported key combination.",
+    keyConflict: "That shortcut is already assigned or would interfere with typing."
   },
   dialog: {
     findTitle: "Find a conversation",
@@ -143,7 +158,7 @@ var zh_default = {
     active: "\u6D3B\u52A8",
     archived: "\u5DF2\u5347\u7EA7\u5F52\u6863",
     empty: "\u8FD8\u6CA1\u6709\u5FEB\u6377\u5BF9\u8BDD",
-    emptyHint: "\u6309 Option + Space\uFF0C\u5F00\u59CB\u7B2C\u4E00\u4E2A\u8F7B\u91CF\u95EE\u7B54\u3002",
+    emptyHint: "\u6309 {hotkey}\uFF0C\u5F00\u59CB\u7B2C\u4E00\u4E2A\u8F7B\u91CF\u95EE\u7B54\u3002",
     clear: "\u6E05\u7A7A Inbox",
     cleanup: "\u6E05\u7A7A\u8FC7\u671F",
     continue: "\u7EE7\u7EED\u95EE\u7B54",
@@ -176,6 +191,7 @@ var zh_default = {
     defaultHint: "\u4E0B\u4E00\u6B21\u65B0\u5BF9\u8BDD\u751F\u6548\uFF1B\u5DF2\u6709\u4F1A\u8BDD\u4FDD\u6301\u5404\u81EA\u6A21\u578B\u3002",
     visionModel: "\u89C6\u89C9\u6A21\u578B",
     visionHint: "\u9ED8\u8BA4\u6A21\u578B\u4E0D\u652F\u6301\u56FE\u7247\u65F6\uFF0C\u5E26\u56FE\u8F6E\u6B21\u81EA\u52A8\u6539\u7528\u6B64\u6A21\u578B\u3002",
+    unlisted: "\u5F53\u524D\u6A21\u578B\u5217\u8868\u672A\u5217\u51FA",
     inherit: "\u7EE7\u627F DSH \u9ED8\u8BA4\u6A21\u578B",
     none: "\u672A\u914D\u7F6E",
     hotkey: "\u5FEB\u6377\u5524\u8D77\u952E",
@@ -184,7 +200,21 @@ var zh_default = {
     retentionHint: "\u5230\u671F\u7684\u6D3B\u52A8\u4F1A\u8BDD\u4F1A\u5F52\u6863\u5E76\u79FB\u51FA Inbox\uFF1B\u5DF2\u5347\u7EA7\u5F52\u6863\u4F1A\u8BDD\u4E0D\u53D7\u5F71\u54CD\u3002",
     save: "\u4FDD\u5B58\u8BBE\u7F6E",
     saved: "\u8BBE\u7F6E\u5DF2\u4FDD\u5B58",
-    globalLimit: "\u539F\u751F Friday \u7A97\u53E3\u968F DSH \u542F\u52A8\uFF0C\u652F\u6301\u7CFB\u7EDF\u5168\u5C40\u5FEB\u6377\u952E\u3001\u4EFB\u610F\u62D6\u52A8\u4E0E macOS Liquid Glass\u3002"
+    globalLimit: "\u539F\u751F Friday \u7A97\u53E3\u968F DSH \u542F\u52A8\uFF0C\u652F\u6301\u7CFB\u7EDF\u5168\u5C40\u5FEB\u6377\u952E\u3001\u4EFB\u610F\u62D6\u52A8\u4E0E macOS Liquid Glass\u3002",
+    orb: "\u684C\u9762\u5149\u7403",
+    preview: "\u5149\u7403\u5B9E\u65F6\u9884\u89C8",
+    color: "\u989C\u8272",
+    brightness: "\u4EAE\u5EA6",
+    opacity: "\u4E0D\u900F\u660E\u5EA6",
+    size: "\u5927\u5C0F",
+    shortcuts: "\u5FEB\u6377\u952E",
+    newChat: "\u5FEB\u6377\u9762\u677F\u5185\u65B0\u5BF9\u8BDD",
+    close: "\u6536\u8D77\u9762\u677F\u6216\u5173\u95ED\u5F39\u7A97",
+    send: "\u53D1\u9001\u6D88\u606F",
+    newline: "\u8F93\u5165\u6846\u5185\u6362\u884C",
+    pressKeys: "\u8BF7\u6309\u5FEB\u6377\u952E\u2026",
+    invalidKey: "\u8BF7\u6309\u4E00\u4E2A\u652F\u6301\u7684\u7EC4\u5408\u952E\u3002",
+    keyConflict: "\u8BE5\u7EC4\u5408\u952E\u5DF2\u88AB\u4F7F\u7528\uFF0C\u6216\u4F1A\u5F71\u54CD\u6B63\u5E38\u8F93\u5165\u3002"
   },
   dialog: {
     findTitle: "\u67E5\u627E\u5BF9\u8BDD",
@@ -292,7 +322,24 @@ function nativeStreamChat({ body, regenerate = false, signal, onEvent }) {
     }
   });
 }
+function syncAppearance() {
+  const root = document.documentElement;
+  const preference = root.dataset.appearance || "system";
+  root.toggleAttribute("data-dark", preference === "dark" || preference === "system" && systemAppearance?.matches);
+}
+var systemAppearance = window.matchMedia?.("(prefers-color-scheme: dark)");
+systemAppearance?.addEventListener("change", syncAppearance);
+if (systemAppearance) syncAppearance();
 window.FridayNative = {
+  fontSizes(text, code, preference = "system") {
+    document.documentElement.dataset.appearance = preference;
+    syncAppearance();
+    document.body.style.setProperty("--dsh-content-font-size", `${text}px`);
+    document.body.style.setProperty("--dsh-code-font-size", `${code}px`);
+  },
+  shortcuts(value) {
+    window.dispatchEvent(new CustomEvent("dsh-friday:shortcuts", { detail: value }));
+  },
   resolve(id, ok, value) {
     const request2 = pending.get(id);
     if (!request2) return;
@@ -338,6 +385,8 @@ async function request(path, options = {}) {
   return response.json();
 }
 var api = {
+  recordShortcut: (id, active) => request("/shortcut-recording", { method: "POST", body: JSON.stringify({ id, active }) }),
+  previewOrb: (orb) => request("/orb-preview", { method: "POST", body: JSON.stringify(orb) }),
   showNative: (sessionId) => request("/native/show", { method: "POST", body: JSON.stringify({ sessionId }) }),
   config: () => request("/config"),
   saveConfig: (config) => request("/config", { method: "PUT", body: JSON.stringify(config) }),
@@ -400,7 +449,47 @@ async function streamChat({ body, regenerate = false, signal, onEvent }) {
   }
 }
 
+// src/shared/preferences.js
+var defaultOrb = Object.freeze({ color: "#5ce1ff", brightness: 100, opacity: 100, size: 100 });
+var orbRanges = Object.freeze({ brightness: [25, 175], opacity: [10, 100], size: [50, 150] });
+var defaultShortcuts = Object.freeze({ newChat: "Alt+N", close: "Escape", send: "Enter", newline: "Shift+Enter" });
+var aliases = { Option: "Alt", Control: "Ctrl", Cmd: "Meta", Command: "Meta" };
+var modifiers = ["Ctrl", "Alt", "Shift", "Meta"];
+var keyPattern = /^(?:Space|Enter|Escape|Tab|Backspace|Delete|Arrow(?:Up|Down|Left|Right)|F(?:[1-9]|1[0-2])|[A-Z0-9])$/;
+function shortcutId(value) {
+  if (typeof value !== "string") return null;
+  const parts = value.trim().split("+");
+  let key = parts.pop();
+  if (key.length === 1) key = key.toUpperCase();
+  const mods = parts.map((part) => aliases[part] || part);
+  if (!keyPattern.test(key) || mods.some((mod) => !modifiers.includes(mod)) || new Set(mods).size !== mods.length) return null;
+  return [...modifiers.filter((mod) => mods.includes(mod)), key].join("+");
+}
+function recordedShortcut(event) {
+  const key = (event.code || event.key || "").replace(/^Key([A-Z])$/, "$1").replace(/^Digit([0-9])$/, "$1").replace(/^NumpadEnter$/, "Enter");
+  return shortcutId([...modifiers.filter((mod) => event[mod.toLowerCase() + "Key"]), key].join("+"));
+}
+function normalizeShortcuts(input, globalKey) {
+  const used = /* @__PURE__ */ new Set([shortcutId(globalKey)]);
+  const result = {};
+  for (const [action, fallback] of Object.entries(defaultShortcuts)) {
+    let value = shortcutId(input?.[action] ?? fallback);
+    if (action === "newChat" && input?.newChat == null && used.has(value)) value = "Alt+Shift+N";
+    if (!value || !/(Ctrl|Alt|Meta)\+/.test(value) && !/^(Shift\+)?(Enter|Escape)$/.test(value)) {
+      throw new Error("Use a modifier with the key, or choose Enter or Escape.");
+    }
+    if (used.has(value)) throw new Error(`Shortcut already assigned: ${value}`);
+    used.add(value);
+    result[action] = value;
+  }
+  return result;
+}
+
 // src/client/hotkey.js
+function actionMatches(event, spec) {
+  const id = recordedShortcut(event);
+  return Boolean(id && id === shortcutId(spec));
+}
 function parseHotkey(spec = "Alt+Space") {
   const parts = String(spec).split("+").map((part) => part.trim()).filter(Boolean);
   const key = parts.pop()?.toLowerCase() || "space";
@@ -415,7 +504,8 @@ function parseHotkey(spec = "Alt+Space") {
   return result;
 }
 function matchesHotkey(event, hotkey) {
-  const keyMatches = hotkey.key === "space" ? event.code === "Space" : String(event.key).toLowerCase() === hotkey.key;
+  const physical = recordedShortcut(event)?.split("+").pop()?.toLowerCase();
+  const keyMatches = physical === hotkey.key;
   return keyMatches && event.altKey === hotkey.alt && event.ctrlKey === hotkey.ctrl && event.metaKey === hotkey.meta && event.shiftKey === hotkey.shift;
 }
 
@@ -423,320 +513,13 @@ function matchesHotkey(event, hotkey) {
 var import_react6 = __toESM(require("react"), 1);
 
 // src/client/composer.jsx
+var import_react4 = __toESM(require("react"), 1);
+
+// src/client/messages.jsx
 var import_react3 = __toESM(require("react"), 1);
 
-// src/client/messages.jsx
-var import_react2 = __toESM(require("react"), 1);
-
-// src/client/markdown.jsx
-var import_react = __toESM(require("react"), 1);
-function safeHref(value) {
-  try {
-    const url = new URL(value);
-    return ["http:", "https:"].includes(url.protocol) ? url.href : null;
-  } catch {
-    return null;
-  }
-}
-function Inline({ text }) {
-  const nodes = [];
-  const pattern = /(`[^`\n]+`|\*\*[^*\n]+\*\*|\*[^*\n]+\*|\[[^\]\n]+\]\([^\s)]+\))/g;
-  let cursor = 0;
-  let match;
-  let key = 0;
-  while (match = pattern.exec(text)) {
-    if (match.index > cursor) nodes.push(text.slice(cursor, match.index));
-    const token = match[0];
-    if (token.startsWith("`")) nodes.push(/* @__PURE__ */ import_react.default.createElement("code", { key: key++ }, token.slice(1, -1)));
-    else if (token.startsWith("**")) nodes.push(/* @__PURE__ */ import_react.default.createElement("strong", { key: key++ }, token.slice(2, -2)));
-    else if (token.startsWith("*")) nodes.push(/* @__PURE__ */ import_react.default.createElement("em", { key: key++ }, token.slice(1, -1)));
-    else {
-      const link = /^\[([^\]]+)\]\(([^)]+)\)$/.exec(token);
-      const href = safeHref(link?.[2] || "");
-      nodes.push(href ? /* @__PURE__ */ import_react.default.createElement("a", { key: key++, href, target: "_blank", rel: "noreferrer noopener" }, link[1]) : token);
-    }
-    cursor = match.index + token.length;
-  }
-  if (cursor < text.length) nodes.push(text.slice(cursor));
-  return /* @__PURE__ */ import_react.default.createElement(import_react.default.Fragment, null, nodes);
-}
-function Table({ lines }) {
-  const rows = lines.map((line) => line.trim().replace(/^\||\|$/g, "").split("|").map((cell) => cell.trim()));
-  const head = rows[0] || [];
-  const body = rows.slice(2);
-  return /* @__PURE__ */ import_react.default.createElement("div", { className: "df-table-scroll" }, /* @__PURE__ */ import_react.default.createElement("table", null, /* @__PURE__ */ import_react.default.createElement("thead", null, /* @__PURE__ */ import_react.default.createElement("tr", null, head.map((cell, index) => /* @__PURE__ */ import_react.default.createElement("th", { key: index }, /* @__PURE__ */ import_react.default.createElement(Inline, { text: cell }))))), /* @__PURE__ */ import_react.default.createElement("tbody", null, body.map((row, rowIndex) => /* @__PURE__ */ import_react.default.createElement("tr", { key: rowIndex }, row.map((cell, index) => /* @__PURE__ */ import_react.default.createElement("td", { key: index }, /* @__PURE__ */ import_react.default.createElement(Inline, { text: cell }))))))));
-}
-function Markdown({ text = "" }) {
-  const lines = String(text).replace(/\r\n/g, "\n").split("\n");
-  const blocks = [];
-  let index = 0;
-  let key = 0;
-  while (index < lines.length) {
-    const line = lines[index];
-    if (!line.trim()) {
-      index += 1;
-      continue;
-    }
-    if (line.trimStart().startsWith("```")) {
-      const language = line.trim().slice(3);
-      const code = [];
-      index += 1;
-      while (index < lines.length && !lines[index].trimStart().startsWith("```")) code.push(lines[index++]);
-      if (index < lines.length) index += 1;
-      blocks.push(/* @__PURE__ */ import_react.default.createElement("pre", { key: key++, "data-language": language || void 0 }, /* @__PURE__ */ import_react.default.createElement("code", null, code.join("\n"))));
-      continue;
-    }
-    if (/^\s*\|.+\|\s*$/.test(line) && /^\s*\|?\s*:?-{3,}/.test(lines[index + 1] || "")) {
-      const table = [line, lines[index + 1]];
-      index += 2;
-      while (index < lines.length && /^\s*\|.+\|\s*$/.test(lines[index])) table.push(lines[index++]);
-      blocks.push(/* @__PURE__ */ import_react.default.createElement(Table, { key: key++, lines: table }));
-      continue;
-    }
-    const heading = /^(#{1,4})\s+(.+)$/.exec(line);
-    if (heading) {
-      const Tag = `h${Math.min(4, heading[1].length + 1)}`;
-      blocks.push(/* @__PURE__ */ import_react.default.createElement(Tag, { key: key++ }, /* @__PURE__ */ import_react.default.createElement(Inline, { text: heading[2] })));
-      index += 1;
-      continue;
-    }
-    if (/^\s*>\s?/.test(line)) {
-      const quote = [];
-      while (index < lines.length && /^\s*>\s?/.test(lines[index])) quote.push(lines[index++].replace(/^\s*>\s?/, ""));
-      blocks.push(/* @__PURE__ */ import_react.default.createElement("blockquote", { key: key++ }, /* @__PURE__ */ import_react.default.createElement(Inline, { text: quote.join("\n") })));
-      continue;
-    }
-    if (/^\s*(?:[-*+]|\d+\.)\s+/.test(line)) {
-      const ordered = /^\s*\d+\.\s+/.test(line);
-      const items = [];
-      const itemPattern = ordered ? /^\s*\d+\.\s+/ : /^\s*[-*+]\s+/;
-      while (index < lines.length && itemPattern.test(lines[index])) items.push(lines[index++].replace(itemPattern, ""));
-      const Tag = ordered ? "ol" : "ul";
-      blocks.push(/* @__PURE__ */ import_react.default.createElement(Tag, { key: key++ }, items.map((item, itemIndex) => /* @__PURE__ */ import_react.default.createElement("li", { key: itemIndex }, /* @__PURE__ */ import_react.default.createElement(Inline, { text: item })))));
-      continue;
-    }
-    const paragraph = [line];
-    index += 1;
-    while (index < lines.length && lines[index].trim() && !/^(?:\s*```|\s*#{1,4}\s|\s*>\s?|\s*(?:[-*+]|\d+\.)\s+|\s*\|.+\|\s*)$/.test(lines[index])) {
-      paragraph.push(lines[index++]);
-    }
-    blocks.push(/* @__PURE__ */ import_react.default.createElement("p", { key: key++ }, /* @__PURE__ */ import_react.default.createElement(Inline, { text: paragraph.join("\n") })));
-  }
-  return /* @__PURE__ */ import_react.default.createElement("div", { className: "df-markdown" }, blocks);
-}
-
-// src/client/messages.jsx
-function Icon({ name, size = 18 }) {
-  const paths = {
-    plus: "M12 5v14M5 12h14",
-    close: "m6 6 12 12M18 6 6 18",
-    search: "m21 21-4.4-4.4m2.4-5.1a7.5 7.5 0 1 1-15 0 7.5 7.5 0 0 1 15 0Z",
-    send: "m22 2-7 20-4-9-9-4 20-7Z",
-    stop: "M7 7h10v10H7z",
-    image: "M19 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2ZM8.5 10a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3Zm12.5 6-5-5L5 21",
-    copy: "M8 8h12v12H8zM4 16V4h12",
-    refresh: "M20 6v5h-5M4 18v-5h5m9.5-4A8 8 0 0 0 5 6.5L4 11m16 2-1 4.5A8 8 0 0 1 5.5 15",
-    upgrade: "M12 19V5m-6 6 6-6 6 6M5 21h14",
-    trash: "M4 7h16M9 7V4h6v3m3 0-1 14H7L6 7m4 4v6m4-6v6",
-    inbox: "M3 13 6 5h12l3 8v6H3v-6Zm0 1h5l2 3h4l2-3h5",
-    chevron: "m9 18 6-6-6-6"
-  };
-  return /* @__PURE__ */ import_react2.default.createElement("svg", { width: size, height: size, viewBox: "0 0 24 24", fill: "none", "aria-hidden": "true" }, /* @__PURE__ */ import_react2.default.createElement("path", { d: paths[name] || paths.inbox, stroke: "currentColor", strokeWidth: "1.7", strokeLinecap: "round", strokeLinejoin: "round" }));
-}
-function Attachment({ sessionId, image }) {
-  const [url, setUrl] = (0, import_react2.useState)(null);
-  const [failed, setFailed] = (0, import_react2.useState)(false);
-  const ref = image.attachment;
-  (0, import_react2.useEffect)(() => {
-    let active = true;
-    setUrl(null);
-    setFailed(false);
-    api.attachment(sessionId, ref.attachmentId).then((value) => {
-      if (active) setUrl(value.dataUrl);
-    }).catch(() => {
-      if (active) setFailed(true);
-    });
-    return () => {
-      active = false;
-    };
-  }, [sessionId, ref.attachmentId]);
-  return /* @__PURE__ */ import_react2.default.createElement("div", { className: "df-attachment" }, url ? /* @__PURE__ */ import_react2.default.createElement("img", { src: url, alt: ref.name || "Attached" }) : /* @__PURE__ */ import_react2.default.createElement("span", null, failed ? "Image unavailable" : "Loading image\u2026"));
-}
-function Sources({ sources = [], t }) {
-  if (!sources.length) return null;
-  return /* @__PURE__ */ import_react2.default.createElement("div", { className: "df-sources" }, /* @__PURE__ */ import_react2.default.createElement("div", { className: "df-sources-title" }, t("quick.sources")), /* @__PURE__ */ import_react2.default.createElement("ol", null, sources.filter((source) => safeHref(source.url)).map((source) => /* @__PURE__ */ import_react2.default.createElement("li", { key: source.url }, /* @__PURE__ */ import_react2.default.createElement("a", { href: safeHref(source.url), target: "_blank", rel: "noreferrer noopener" }, source.title || source.url), source.snippet ? /* @__PURE__ */ import_react2.default.createElement("span", null, source.snippet) : null))));
-}
-function MessageList({ conversation, sessionId, streamingText, streamingCitations, t }) {
-  const messages = [...conversation?.messages || []];
-  if (streamingText) messages.push({ id: "streaming", role: "assistant", text: streamingText, citations: streamingCitations });
-  return /* @__PURE__ */ import_react2.default.createElement("div", { className: "df-messages" }, messages.map((message) => /* @__PURE__ */ import_react2.default.createElement("article", { className: `df-message ${message.role}`, key: `${message.id}-${message.seq || ""}` }, /* @__PURE__ */ import_react2.default.createElement("div", { className: "df-message-role" }, message.role === "user" ? "You" : "Friday"), message.images?.length ? /* @__PURE__ */ import_react2.default.createElement("div", { className: "df-attachment-grid" }, message.images.map((image) => /* @__PURE__ */ import_react2.default.createElement(Attachment, { key: image.attachment.attachmentId, sessionId: sessionId || conversation.id, image }))) : null, message.text ? /* @__PURE__ */ import_react2.default.createElement(Markdown, { text: message.text }) : null, /* @__PURE__ */ import_react2.default.createElement(Sources, { sources: message.citations, t }), message.interrupted ? /* @__PURE__ */ import_react2.default.createElement("div", { className: "df-hint" }, "Interrupted") : null)));
-}
-function Modal({ title, description, children, onClose, className = "" }) {
-  const dialogRef = import_react2.default.useRef(null);
-  const onCloseRef = import_react2.default.useRef(onClose);
-  onCloseRef.current = onClose;
-  (0, import_react2.useEffect)(() => {
-    const previous = document.activeElement;
-    const dialog = dialogRef.current;
-    const focusable = () => [...dialog?.querySelectorAll('button, input, select, textarea, [tabindex="0"]') || []].filter((node) => !node.disabled);
-    const preferred = dialog?.querySelector("[data-autofocus]");
-    (preferred || focusable()[0])?.focus();
-    const onKey = (event) => {
-      if (event.key === "Escape") {
-        event.preventDefault();
-        event.stopPropagation();
-        onCloseRef.current?.();
-      }
-      if (event.key === "Tab") {
-        const items = focusable();
-        if (!items.length) return;
-        const first = items[0];
-        const last = items[items.length - 1];
-        if (event.shiftKey && document.activeElement === first) {
-          event.preventDefault();
-          last.focus();
-        } else if (!event.shiftKey && document.activeElement === last) {
-          event.preventDefault();
-          first.focus();
-        }
-      }
-    };
-    document.addEventListener("keydown", onKey, true);
-    return () => {
-      document.removeEventListener("keydown", onKey, true);
-      previous?.focus?.();
-    };
-  }, []);
-  return /* @__PURE__ */ import_react2.default.createElement("div", { className: "df-modal-backdrop", onMouseDown: (event) => {
-    if (event.target === event.currentTarget) onClose?.();
-  } }, /* @__PURE__ */ import_react2.default.createElement("section", { className: `df-modal ${className}`, role: "dialog", "aria-modal": "true", "aria-label": title, ref: dialogRef }, /* @__PURE__ */ import_react2.default.createElement("header", { className: "df-modal-head" }, /* @__PURE__ */ import_react2.default.createElement("div", null, /* @__PURE__ */ import_react2.default.createElement("h2", null, title), description ? /* @__PURE__ */ import_react2.default.createElement("p", null, description) : null), /* @__PURE__ */ import_react2.default.createElement("button", { className: "df-icon-btn", type: "button", onClick: onClose, "aria-label": "Close" }, /* @__PURE__ */ import_react2.default.createElement(Icon, { name: "close" }))), /* @__PURE__ */ import_react2.default.createElement("div", { className: "df-modal-body" }, children)));
-}
-
-// src/client/composer.jsx
-function readFile(file) {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = () => resolve(reader.result);
-    reader.onerror = () => reject(new Error(`Could not read ${file.name || "image"}`));
-    reader.readAsDataURL(file);
-  });
-}
-function useImageDrafts(config, setError) {
-  const [images, setImages] = (0, import_react3.useState)([]);
-  const addFiles = (0, import_react3.useCallback)(async (files) => {
-    if (!config) return;
-    const limits = config.imageLimits || {};
-    const allowed = limits.mediaTypes || ["image/png", "image/jpeg", "image/webp", "image/gif"];
-    const candidates = [...files].filter((file) => file.type.startsWith("image/"));
-    if (!candidates.length) return;
-    setError(null);
-    try {
-      if (images.length + candidates.length > (limits.maxImagesPerMessage || 4)) {
-        throw new Error(`At most ${limits.maxImagesPerMessage || 4} images are allowed per message`);
-      }
-      let total = images.reduce((sum, image) => sum + image.bytes, 0);
-      const added = [];
-      for (const file of candidates) {
-        if (!allowed.includes(file.type)) throw new Error(`${file.name || "Image"} has an unsupported format`);
-        if (file.size > (limits.maxImageBytes || 10 * 1024 * 1024)) throw new Error(`${file.name || "Image"} is too large`);
-        total += file.size;
-        if (total > (limits.maxMessageImageBytes || 20 * 1024 * 1024)) throw new Error("The combined image size is too large");
-        added.push({ name: file.name || `pasted-${Date.now()}.png`, bytes: file.size, dataUrl: await readFile(file) });
-      }
-      setImages((current) => [...current, ...added]);
-    } catch (fileError) {
-      setError(fileError.message);
-    }
-  }, [config, images, setError]);
-  return { images, setImages, addFiles };
-}
-function ImageDrafts({ images, setImages }) {
-  if (!images.length) return null;
-  return /* @__PURE__ */ import_react3.default.createElement("div", { className: "df-image-drafts" }, images.map((image, index) => /* @__PURE__ */ import_react3.default.createElement("div", { className: "df-image-draft", key: `${image.name}-${index}` }, /* @__PURE__ */ import_react3.default.createElement("img", { src: image.dataUrl, alt: image.name }), /* @__PURE__ */ import_react3.default.createElement("button", { type: "button", onClick: () => setImages((current) => current.filter((_, itemIndex) => itemIndex !== index)), "aria-label": "Remove image" }, /* @__PURE__ */ import_react3.default.createElement(Icon, { name: "close", size: 13 })))));
-}
-function ConversationComposer({
-  t,
-  draft,
-  setDraft,
-  images,
-  addFiles,
-  generating,
-  archived,
-  imageEnabled,
-  onSubmit,
-  onStop,
-  onEscape,
-  inputRef,
-  className = ""
-}) {
-  const fileRef = (0, import_react3.useRef)(null);
-  return /* @__PURE__ */ import_react3.default.createElement("div", { className: `df-composer ${className}` }, /* @__PURE__ */ import_react3.default.createElement(
-    "input",
-    {
-      ref: fileRef,
-      type: "file",
-      accept: "image/png,image/jpeg,image/webp,image/gif",
-      multiple: true,
-      hidden: true,
-      onChange: (event) => {
-        void addFiles(event.target.files);
-        event.target.value = "";
-      }
-    }
-  ), /* @__PURE__ */ import_react3.default.createElement(
-    "button",
-    {
-      className: "df-icon-btn df-composer-attach",
-      type: "button",
-      disabled: !imageEnabled || generating || archived,
-      title: imageEnabled ? t("quick.attach") : t("settings.visionHint"),
-      "aria-label": t("quick.attach"),
-      onClick: () => fileRef.current?.click()
-    },
-    /* @__PURE__ */ import_react3.default.createElement(Icon, { name: "plus" })
-  ), /* @__PURE__ */ import_react3.default.createElement(
-    "textarea",
-    {
-      ref: inputRef,
-      rows: "1",
-      value: draft,
-      disabled: generating || archived,
-      placeholder: t("quick.placeholder"),
-      onChange: (event) => setDraft(event.target.value),
-      onPaste: (event) => {
-        const files = [...event.clipboardData.files];
-        if (files.length) {
-          event.preventDefault();
-          void addFiles(files);
-        }
-      },
-      onKeyDown: (event) => {
-        if (event.key === "Escape" && onEscape) {
-          event.preventDefault();
-          event.stopPropagation();
-          onEscape();
-        }
-        if (event.key === "Enter" && !event.shiftKey && !event.nativeEvent.isComposing) {
-          event.preventDefault();
-          void onSubmit();
-        }
-      }
-    }
-  ), /* @__PURE__ */ import_react3.default.createElement(
-    "button",
-    {
-      className: "df-send",
-      type: "button",
-      disabled: generating ? false : archived || !draft.trim() && !images.length,
-      onClick: generating ? onStop : () => void onSubmit(),
-      "aria-label": generating ? t("quick.stop") : t("quick.send")
-    },
-    /* @__PURE__ */ import_react3.default.createElement(Icon, { name: generating ? "stop" : "send" })
-  ));
-}
-
 // src/client/store.js
-var import_react4 = __toESM(require("react"), 1);
+var import_react = __toESM(require("react"), 1);
 var state = {
   overlayOpen: false,
   inboxOpen: false,
@@ -754,7 +537,7 @@ function setState(patch) {
   for (const listener of listeners) listener();
 }
 function useFridayState(selector = (value) => value) {
-  return import_react4.default.useSyncExternalStore(
+  return import_react.default.useSyncExternalStore(
     (listener) => {
       listeners.add(listener);
       return () => listeners.delete(listener);
@@ -825,6 +608,317 @@ function openTask(sessionId) {
     console.error("dsh-friday: open upgraded task", error);
     toast(error.message || String(error), "error");
   }
+}
+
+// src/client/markdown.jsx
+var import_react2 = __toESM(require("react"), 1);
+function safeHref(value) {
+  try {
+    const url = new URL(value);
+    return ["http:", "https:"].includes(url.protocol) ? url.href : null;
+  } catch {
+    return null;
+  }
+}
+function Inline({ text }) {
+  const nodes = [];
+  const pattern = /(`[^`\n]+`|\*\*[^*\n]+\*\*|\*[^*\n]+\*|\[[^\]\n]+\]\([^\s)]+\))/g;
+  let cursor = 0;
+  let match;
+  let key = 0;
+  while (match = pattern.exec(text)) {
+    if (match.index > cursor) nodes.push(text.slice(cursor, match.index));
+    const token = match[0];
+    if (token.startsWith("`")) nodes.push(/* @__PURE__ */ import_react2.default.createElement("code", { key: key++ }, token.slice(1, -1)));
+    else if (token.startsWith("**")) nodes.push(/* @__PURE__ */ import_react2.default.createElement("strong", { key: key++ }, token.slice(2, -2)));
+    else if (token.startsWith("*")) nodes.push(/* @__PURE__ */ import_react2.default.createElement("em", { key: key++ }, token.slice(1, -1)));
+    else {
+      const link = /^\[([^\]]+)\]\(([^)]+)\)$/.exec(token);
+      const href = safeHref(link?.[2] || "");
+      nodes.push(href ? /* @__PURE__ */ import_react2.default.createElement("a", { key: key++, href, target: "_blank", rel: "noreferrer noopener" }, link[1]) : token);
+    }
+    cursor = match.index + token.length;
+  }
+  if (cursor < text.length) nodes.push(text.slice(cursor));
+  return /* @__PURE__ */ import_react2.default.createElement(import_react2.default.Fragment, null, nodes);
+}
+function Table({ lines }) {
+  const rows = lines.map((line) => line.trim().replace(/^\||\|$/g, "").split("|").map((cell) => cell.trim()));
+  const head = rows[0] || [];
+  const body = rows.slice(2);
+  return /* @__PURE__ */ import_react2.default.createElement("div", { className: "df-table-scroll" }, /* @__PURE__ */ import_react2.default.createElement("table", null, /* @__PURE__ */ import_react2.default.createElement("thead", null, /* @__PURE__ */ import_react2.default.createElement("tr", null, head.map((cell, index) => /* @__PURE__ */ import_react2.default.createElement("th", { key: index }, /* @__PURE__ */ import_react2.default.createElement(Inline, { text: cell }))))), /* @__PURE__ */ import_react2.default.createElement("tbody", null, body.map((row, rowIndex) => /* @__PURE__ */ import_react2.default.createElement("tr", { key: rowIndex }, row.map((cell, index) => /* @__PURE__ */ import_react2.default.createElement("td", { key: index }, /* @__PURE__ */ import_react2.default.createElement(Inline, { text: cell }))))))));
+}
+function Markdown({ text = "" }) {
+  const lines = String(text).replace(/\r\n/g, "\n").split("\n");
+  const blocks = [];
+  let index = 0;
+  let key = 0;
+  while (index < lines.length) {
+    const line = lines[index];
+    if (!line.trim()) {
+      index += 1;
+      continue;
+    }
+    if (line.trimStart().startsWith("```")) {
+      const language = line.trim().slice(3);
+      const code = [];
+      index += 1;
+      while (index < lines.length && !lines[index].trimStart().startsWith("```")) code.push(lines[index++]);
+      if (index < lines.length) index += 1;
+      blocks.push(/* @__PURE__ */ import_react2.default.createElement("pre", { key: key++, "data-language": language || void 0 }, /* @__PURE__ */ import_react2.default.createElement("code", null, code.join("\n"))));
+      continue;
+    }
+    if (/^\s*\|.+\|\s*$/.test(line) && /^\s*\|?\s*:?-{3,}/.test(lines[index + 1] || "")) {
+      const table = [line, lines[index + 1]];
+      index += 2;
+      while (index < lines.length && /^\s*\|.+\|\s*$/.test(lines[index])) table.push(lines[index++]);
+      blocks.push(/* @__PURE__ */ import_react2.default.createElement(Table, { key: key++, lines: table }));
+      continue;
+    }
+    const heading = /^(#{1,4})\s+(.+)$/.exec(line);
+    if (heading) {
+      const Tag = `h${Math.min(4, heading[1].length + 1)}`;
+      blocks.push(/* @__PURE__ */ import_react2.default.createElement(Tag, { key: key++ }, /* @__PURE__ */ import_react2.default.createElement(Inline, { text: heading[2] })));
+      index += 1;
+      continue;
+    }
+    if (/^\s*>\s?/.test(line)) {
+      const quote = [];
+      while (index < lines.length && /^\s*>\s?/.test(lines[index])) quote.push(lines[index++].replace(/^\s*>\s?/, ""));
+      blocks.push(/* @__PURE__ */ import_react2.default.createElement("blockquote", { key: key++ }, /* @__PURE__ */ import_react2.default.createElement(Inline, { text: quote.join("\n") })));
+      continue;
+    }
+    if (/^\s*(?:[-*+]|\d+\.)\s+/.test(line)) {
+      const ordered = /^\s*\d+\.\s+/.test(line);
+      const items = [];
+      const itemPattern = ordered ? /^\s*\d+\.\s+/ : /^\s*[-*+]\s+/;
+      while (index < lines.length && itemPattern.test(lines[index])) items.push(lines[index++].replace(itemPattern, ""));
+      const Tag = ordered ? "ol" : "ul";
+      blocks.push(/* @__PURE__ */ import_react2.default.createElement(Tag, { key: key++ }, items.map((item, itemIndex) => /* @__PURE__ */ import_react2.default.createElement("li", { key: itemIndex }, /* @__PURE__ */ import_react2.default.createElement(Inline, { text: item })))));
+      continue;
+    }
+    const paragraph = [line];
+    index += 1;
+    while (index < lines.length && lines[index].trim() && !/^(?:\s*```|\s*#{1,4}\s|\s*>\s?|\s*(?:[-*+]|\d+\.)\s+|\s*\|.+\|\s*)$/.test(lines[index])) {
+      paragraph.push(lines[index++]);
+    }
+    blocks.push(/* @__PURE__ */ import_react2.default.createElement("p", { key: key++ }, /* @__PURE__ */ import_react2.default.createElement(Inline, { text: paragraph.join("\n") })));
+  }
+  return /* @__PURE__ */ import_react2.default.createElement("div", { className: "df-markdown" }, blocks);
+}
+
+// src/client/messages.jsx
+function Icon({ name, size = 18 }) {
+  const paths = {
+    plus: "M12 5v14M5 12h14",
+    close: "m6 6 12 12M18 6 6 18",
+    search: "m21 21-4.4-4.4m2.4-5.1a7.5 7.5 0 1 1-15 0 7.5 7.5 0 0 1 15 0Z",
+    send: "m22 2-7 20-4-9-9-4 20-7Z",
+    stop: "M7 7h10v10H7z",
+    image: "M19 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2ZM8.5 10a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3Zm12.5 6-5-5L5 21",
+    copy: "M8 8h12v12H8zM4 16V4h12",
+    refresh: "M20 6v5h-5M4 18v-5h5m9.5-4A8 8 0 0 0 5 6.5L4 11m16 2-1 4.5A8 8 0 0 1 5.5 15",
+    upgrade: "M12 19V5m-6 6 6-6 6 6M5 21h14",
+    trash: "M4 7h16M9 7V4h6v3m3 0-1 14H7L6 7m4 4v6m4-6v6",
+    inbox: "M3 13 6 5h12l3 8v6H3v-6Zm0 1h5l2 3h4l2-3h5",
+    chevron: "m9 18 6-6-6-6"
+  };
+  return /* @__PURE__ */ import_react3.default.createElement("svg", { width: size, height: size, viewBox: "0 0 24 24", fill: "none", "aria-hidden": "true" }, /* @__PURE__ */ import_react3.default.createElement("path", { d: paths[name] || paths.inbox, stroke: "currentColor", strokeWidth: "1.7", strokeLinecap: "round", strokeLinejoin: "round" }));
+}
+function Attachment({ sessionId, image }) {
+  const [url, setUrl] = (0, import_react3.useState)(null);
+  const [failed, setFailed] = (0, import_react3.useState)(false);
+  const ref = image.attachment;
+  (0, import_react3.useEffect)(() => {
+    let active = true;
+    setUrl(null);
+    setFailed(false);
+    api.attachment(sessionId, ref.attachmentId).then((value) => {
+      if (active) setUrl(value.dataUrl);
+    }).catch(() => {
+      if (active) setFailed(true);
+    });
+    return () => {
+      active = false;
+    };
+  }, [sessionId, ref.attachmentId]);
+  return /* @__PURE__ */ import_react3.default.createElement("div", { className: "df-attachment" }, url ? /* @__PURE__ */ import_react3.default.createElement("img", { src: url, alt: ref.name || "Attached" }) : /* @__PURE__ */ import_react3.default.createElement("span", null, failed ? "Image unavailable" : "Loading image\u2026"));
+}
+function Sources({ sources = [], t }) {
+  const links = sources.filter((source) => safeHref(source?.url));
+  if (!links.length) return null;
+  return /* @__PURE__ */ import_react3.default.createElement("details", { className: "df-sources" }, /* @__PURE__ */ import_react3.default.createElement("summary", { className: "df-sources-title" }, t("quick.sources"), " (", links.length, ")"), /* @__PURE__ */ import_react3.default.createElement("ol", null, links.map((source) => /* @__PURE__ */ import_react3.default.createElement("li", { key: source.url }, /* @__PURE__ */ import_react3.default.createElement("a", { href: safeHref(source.url), target: "_blank", rel: "noreferrer noopener" }, source.title || source.url), source.snippet ? /* @__PURE__ */ import_react3.default.createElement("span", null, source.snippet) : null))));
+}
+function MessageList({ conversation, sessionId, streamingText, streamingCitations, t }) {
+  const messages = [...conversation?.messages || []];
+  if (streamingText) messages.push({ id: "streaming", role: "assistant", text: streamingText, citations: streamingCitations });
+  return /* @__PURE__ */ import_react3.default.createElement("div", { className: "df-messages" }, messages.map((message) => /* @__PURE__ */ import_react3.default.createElement("article", { className: `df-message ${message.role}`, key: `${sessionId || conversation?.id}-${message.id}-${message.seq || ""}` }, /* @__PURE__ */ import_react3.default.createElement("div", { className: "df-message-role" }, message.role === "user" ? "You" : "Friday"), message.images?.length ? /* @__PURE__ */ import_react3.default.createElement("div", { className: "df-attachment-grid" }, message.images.map((image) => /* @__PURE__ */ import_react3.default.createElement(Attachment, { key: image.attachment.attachmentId, sessionId: sessionId || conversation.id, image }))) : null, message.text ? /* @__PURE__ */ import_react3.default.createElement(Markdown, { text: message.text }) : null, /* @__PURE__ */ import_react3.default.createElement(Sources, { sources: message.citations, t }), message.interrupted ? /* @__PURE__ */ import_react3.default.createElement("div", { className: "df-hint" }, "Interrupted") : null)));
+}
+function Modal({ title, description, children, onClose, className = "" }) {
+  const dialogRef = import_react3.default.useRef(null);
+  const onCloseRef = import_react3.default.useRef(onClose);
+  onCloseRef.current = onClose;
+  (0, import_react3.useEffect)(() => {
+    const previous = document.activeElement;
+    const dialog = dialogRef.current;
+    const focusable = () => [...dialog?.querySelectorAll('button, input, select, textarea, [tabindex="0"]') || []].filter((node) => !node.disabled);
+    const preferred = dialog?.querySelector("[data-autofocus]");
+    (preferred || focusable()[0])?.focus();
+    const onKey = (event) => {
+      if (event.isComposing) return;
+      if (actionMatches(event, getState().config?.config?.shortcuts?.close || defaultShortcuts.close)) {
+        event.preventDefault();
+        event.stopPropagation();
+        onCloseRef.current?.();
+      }
+      if (event.key === "Tab") {
+        const items = focusable();
+        if (!items.length) return;
+        const first = items[0];
+        const last = items[items.length - 1];
+        if (event.shiftKey && document.activeElement === first) {
+          event.preventDefault();
+          last.focus();
+        } else if (!event.shiftKey && document.activeElement === last) {
+          event.preventDefault();
+          first.focus();
+        }
+      }
+    };
+    document.addEventListener("keydown", onKey, true);
+    return () => {
+      document.removeEventListener("keydown", onKey, true);
+      previous?.focus?.();
+    };
+  }, []);
+  return /* @__PURE__ */ import_react3.default.createElement("div", { className: "df-modal-backdrop", onMouseDown: (event) => {
+    if (event.target === event.currentTarget) onClose?.();
+  } }, /* @__PURE__ */ import_react3.default.createElement("section", { className: `df-modal ${className}`, role: "dialog", "aria-modal": "true", "aria-label": title, ref: dialogRef }, /* @__PURE__ */ import_react3.default.createElement("header", { className: "df-modal-head" }, /* @__PURE__ */ import_react3.default.createElement("div", null, /* @__PURE__ */ import_react3.default.createElement("h2", null, title), description ? /* @__PURE__ */ import_react3.default.createElement("p", null, description) : null), /* @__PURE__ */ import_react3.default.createElement("button", { className: "df-icon-btn", type: "button", onClick: onClose, "aria-label": "Close" }, /* @__PURE__ */ import_react3.default.createElement(Icon, { name: "close" }))), /* @__PURE__ */ import_react3.default.createElement("div", { className: "df-modal-body" }, children)));
+}
+
+// src/client/composer.jsx
+function readFile(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = () => reject(new Error(`Could not read ${file.name || "image"}`));
+    reader.readAsDataURL(file);
+  });
+}
+function useImageDrafts(config, setError) {
+  const [images, setImages] = (0, import_react4.useState)([]);
+  const addFiles = (0, import_react4.useCallback)(async (files) => {
+    if (!config) return;
+    const limits = config.imageLimits || {};
+    const allowed = limits.mediaTypes || ["image/png", "image/jpeg", "image/webp", "image/gif"];
+    const candidates = [...files].filter((file) => file.type.startsWith("image/"));
+    if (!candidates.length) return;
+    setError(null);
+    try {
+      if (images.length + candidates.length > (limits.maxImagesPerMessage || 4)) {
+        throw new Error(`At most ${limits.maxImagesPerMessage || 4} images are allowed per message`);
+      }
+      let total = images.reduce((sum, image) => sum + image.bytes, 0);
+      const added = [];
+      for (const file of candidates) {
+        if (!allowed.includes(file.type)) throw new Error(`${file.name || "Image"} has an unsupported format`);
+        if (file.size > (limits.maxImageBytes || 10 * 1024 * 1024)) throw new Error(`${file.name || "Image"} is too large`);
+        total += file.size;
+        if (total > (limits.maxMessageImageBytes || 20 * 1024 * 1024)) throw new Error("The combined image size is too large");
+        added.push({ name: file.name || `pasted-${Date.now()}.png`, bytes: file.size, dataUrl: await readFile(file) });
+      }
+      setImages((current) => [...current, ...added]);
+    } catch (fileError) {
+      setError(fileError.message);
+    }
+  }, [config, images, setError]);
+  return { images, setImages, addFiles };
+}
+function ImageDrafts({ images, setImages }) {
+  if (!images.length) return null;
+  return /* @__PURE__ */ import_react4.default.createElement("div", { className: "df-image-drafts" }, images.map((image, index) => /* @__PURE__ */ import_react4.default.createElement("div", { className: "df-image-draft", key: `${image.name}-${index}` }, /* @__PURE__ */ import_react4.default.createElement("img", { src: image.dataUrl, alt: image.name }), /* @__PURE__ */ import_react4.default.createElement("button", { type: "button", onClick: () => setImages((current) => current.filter((_, itemIndex) => itemIndex !== index)), "aria-label": "Remove image" }, /* @__PURE__ */ import_react4.default.createElement(Icon, { name: "close", size: 13 })))));
+}
+function ConversationComposer({
+  t,
+  draft,
+  setDraft,
+  images,
+  addFiles,
+  generating,
+  archived,
+  imageEnabled,
+  onSubmit,
+  onStop,
+  shortcuts = defaultShortcuts,
+  inputRef,
+  className = ""
+}) {
+  const fileRef = (0, import_react4.useRef)(null);
+  return /* @__PURE__ */ import_react4.default.createElement("div", { className: `df-composer ${className}` }, /* @__PURE__ */ import_react4.default.createElement(
+    "input",
+    {
+      ref: fileRef,
+      type: "file",
+      accept: "image/png,image/jpeg,image/webp,image/gif",
+      multiple: true,
+      hidden: true,
+      onChange: (event) => {
+        void addFiles(event.target.files);
+        event.target.value = "";
+      }
+    }
+  ), /* @__PURE__ */ import_react4.default.createElement(
+    "button",
+    {
+      className: "df-icon-btn df-composer-attach",
+      type: "button",
+      disabled: !imageEnabled || generating || archived,
+      title: imageEnabled ? t("quick.attach") : t("settings.visionHint"),
+      "aria-label": t("quick.attach"),
+      onClick: () => fileRef.current?.click()
+    },
+    /* @__PURE__ */ import_react4.default.createElement(Icon, { name: "plus" })
+  ), /* @__PURE__ */ import_react4.default.createElement(
+    "textarea",
+    {
+      ref: inputRef,
+      rows: "1",
+      value: draft,
+      disabled: generating || archived,
+      placeholder: t("quick.placeholder"),
+      onChange: (event) => setDraft(event.target.value),
+      onPaste: (event) => {
+        const files = [...event.clipboardData.files];
+        if (files.length) {
+          event.preventDefault();
+          void addFiles(files);
+        }
+      },
+      onKeyDown: (event) => {
+        if (event.nativeEvent.isComposing || event.nativeEvent.keyCode === 229) return;
+        if (actionMatches(event, shortcuts.send)) {
+          event.preventDefault();
+          if (!event.repeat) void onSubmit();
+        } else if (actionMatches(event, shortcuts.newline)) {
+          event.preventDefault();
+          const field = event.currentTarget;
+          const at = field.selectionStart;
+          setDraft(draft.slice(0, at) + "\n" + draft.slice(field.selectionEnd));
+          requestAnimationFrame(() => field.setSelectionRange(at + 1, at + 1));
+        }
+      }
+    }
+  ), /* @__PURE__ */ import_react4.default.createElement(
+    "button",
+    {
+      className: "df-send",
+      type: "button",
+      disabled: generating ? false : archived || !draft.trim() && !images.length,
+      onClick: generating ? onStop : () => void onSubmit(),
+      "aria-label": generating ? t("quick.stop") : t("quick.send")
+    },
+    /* @__PURE__ */ import_react4.default.createElement(Icon, { name: generating ? "stop" : "send" })
+  ));
 }
 
 // src/client/upgrade.jsx
@@ -945,7 +1039,9 @@ function InboxPage({ t }) {
   const [findOpen, setFindOpen] = (0, import_react6.useState)(false);
   const [upgradeId, setUpgradeId] = (0, import_react6.useState)(null);
   const [confirm, setConfirm] = (0, import_react6.useState)(null);
-  const [config, setLocalConfig] = (0, import_react6.useState)(null);
+  const [initialConfig, setLocalConfig] = (0, import_react6.useState)(null);
+  const currentConfig = useFridayState((state2) => state2.config);
+  const config = currentConfig || initialConfig;
   const [draft, setDraft] = (0, import_react6.useState)("");
   const [generating, setGenerating] = (0, import_react6.useState)(false);
   const [streamingText, setStreamingText] = (0, import_react6.useState)("");
@@ -1178,7 +1274,7 @@ function InboxPage({ t }) {
       setError(requestError.message);
     }
   };
-  return /* @__PURE__ */ import_react6.default.createElement("div", { className: "df-page" }, /* @__PURE__ */ import_react6.default.createElement("header", { className: "df-page-head" }, /* @__PURE__ */ import_react6.default.createElement("div", null, /* @__PURE__ */ import_react6.default.createElement("h1", null, t("inbox.title")), /* @__PURE__ */ import_react6.default.createElement("p", null, t("inbox.subtitle"))), /* @__PURE__ */ import_react6.default.createElement("div", { className: "df-page-actions" }, /* @__PURE__ */ import_react6.default.createElement("button", { className: "df-btn", type: "button", onClick: () => setFindOpen(true) }, /* @__PURE__ */ import_react6.default.createElement(Icon, { name: "search" }), t("inbox.find")), /* @__PURE__ */ import_react6.default.createElement("button", { className: "df-btn primary", type: "button", onClick: newConversation }, /* @__PURE__ */ import_react6.default.createElement(Icon, { name: "plus" }), t("inbox.new")))), /* @__PURE__ */ import_react6.default.createElement("div", { className: "df-toolbar" }, /* @__PURE__ */ import_react6.default.createElement("div", { className: "df-search-field" }, /* @__PURE__ */ import_react6.default.createElement(Icon, { name: "search" }), /* @__PURE__ */ import_react6.default.createElement("input", { value: query, onChange: (event) => setQuery(event.target.value), placeholder: t("inbox.search") })), /* @__PURE__ */ import_react6.default.createElement("select", { className: "df-input df-time-filter", "aria-label": "Time range", value: range, onChange: (event) => setRange(event.target.value) }, ["all", "today", "week", "month"].map((value) => /* @__PURE__ */ import_react6.default.createElement("option", { key: value, value }, t(`state.${value === "all" ? "allTime" : value}`)))), /* @__PURE__ */ import_react6.default.createElement("button", { className: "df-btn subtle", type: "button", onClick: cleanup }, t("inbox.cleanup")), status === "active" ? /* @__PURE__ */ import_react6.default.createElement("button", { className: "df-btn subtle danger", type: "button", disabled: !items.length, onClick: () => setConfirm("clear") }, t("inbox.clear")) : null), /* @__PURE__ */ import_react6.default.createElement("div", { className: "df-tabs", role: "tablist" }, /* @__PURE__ */ import_react6.default.createElement("button", { role: "tab", "aria-selected": status === "active", className: status === "active" ? "active" : "", onClick: () => setStatus("active") }, t("inbox.active")), /* @__PURE__ */ import_react6.default.createElement("button", { role: "tab", "aria-selected": status === "archived", className: status === "archived" ? "active" : "", onClick: () => setStatus("archived") }, t("inbox.archived"))), error ? /* @__PURE__ */ import_react6.default.createElement("div", { className: "df-error df-page-error", role: "alert" }, error, /* @__PURE__ */ import_react6.default.createElement("button", { className: "df-btn", onClick: loadItems }, t("state.retry"))) : null, /* @__PURE__ */ import_react6.default.createElement("div", { className: "df-inbox-layout" }, /* @__PURE__ */ import_react6.default.createElement("section", { className: "df-list", "aria-label": t("inbox.title") }, loading && !items.length ? /* @__PURE__ */ import_react6.default.createElement("div", { className: "df-empty-small" }, t("state.loading")) : null, !loading && !items.length ? /* @__PURE__ */ import_react6.default.createElement("div", { className: "df-empty-state" }, /* @__PURE__ */ import_react6.default.createElement(Icon, { name: "inbox", size: 28 }), /* @__PURE__ */ import_react6.default.createElement("h2", null, query ? t("state.noResults") : t("inbox.empty")), /* @__PURE__ */ import_react6.default.createElement("p", null, t("inbox.emptyHint"))) : null, items.map((item) => /* @__PURE__ */ import_react6.default.createElement("button", { className: `df-inbox-row ${selectedId === item.id ? "selected" : ""}`, type: "button", key: item.id, onClick: () => select(item.id) }, /* @__PURE__ */ import_react6.default.createElement("span", { className: "df-row-top" }, /* @__PURE__ */ import_react6.default.createElement("strong", null, item.title), /* @__PURE__ */ import_react6.default.createElement("time", null, timeLabel(item.updatedAt))), /* @__PURE__ */ import_react6.default.createElement("span", { className: "df-row-summary" }, item.snippet || item.firstPrompt || item.title), /* @__PURE__ */ import_react6.default.createElement("span", { className: "df-row-meta" }, /* @__PURE__ */ import_react6.default.createElement("span", null, item.model?.model || "Friday"), item.hasImage ? /* @__PURE__ */ import_react6.default.createElement("span", { className: "df-badge" }, /* @__PURE__ */ import_react6.default.createElement(Icon, { name: "image", size: 12 }), t("inbox.images")) : null, item.archived ? /* @__PURE__ */ import_react6.default.createElement("span", { className: "df-badge" }, t("inbox.upgraded")) : null)))), /* @__PURE__ */ import_react6.default.createElement("section", { className: "df-detail" }, !detail ? /* @__PURE__ */ import_react6.default.createElement("div", { className: "df-empty-state" }, /* @__PURE__ */ import_react6.default.createElement(Icon, { name: "chevron", size: 24 }), /* @__PURE__ */ import_react6.default.createElement("p", null, t("inbox.find"))) : /* @__PURE__ */ import_react6.default.createElement(import_react6.default.Fragment, null, /* @__PURE__ */ import_react6.default.createElement("header", { className: "df-detail-head" }, /* @__PURE__ */ import_react6.default.createElement("div", null, /* @__PURE__ */ import_react6.default.createElement("h2", null, detail.title), /* @__PURE__ */ import_react6.default.createElement("div", { className: "df-hint" }, timeLabel(detail.updatedAt), " \xB7 ", detail.model?.model || "Friday")), /* @__PURE__ */ import_react6.default.createElement("div", { className: "df-detail-actions" }, !detail.archived && !detail.upgraded && /* @__PURE__ */ import_react6.default.createElement("button", { className: "df-btn", onClick: showQuickPanel }, t("inbox.quick")), detail.archived && detail.upgraded && /* @__PURE__ */ import_react6.default.createElement("button", { className: "df-icon-btn danger", type: "button", onClick: () => setConfirm(detail.id), "aria-label": t("inbox.delete") }, /* @__PURE__ */ import_react6.default.createElement(Icon, { name: "trash" })), detail.upgraded && !detail.archived ? /* @__PURE__ */ import_react6.default.createElement("button", { className: "df-btn", onClick: resumeUpgrade }, t("inbox.resumeUpgrade")) : detail.upgradedSessionId ? /* @__PURE__ */ import_react6.default.createElement("button", { className: "df-btn", type: "button", onClick: () => openTask(detail.upgradedSessionId) }, t("inbox.openTask"), /* @__PURE__ */ import_react6.default.createElement(Icon, { name: "chevron" })) : /* @__PURE__ */ import_react6.default.createElement(import_react6.default.Fragment, null, /* @__PURE__ */ import_react6.default.createElement("button", { className: "df-btn primary", type: "button", disabled: detail.running || generating, onClick: () => setUpgradeId(detail.id) }, /* @__PURE__ */ import_react6.default.createElement(Icon, { name: "upgrade" }), t("inbox.upgrade")), /* @__PURE__ */ import_react6.default.createElement("button", { className: "df-icon-btn danger", type: "button", onClick: () => setConfirm(detail.id), "aria-label": t("inbox.delete") }, /* @__PURE__ */ import_react6.default.createElement(Icon, { name: "trash" }))))), /* @__PURE__ */ import_react6.default.createElement("div", { className: "df-detail-transcript", ref: scrollRef }, /* @__PURE__ */ import_react6.default.createElement(MessageList, { conversation: detail, sessionId: detail.id, streamingText: streamingText || detail.liveText, streamingCitations: citations, t }), generating && !streamingText ? /* @__PURE__ */ import_react6.default.createElement("div", { className: "df-thinking" }, /* @__PURE__ */ import_react6.default.createElement("span", null), t("quick.thinking")) : null), /* @__PURE__ */ import_react6.default.createElement("footer", { className: "df-inline-chat" }, /* @__PURE__ */ import_react6.default.createElement(ImageDrafts, { images, setImages }), chatError ? /* @__PURE__ */ import_react6.default.createElement("div", { className: "df-error", role: "alert" }, chatError) : null, detail.archived || detail.upgraded ? /* @__PURE__ */ import_react6.default.createElement("div", { className: "df-hint" }, t("inbox.upgraded")) : null, /* @__PURE__ */ import_react6.default.createElement(
+  return /* @__PURE__ */ import_react6.default.createElement("div", { className: "df-page" }, /* @__PURE__ */ import_react6.default.createElement("header", { className: "df-page-head" }, /* @__PURE__ */ import_react6.default.createElement("div", null, /* @__PURE__ */ import_react6.default.createElement("h1", null, t("inbox.title")), /* @__PURE__ */ import_react6.default.createElement("p", null, t("inbox.subtitle"))), /* @__PURE__ */ import_react6.default.createElement("div", { className: "df-page-actions" }, /* @__PURE__ */ import_react6.default.createElement("button", { className: "df-btn", type: "button", onClick: () => setFindOpen(true) }, /* @__PURE__ */ import_react6.default.createElement(Icon, { name: "search" }), t("inbox.find")), /* @__PURE__ */ import_react6.default.createElement("button", { className: "df-btn primary", type: "button", onClick: newConversation }, /* @__PURE__ */ import_react6.default.createElement(Icon, { name: "plus" }), t("inbox.new")))), /* @__PURE__ */ import_react6.default.createElement("div", { className: "df-toolbar" }, /* @__PURE__ */ import_react6.default.createElement("div", { className: "df-search-field" }, /* @__PURE__ */ import_react6.default.createElement(Icon, { name: "search" }), /* @__PURE__ */ import_react6.default.createElement("input", { value: query, onChange: (event) => setQuery(event.target.value), placeholder: t("inbox.search") })), /* @__PURE__ */ import_react6.default.createElement("select", { className: "df-input df-time-filter", "aria-label": "Time range", value: range, onChange: (event) => setRange(event.target.value) }, ["all", "today", "week", "month"].map((value) => /* @__PURE__ */ import_react6.default.createElement("option", { key: value, value }, t(`state.${value === "all" ? "allTime" : value}`)))), /* @__PURE__ */ import_react6.default.createElement("button", { className: "df-btn subtle", type: "button", onClick: cleanup }, t("inbox.cleanup")), status === "active" ? /* @__PURE__ */ import_react6.default.createElement("button", { className: "df-btn subtle danger", type: "button", disabled: !items.length, onClick: () => setConfirm("clear") }, t("inbox.clear")) : null), /* @__PURE__ */ import_react6.default.createElement("div", { className: "df-tabs", role: "tablist" }, /* @__PURE__ */ import_react6.default.createElement("button", { role: "tab", "aria-selected": status === "active", className: status === "active" ? "active" : "", onClick: () => setStatus("active") }, t("inbox.active")), /* @__PURE__ */ import_react6.default.createElement("button", { role: "tab", "aria-selected": status === "archived", className: status === "archived" ? "active" : "", onClick: () => setStatus("archived") }, t("inbox.archived"))), error ? /* @__PURE__ */ import_react6.default.createElement("div", { className: "df-error df-page-error", role: "alert" }, error, /* @__PURE__ */ import_react6.default.createElement("button", { className: "df-btn", onClick: loadItems }, t("state.retry"))) : null, /* @__PURE__ */ import_react6.default.createElement("div", { className: "df-inbox-layout" }, /* @__PURE__ */ import_react6.default.createElement("section", { className: "df-list", "aria-label": t("inbox.title") }, loading && !items.length ? /* @__PURE__ */ import_react6.default.createElement("div", { className: "df-empty-small" }, t("state.loading")) : null, !loading && !items.length ? /* @__PURE__ */ import_react6.default.createElement("div", { className: "df-empty-state" }, /* @__PURE__ */ import_react6.default.createElement(Icon, { name: "inbox", size: 28 }), /* @__PURE__ */ import_react6.default.createElement("h2", null, query ? t("state.noResults") : t("inbox.empty")), /* @__PURE__ */ import_react6.default.createElement("p", null, t("inbox.emptyHint").replace("{hotkey}", config?.config?.hotkey || "Alt+Space"))) : null, items.map((item) => /* @__PURE__ */ import_react6.default.createElement("button", { className: `df-inbox-row ${selectedId === item.id ? "selected" : ""}`, type: "button", key: item.id, onClick: () => select(item.id) }, /* @__PURE__ */ import_react6.default.createElement("span", { className: "df-row-top" }, /* @__PURE__ */ import_react6.default.createElement("strong", null, item.title), /* @__PURE__ */ import_react6.default.createElement("time", null, timeLabel(item.updatedAt))), /* @__PURE__ */ import_react6.default.createElement("span", { className: "df-row-summary" }, item.snippet || item.firstPrompt || item.title), /* @__PURE__ */ import_react6.default.createElement("span", { className: "df-row-meta" }, /* @__PURE__ */ import_react6.default.createElement("span", null, item.model?.model || "Friday"), item.hasImage ? /* @__PURE__ */ import_react6.default.createElement("span", { className: "df-badge" }, /* @__PURE__ */ import_react6.default.createElement(Icon, { name: "image", size: 12 }), t("inbox.images")) : null, item.archived ? /* @__PURE__ */ import_react6.default.createElement("span", { className: "df-badge" }, t("inbox.upgraded")) : null)))), /* @__PURE__ */ import_react6.default.createElement("section", { className: "df-detail" }, !detail ? /* @__PURE__ */ import_react6.default.createElement("div", { className: "df-empty-state" }, /* @__PURE__ */ import_react6.default.createElement(Icon, { name: "chevron", size: 24 }), /* @__PURE__ */ import_react6.default.createElement("p", null, t("inbox.find"))) : /* @__PURE__ */ import_react6.default.createElement(import_react6.default.Fragment, null, /* @__PURE__ */ import_react6.default.createElement("header", { className: "df-detail-head" }, /* @__PURE__ */ import_react6.default.createElement("div", null, /* @__PURE__ */ import_react6.default.createElement("h2", null, detail.title), /* @__PURE__ */ import_react6.default.createElement("div", { className: "df-hint" }, timeLabel(detail.updatedAt), " \xB7 ", detail.model?.model || "Friday")), /* @__PURE__ */ import_react6.default.createElement("div", { className: "df-detail-actions" }, !detail.archived && !detail.upgraded && /* @__PURE__ */ import_react6.default.createElement("button", { className: "df-btn", onClick: showQuickPanel }, t("inbox.quick")), detail.archived && detail.upgraded && /* @__PURE__ */ import_react6.default.createElement("button", { className: "df-icon-btn danger", type: "button", onClick: () => setConfirm(detail.id), "aria-label": t("inbox.delete") }, /* @__PURE__ */ import_react6.default.createElement(Icon, { name: "trash" })), detail.upgraded && !detail.archived ? /* @__PURE__ */ import_react6.default.createElement("button", { className: "df-btn", onClick: resumeUpgrade }, t("inbox.resumeUpgrade")) : detail.upgradedSessionId ? /* @__PURE__ */ import_react6.default.createElement("button", { className: "df-btn", type: "button", onClick: () => openTask(detail.upgradedSessionId) }, t("inbox.openTask"), /* @__PURE__ */ import_react6.default.createElement(Icon, { name: "chevron" })) : /* @__PURE__ */ import_react6.default.createElement(import_react6.default.Fragment, null, /* @__PURE__ */ import_react6.default.createElement("button", { className: "df-btn primary", type: "button", disabled: detail.running || generating, onClick: () => setUpgradeId(detail.id) }, /* @__PURE__ */ import_react6.default.createElement(Icon, { name: "upgrade" }), t("inbox.upgrade")), /* @__PURE__ */ import_react6.default.createElement("button", { className: "df-icon-btn danger", type: "button", onClick: () => setConfirm(detail.id), "aria-label": t("inbox.delete") }, /* @__PURE__ */ import_react6.default.createElement(Icon, { name: "trash" }))))), /* @__PURE__ */ import_react6.default.createElement("div", { className: "df-detail-transcript", ref: scrollRef }, /* @__PURE__ */ import_react6.default.createElement(MessageList, { conversation: detail, sessionId: detail.id, streamingText: streamingText || detail.liveText, streamingCitations: citations, t }), generating && !streamingText ? /* @__PURE__ */ import_react6.default.createElement("div", { className: "df-thinking" }, /* @__PURE__ */ import_react6.default.createElement("span", null), t("quick.thinking")) : null), /* @__PURE__ */ import_react6.default.createElement("footer", { className: "df-inline-chat" }, /* @__PURE__ */ import_react6.default.createElement(ImageDrafts, { images, setImages }), chatError ? /* @__PURE__ */ import_react6.default.createElement("div", { className: "df-error", role: "alert" }, chatError) : null, detail.archived || detail.upgraded ? /* @__PURE__ */ import_react6.default.createElement("div", { className: "df-hint" }, t("inbox.upgraded")) : null, /* @__PURE__ */ import_react6.default.createElement(
     ConversationComposer,
     {
       t,
@@ -1190,6 +1286,7 @@ function InboxPage({ t }) {
       archived: Boolean(detail.archived || detail.upgraded),
       imageEnabled: Boolean(config && (config.defaultSupportsImages || config.visionAvailable)),
       inputRef,
+      shortcuts: config?.config?.shortcuts,
       onSubmit: runStream,
       onStop: stop
     }
@@ -1218,6 +1315,7 @@ function QuickOverlay({ t }) {
   const open = useFridayState((state2) => state2.overlayOpen);
   const sessionId = useFridayState((state2) => state2.sessionId);
   const config = useFridayState((state2) => state2.config);
+  const shortcuts = config?.config?.shortcuts || defaultShortcuts;
   const [conversation, setConversation] = (0, import_react7.useState)(null);
   const [draft, setDraft] = (0, import_react7.useState)("");
   const [generating, setGenerating] = (0, import_react7.useState)(false);
@@ -1238,7 +1336,7 @@ function QuickOverlay({ t }) {
       if (getState().sessionId === id) setConversation(value.conversation);
       return value.conversation;
     } catch (requestError) {
-      setError(requestError.message);
+      if (getState().sessionId === id) setError(requestError.message);
       return null;
     }
   }, []);
@@ -1247,7 +1345,7 @@ function QuickOverlay({ t }) {
     api.config().then(setConfig).catch((requestError) => setError(requestError.message));
   }, [open, config]);
   (0, import_react7.useEffect)(() => {
-    if (!open || !config || sessionId !== void 0) return;
+    if (runtime.native || !open || !config || sessionId !== void 0) return;
     const recent = config.recent;
     const resume = recent && Date.now() - recent.updatedAt <= 5 * 60 * 1e3;
     setState({ sessionId: resume ? recent.id : null });
@@ -1291,7 +1389,15 @@ function QuickOverlay({ t }) {
   (0, import_react7.useEffect)(() => {
     if (!open || !runtime.native) return;
     const expanded2 = Boolean(conversation?.messages?.length || streamingText || generating);
-    const height = upgradeOpen ? 700 : (expanded2 ? 480 : 106) + (images.length ? 68 : 0) + (error ? 42 : 0);
+    const quick = inputRef.current?.closest(".df-quick");
+    if (!expanded2 && !upgradeOpen && quick) {
+      const resize = () => runtime.native.resize({ width: 490, height: Math.ceil(quick.scrollHeight) + 2 });
+      resize();
+      const observer = new ResizeObserver(resize);
+      for (const child of quick.children) observer.observe(child);
+      return () => observer.disconnect();
+    }
+    const height = upgradeOpen ? 700 : 480 + (images.length ? 68 : 0) + (error ? 42 : 0);
     runtime.native.resize({ width: upgradeOpen ? 730 : 490, height });
   }, [open, conversation?.messages?.length, streamingText, generating, images.length, error, upgradeOpen]);
   const hide = (0, import_react7.useCallback)(() => {
@@ -1309,7 +1415,9 @@ function QuickOverlay({ t }) {
     setCitations([]);
     setImages([]);
     setError(null);
+    setDraft("");
     newConversation();
+    inputRef.current?.focus();
   }, []);
   const runStream = (0, import_react7.useCallback)(async (regenerate = false) => {
     if (generating || abortRef.current || sessionId === void 0) return;
@@ -1332,10 +1440,10 @@ function QuickOverlay({ t }) {
         regenerate,
         signal: controller.signal,
         onEvent: (event) => {
+          if (controller.signal.aborted) return;
           if (event.type === "meta") {
             activeId = event.sessionId;
             markRecent(activeId);
-            if (controller.signal.aborted) return;
             if (getState().sessionId !== activeId) setState({ sessionId: activeId });
           } else if (event.type === "delta") {
             setStreamingText((current) => current + event.text);
@@ -1423,6 +1531,15 @@ function QuickOverlay({ t }) {
       className: `df-quick ${expanded ? "expanded" : "compact"}${position ? " positioned" : ""}`,
       "aria-label": "Friday quick conversation",
       style: position ? { left: position.left, top: position.top, transform: "none" } : void 0,
+      tabIndex: -1,
+      onKeyDownCapture: (event) => {
+        if (upgradeOpen || event.nativeEvent.isComposing) return;
+        const newChat = actionMatches(event, shortcuts.newChat);
+        if (!newChat && !actionMatches(event, shortcuts.close)) return;
+        event.preventDefault();
+        event.stopPropagation();
+        if (!event.repeat) (newChat ? createNew : hide)();
+      },
       onPointerDown: startDrag,
       onPointerMove: moveDrag,
       onPointerUp: endDrag,
@@ -1436,8 +1553,8 @@ function QuickOverlay({ t }) {
         void addFiles(event.dataTransfer.files);
       }
     },
-    expanded || runtime.native ? /* @__PURE__ */ import_react7.default.createElement("header", { className: "df-quick-head" }, /* @__PURE__ */ import_react7.default.createElement("div", { className: "df-quick-brand" }, /* @__PURE__ */ import_react7.default.createElement("span", { className: "df-brand-dot" }), /* @__PURE__ */ import_react7.default.createElement("strong", null, conversation?.title || "Friday")), /* @__PURE__ */ import_react7.default.createElement("div", { className: "df-quick-actions" }, /* @__PURE__ */ import_react7.default.createElement("button", { className: "df-btn", type: "button", onClick: openInbox }, /* @__PURE__ */ import_react7.default.createElement(Icon, { name: "inbox", size: 14 }), "Inbox"), /* @__PURE__ */ import_react7.default.createElement("button", { className: "df-icon-btn", type: "button", onClick: createNew, title: t("quick.new"), "aria-label": t("quick.new") }, /* @__PURE__ */ import_react7.default.createElement(Icon, { name: "plus" })), sessionId && messages.length && !archived ? /* @__PURE__ */ import_react7.default.createElement("button", { className: "df-icon-btn", type: "button", disabled: generating || conversation?.running, onClick: () => setUpgradeOpen(true), title: t("quick.upgrade"), "aria-label": t("quick.upgrade") }, /* @__PURE__ */ import_react7.default.createElement(Icon, { name: "upgrade" })) : null, /* @__PURE__ */ import_react7.default.createElement("button", { className: "df-icon-btn", type: "button", onClick: hide, title: t("quick.close"), "aria-label": t("quick.close") }, /* @__PURE__ */ import_react7.default.createElement(Icon, { name: "close" })))) : null,
-    expanded ? /* @__PURE__ */ import_react7.default.createElement("div", { className: "df-quick-transcript", ref: scrollRef }, /* @__PURE__ */ import_react7.default.createElement(MessageList, { conversation, sessionId, streamingText: streamingText || conversation?.liveText, streamingCitations: citations, t }), generating && !streamingText ? /* @__PURE__ */ import_react7.default.createElement("div", { className: "df-thinking", "aria-label": t("quick.thinking") }, /* @__PURE__ */ import_react7.default.createElement("span", null)) : null) : null,
+    expanded || runtime.native ? /* @__PURE__ */ import_react7.default.createElement("header", { className: "df-quick-head" }, /* @__PURE__ */ import_react7.default.createElement("div", { className: "df-quick-brand" }, /* @__PURE__ */ import_react7.default.createElement("span", { className: "df-brand-dot" }), /* @__PURE__ */ import_react7.default.createElement("strong", null, conversation?.title || "Friday")), /* @__PURE__ */ import_react7.default.createElement("div", { className: "df-quick-actions" }, /* @__PURE__ */ import_react7.default.createElement("button", { className: "df-btn", type: "button", onClick: openInbox }, /* @__PURE__ */ import_react7.default.createElement(Icon, { name: "inbox", size: 14 }), "Inbox"), /* @__PURE__ */ import_react7.default.createElement("button", { className: "df-icon-btn", type: "button", onClick: createNew, title: t("quick.new") + " \xB7 " + shortcuts.newChat, "aria-label": t("quick.new") }, /* @__PURE__ */ import_react7.default.createElement(Icon, { name: "plus" })), sessionId && messages.length && !archived ? /* @__PURE__ */ import_react7.default.createElement("button", { className: "df-icon-btn", type: "button", disabled: generating || conversation?.running, onClick: () => setUpgradeOpen(true), title: t("quick.upgrade"), "aria-label": t("quick.upgrade") }, /* @__PURE__ */ import_react7.default.createElement(Icon, { name: "upgrade" })) : null, /* @__PURE__ */ import_react7.default.createElement("button", { className: "df-icon-btn", type: "button", onClick: hide, title: t("quick.close"), "aria-label": t("quick.close") }, /* @__PURE__ */ import_react7.default.createElement(Icon, { name: "close" })))) : null,
+    expanded ? /* @__PURE__ */ import_react7.default.createElement("div", { className: "df-quick-transcript", tabIndex: 0, ref: scrollRef }, /* @__PURE__ */ import_react7.default.createElement(MessageList, { conversation, sessionId, streamingText: streamingText || conversation?.liveText, streamingCitations: citations, t }), generating && !streamingText ? /* @__PURE__ */ import_react7.default.createElement("div", { className: "df-thinking", "aria-label": t("quick.thinking") }, /* @__PURE__ */ import_react7.default.createElement("span", null)) : null) : null,
     lastAssistant && !generating ? /* @__PURE__ */ import_react7.default.createElement("div", { className: "df-answer-actions" }, /* @__PURE__ */ import_react7.default.createElement("button", { type: "button", onClick: copy, title: t("quick.copy"), "aria-label": t("quick.copy") }, /* @__PURE__ */ import_react7.default.createElement(Icon, { name: "copy", size: 15 })), /* @__PURE__ */ import_react7.default.createElement("button", { type: "button", onClick: () => void runStream(true), title: t("quick.regenerate"), "aria-label": t("quick.regenerate") }, /* @__PURE__ */ import_react7.default.createElement(Icon, { name: "refresh", size: 15 }))) : null,
     /* @__PURE__ */ import_react7.default.createElement(ImageDrafts, { images, setImages }),
     error ? /* @__PURE__ */ import_react7.default.createElement("div", { className: "df-error df-quick-error", role: "alert" }, error) : null,
@@ -1456,65 +1573,185 @@ function QuickOverlay({ t }) {
         inputRef,
         onSubmit: () => runStream(false),
         onStop: stop,
-        onEscape: hide
+        shortcuts
       }
     )
   ), upgradeOpen && sessionId ? /* @__PURE__ */ import_react7.default.createElement(UpgradeDialog, { sessionId, t, onClose: () => setUpgradeOpen(false) }) : null);
 }
 
 // src/client/settings.jsx
+var import_react9 = __toESM(require("react"), 1);
+
+// src/client/appearance-settings.jsx
 var import_react8 = __toESM(require("react"), 1);
-var modelValue = (model) => model ? `${model.provider}\0${model.model}` : "";
+function OrbControls({ orb, change, t }) {
+  const [image, setImage] = (0, import_react8.useState)("");
+  const [error, setError] = (0, import_react8.useState)(null);
+  const { color, brightness } = orb;
+  (0, import_react8.useEffect)(() => {
+    let active = true;
+    const timer = setTimeout(() => {
+      api.previewOrb({ color, brightness }).then((data) => {
+        if (active) {
+          setImage(data.image);
+          setError(null);
+        }
+      }).catch((e) => {
+        if (active) setError(e.message);
+      });
+    }, 40);
+    return () => {
+      active = false;
+      clearTimeout(timer);
+    };
+  }, [color, brightness]);
+  return /* @__PURE__ */ import_react8.default.createElement("fieldset", { className: "df-prefs" }, /* @__PURE__ */ import_react8.default.createElement("legend", null, t("settings.orb")), /* @__PURE__ */ import_react8.default.createElement("div", { className: "df-orb-controls" }, /* @__PURE__ */ import_react8.default.createElement("div", { className: "df-orb-preview", "aria-label": t("settings.preview") }, error ? /* @__PURE__ */ import_react8.default.createElement("span", { role: "alert" }, error) : image ? /* @__PURE__ */ import_react8.default.createElement("img", { src: image, alt: t("settings.preview"), style: { width: 140 * orb.size / 100, opacity: orb.opacity / 100 } }) : /* @__PURE__ */ import_react8.default.createElement("span", null, t("state.loading"))), /* @__PURE__ */ import_react8.default.createElement("div", null, /* @__PURE__ */ import_react8.default.createElement("label", { className: "df-orb-row" }, t("settings.color"), /* @__PURE__ */ import_react8.default.createElement("input", { type: "color", value: color, onChange: (e) => change({ ...orb, color: e.target.value }) })), Object.entries(orbRanges).map(([key, [min, max]]) => /* @__PURE__ */ import_react8.default.createElement("label", { className: "df-orb-row", key }, t("settings." + key), /* @__PURE__ */ import_react8.default.createElement("input", { type: "range", min, max, value: orb[key], onChange: (e) => change({ ...orb, [key]: Number(e.target.value) }) }), /* @__PURE__ */ import_react8.default.createElement("output", null, orb[key], "%"))))));
+}
+function ShortcutControls({ draft, change, t }) {
+  const [recording, setRecording] = (0, import_react8.useState)(null);
+  const [error, setError] = (0, import_react8.useState)("");
+  const lease = (0, import_react8.useRef)(null);
+  const finish = () => {
+    const current = lease.current;
+    lease.current = null;
+    if (current) current.ready.then(() => api.recordShortcut(current.id, false)).catch(() => {
+    });
+    setRecording(null);
+  };
+  (0, import_react8.useEffect)(() => {
+    window.addEventListener("blur", finish);
+    return () => {
+      window.removeEventListener("blur", finish);
+      finish();
+    };
+  }, []);
+  (0, import_react8.useEffect)(() => {
+    if (!recording) return;
+    const timer = setTimeout(finish, 2e4);
+    return () => clearTimeout(timer);
+  }, [recording]);
+  const begin = (action) => {
+    finish();
+    setError("");
+    const id = crypto.randomUUID();
+    const ready = api.recordShortcut(id, true);
+    lease.current = { id, ready };
+    setRecording(action);
+    ready.catch((e) => {
+      if (lease.current?.id === id) {
+        finish();
+        setError(e.message);
+      }
+    });
+  };
+  const capture = (e, action) => {
+    if (recording !== action) return;
+    e.preventDefault();
+    e.stopPropagation();
+    if (e.repeat || ["Alt", "Control", "Meta", "Shift"].includes(e.key)) return;
+    const spec = recordedShortcut(e);
+    if (!spec || action === "hotkey" && !/(Ctrl|Alt|Meta)\+/.test(spec)) {
+      setError(t("settings.invalidKey"));
+      return;
+    }
+    const patch = action === "hotkey" ? { hotkey: spec } : { shortcuts: { ...draft.shortcuts, [action]: spec } };
+    try {
+      normalizeShortcuts(patch.shortcuts || draft.shortcuts, patch.hotkey || draft.hotkey);
+    } catch {
+      setError(t("settings.keyConflict"));
+      return;
+    }
+    change(patch);
+    finish();
+    setError("");
+  };
+  return /* @__PURE__ */ import_react8.default.createElement("fieldset", { className: "df-prefs" }, /* @__PURE__ */ import_react8.default.createElement("legend", null, t("settings.shortcuts")), ["hotkey", ...Object.keys(defaultShortcuts)].map((action) => /* @__PURE__ */ import_react8.default.createElement("div", { className: "df-key-row", key: action }, /* @__PURE__ */ import_react8.default.createElement("label", { htmlFor: "df-" + action }, t("settings." + action)), /* @__PURE__ */ import_react8.default.createElement(
+    "button",
+    {
+      type: "button",
+      id: "df-" + action,
+      className: "df-btn",
+      "data-recording": recording === action ? "" : void 0,
+      "aria-pressed": recording === action,
+      onBlur: () => {
+        if (recording === action) finish();
+      },
+      onClick: () => recording === action ? finish() : begin(action),
+      onKeyDown: (e) => capture(e, action)
+    },
+    recording === action ? t("settings.pressKeys") : action === "hotkey" ? draft.hotkey : draft.shortcuts[action]
+  ))), error && /* @__PURE__ */ import_react8.default.createElement("p", { className: "df-error", role: "alert" }, error));
+}
+
+// src/client/settings.jsx
+var modelValue = (selection) => selection ? JSON.stringify([selection.provider, selection.model]) : "";
 var parseModel = (value) => {
   if (!value) return null;
-  const [provider, model] = value.split("\0");
-  return provider && model ? { provider, model } : null;
+  const [provider, model] = JSON.parse(value);
+  return { provider, model };
 };
+function modelOptions(models, selected, t) {
+  const options = models.map((model) => /* @__PURE__ */ import_react9.default.createElement("option", { key: modelValue(model), value: modelValue(model) }, model.label));
+  if (selected && !models.some((model) => modelValue(model) === selected)) {
+    const { provider, model } = parseModel(selected);
+    options.push(/* @__PURE__ */ import_react9.default.createElement("option", { key: selected, value: selected }, provider, " \xB7 ", model, " (", t("settings.unlisted"), ")"));
+  }
+  return options;
+}
 function SettingsForm({ t, view = "page" }) {
-  const [state2, setState2] = (0, import_react8.useState)({ loading: true, models: [], native: null, error: null, saving: false });
-  const [draft, setDraft] = (0, import_react8.useState)(null);
-  (0, import_react8.useEffect)(() => {
+  const [state2, setState2] = (0, import_react9.useState)({ loading: true, models: [], native: null, error: null, saving: false });
+  const [draft, setDraft] = (0, import_react9.useState)(null);
+  const [attempt, setAttempt] = (0, import_react9.useState)(0);
+  (0, import_react9.useEffect)(() => {
+    if (view === "summary") return;
+    setState2((current) => ({ ...current, loading: true, error: null }));
     let active = true;
     api.config().then((data) => {
       if (!active) return;
-      setState2({ loading: false, models: data.models || [], native: data.native || null, error: null, saving: false });
+      setState2({ loading: false, models: data.models || [], hostDefault: data.hostDefaultModel, native: data.native || null, error: null, saving: false });
       setDraft({
         defaultModel: modelValue(data.config.defaultModel),
         visionModel: modelValue(data.config.visionModel),
         hotkey: data.config.hotkey,
+        shortcuts: data.config.shortcuts,
+        orb: data.config.orb,
         retentionDays: data.config.retentionDays
       });
     }).catch((error) => {
       if (!active) return;
       setState2((current) => ({ ...current, loading: false, error: error.message }));
-      setDraft((current) => current || { defaultModel: "", visionModel: "", hotkey: "Alt+Space", retentionDays: 30 });
+      setDraft(null);
     });
     return () => {
       active = false;
     };
-  }, []);
-  if (view === "summary") return /* @__PURE__ */ import_react8.default.createElement("span", null, t("meta.description"));
-  if (state2.loading) return /* @__PURE__ */ import_react8.default.createElement("div", { className: "df-settings-block" }, t("state.loading"));
-  if (!draft) return /* @__PURE__ */ import_react8.default.createElement("div", { className: "df-error" }, state2.error || t("state.error"));
+  }, [attempt, view]);
+  if (view === "summary") return /* @__PURE__ */ import_react9.default.createElement("span", null, t("meta.description"));
+  if (state2.loading) return /* @__PURE__ */ import_react9.default.createElement("div", { className: "df-settings-block" }, t("state.loading"));
+  if (!draft) return /* @__PURE__ */ import_react9.default.createElement("div", { className: "df-error", role: "alert" }, state2.error || t("state.error"), /* @__PURE__ */ import_react9.default.createElement("button", { className: "df-btn", type: "button", onClick: () => setAttempt((value) => value + 1) }, t("state.retry")));
+  const host = state2.hostDefault;
+  const hostLabel = state2.models.find((model) => modelValue(model) === modelValue(host))?.label || host && `${host.provider} \xB7 ${host.model}`;
   const update = (patch) => setDraft((current) => ({ ...current, ...patch }));
   const save = async () => {
     setState2((current) => ({ ...current, saving: true, error: null }));
     try {
-      const value = await api.saveConfig({
+      await api.saveConfig({
         defaultModel: parseModel(draft.defaultModel),
         visionModel: parseModel(draft.visionModel),
         hotkey: draft.hotkey,
+        shortcuts: draft.shortcuts,
+        orb: draft.orb,
         retentionDays: Number(draft.retentionDays)
       });
       const data = await api.config();
       setConfig(data);
-      setState2((current) => ({ ...current, native: data.native || null, saving: false }));
+      setState2((current) => ({ ...current, models: data.models || [], hostDefault: data.hostDefaultModel, native: data.native || null, saving: false }));
       toast(t("settings.saved"), "success");
     } catch (error) {
       setState2((current) => ({ ...current, saving: false, error: error.message }));
     }
   };
-  return /* @__PURE__ */ import_react8.default.createElement("div", { className: "df-settings-block" }, /* @__PURE__ */ import_react8.default.createElement("div", { className: "df-form-row" }, /* @__PURE__ */ import_react8.default.createElement("label", { htmlFor: "df-default-model" }, t("settings.defaultModel")), /* @__PURE__ */ import_react8.default.createElement("select", { id: "df-default-model", className: "df-input", value: draft.defaultModel, onChange: (event) => update({ defaultModel: event.target.value }) }, /* @__PURE__ */ import_react8.default.createElement("option", { value: "" }, t("settings.inherit")), state2.models.map((model) => /* @__PURE__ */ import_react8.default.createElement("option", { key: modelValue(model), value: modelValue(model) }, model.label))), /* @__PURE__ */ import_react8.default.createElement("span", { className: "df-hint" }, t("settings.defaultHint"))), /* @__PURE__ */ import_react8.default.createElement("div", { className: "df-form-row" }, /* @__PURE__ */ import_react8.default.createElement("label", { htmlFor: "df-vision-model" }, t("settings.visionModel")), /* @__PURE__ */ import_react8.default.createElement("select", { id: "df-vision-model", className: "df-input", value: draft.visionModel, onChange: (event) => update({ visionModel: event.target.value }) }, /* @__PURE__ */ import_react8.default.createElement("option", { value: "" }, t("settings.none")), state2.models.map((model) => /* @__PURE__ */ import_react8.default.createElement("option", { key: modelValue(model), value: modelValue(model) }, model.label))), /* @__PURE__ */ import_react8.default.createElement("span", { className: "df-hint" }, t("settings.visionHint"))), /* @__PURE__ */ import_react8.default.createElement("div", { className: "df-settings-grid" }, /* @__PURE__ */ import_react8.default.createElement("div", { className: "df-form-row" }, /* @__PURE__ */ import_react8.default.createElement("label", { htmlFor: "df-hotkey" }, t("settings.hotkey")), /* @__PURE__ */ import_react8.default.createElement("input", { id: "df-hotkey", className: "df-input", value: draft.hotkey, onChange: (event) => update({ hotkey: event.target.value }) }), /* @__PURE__ */ import_react8.default.createElement("span", { className: "df-hint" }, t("settings.hotkeyHint"))), /* @__PURE__ */ import_react8.default.createElement("div", { className: "df-form-row" }, /* @__PURE__ */ import_react8.default.createElement("label", { htmlFor: "df-retention" }, t("settings.retention")), /* @__PURE__ */ import_react8.default.createElement(
+  return /* @__PURE__ */ import_react9.default.createElement("div", { className: "df-settings-block" }, /* @__PURE__ */ import_react9.default.createElement("div", { className: "df-form-row" }, /* @__PURE__ */ import_react9.default.createElement("label", { htmlFor: "df-default-model" }, t("settings.defaultModel")), /* @__PURE__ */ import_react9.default.createElement("select", { id: "df-default-model", className: "df-input", value: draft.defaultModel, onChange: (event) => update({ defaultModel: event.target.value }) }, /* @__PURE__ */ import_react9.default.createElement("option", { value: "" }, t("settings.inherit"), hostLabel ? ` (${hostLabel})` : ""), modelOptions(state2.models, draft.defaultModel, t)), /* @__PURE__ */ import_react9.default.createElement("span", { className: "df-hint" }, t("settings.defaultHint"))), /* @__PURE__ */ import_react9.default.createElement("div", { className: "df-form-row" }, /* @__PURE__ */ import_react9.default.createElement("label", { htmlFor: "df-vision-model" }, t("settings.visionModel")), /* @__PURE__ */ import_react9.default.createElement("select", { id: "df-vision-model", className: "df-input", value: draft.visionModel, onChange: (event) => update({ visionModel: event.target.value }) }, /* @__PURE__ */ import_react9.default.createElement("option", { value: "" }, t("settings.none")), modelOptions(state2.models, draft.visionModel, t)), /* @__PURE__ */ import_react9.default.createElement("span", { className: "df-hint" }, t("settings.visionHint"))), /* @__PURE__ */ import_react9.default.createElement(OrbControls, { orb: draft.orb, change: (orb) => update({ orb }), t }), /* @__PURE__ */ import_react9.default.createElement(ShortcutControls, { draft, change: update, t }), /* @__PURE__ */ import_react9.default.createElement("div", { className: "df-settings-grid" }, /* @__PURE__ */ import_react9.default.createElement("div", { className: "df-form-row" }, /* @__PURE__ */ import_react9.default.createElement("label", { htmlFor: "df-retention" }, t("settings.retention")), /* @__PURE__ */ import_react9.default.createElement(
     "input",
     {
       id: "df-retention",
@@ -1525,25 +1762,24 @@ function SettingsForm({ t, view = "page" }) {
       value: draft.retentionDays,
       onChange: (event) => update({ retentionDays: event.target.value })
     }
-  ), /* @__PURE__ */ import_react8.default.createElement("span", { className: "df-hint" }, t("settings.retentionHint")))), /* @__PURE__ */ import_react8.default.createElement("p", { className: `df-hint df-capability-note${state2.native?.hotkeyError || state2.native?.lastError ? " df-error" : ""}` }, state2.native?.hotkeyError || state2.native?.lastError || t("settings.globalLimit")), state2.error ? /* @__PURE__ */ import_react8.default.createElement("div", { className: "df-error", role: "alert" }, state2.error) : null, /* @__PURE__ */ import_react8.default.createElement("div", { className: "df-settings-actions" }, /* @__PURE__ */ import_react8.default.createElement("button", { className: "df-btn primary", type: "button", onClick: save, disabled: state2.saving }, state2.saving ? t("state.loading") : t("settings.save"))));
+  ), /* @__PURE__ */ import_react9.default.createElement("span", { className: "df-hint" }, t("settings.retentionHint")))), /* @__PURE__ */ import_react9.default.createElement("p", { className: `df-hint df-capability-note${state2.native?.hotkeyError || state2.native?.lastError ? " df-error" : ""}` }, state2.native?.hotkeyError || state2.native?.lastError || t("settings.globalLimit")), state2.error ? /* @__PURE__ */ import_react9.default.createElement("div", { className: "df-error", role: "alert" }, state2.error) : null, /* @__PURE__ */ import_react9.default.createElement("div", { className: "df-settings-actions" }, /* @__PURE__ */ import_react9.default.createElement("button", { className: "df-btn primary", type: "button", onClick: save, disabled: state2.saving }, state2.saving ? t("state.loading") : t("settings.save"))));
 }
 
 // src/client/styles.js
 var CSS = String.raw`
-.df-page, .df-quick, .df-modal, .df-settings-block, .df-toast { box-sizing: border-box; font: inherit; color: var(--dsw-alias-label-primary); }
+.df-page, .df-quick, .df-modal, .df-settings-block, .df-toast { box-sizing: border-box; font: inherit; font-size: var(--dsh-content-font-size, 14px); color: var(--dsw-alias-label-primary); }
 .df-page *, .df-quick *, .df-modal *, .df-settings-block * { box-sizing: border-box; }
-.df-page button, .df-quick button, .df-modal button, .df-settings-block button,
-.df-page input, .df-page textarea, .df-quick textarea, .df-modal input, .df-modal select, .df-settings-block input, .df-settings-block select { font: inherit; }
+:where(.df-page, .df-quick, .df-modal, .df-settings-block) :where(button, input, textarea, select) { font: inherit; }
 .df-page h1, .df-page h2, .df-modal h2, .df-quick p { margin: 0; }
-.df-page h1 { font-size: 22px; line-height: 1.3; letter-spacing: -.02em; }
-.df-page-head p { margin: 5px 0 0; color: var(--dsw-alias-label-secondary); font-size: 13px; }
+.df-page h1 { font-size: calc(var(--dsh-content-font-size, 14px) * 1.55); line-height: 1.3; letter-spacing: -.02em; }
+.df-page-head p { margin: 5px 0 0; color: var(--dsw-alias-label-secondary); font-size: var(--dsh-content-font-size, 14px); }
 .df-btn, .df-icon-btn, .df-send, .df-answer-actions button, .df-tabs button {
   border: 1px solid var(--dsw-alias-border-l1); color: var(--dsw-alias-label-primary);
   background: var(--dsw-alias-bg-layer-1); border-radius: 8px; cursor: pointer;
   display: inline-flex; align-items: center; justify-content: center; gap: 7px;
   transition: background .15s ease, border-color .15s ease, transform .15s ease;
 }
-.df-btn { min-height: 32px; padding: 6px 11px; font-size: 12px; white-space: nowrap; }
+.df-btn { min-height: 32px; padding: 6px 11px; font-size: calc(var(--dsh-content-font-size, 14px) * .92); white-space: nowrap; }
 .df-btn:hover:not(:disabled), .df-icon-btn:hover:not(:disabled), .df-answer-actions button:hover:not(:disabled) { background: var(--dsw-alias-bg-layer-2); border-color: var(--dsw-alias-border-l2); }
 .df-btn:active:not(:disabled), .df-icon-btn:active:not(:disabled), .df-send:active:not(:disabled) { transform: translateY(1px); }
 .df-btn.primary, .df-send { background: var(--dsw-alias-brand-primary); color: var(--dsw-alias-bg-layer-1); border-color: var(--dsw-alias-brand-primary); }
@@ -1565,11 +1801,25 @@ var CSS = String.raw`
   color: var(--dsw-alias-label-primary); outline: none;
 }
 .df-input:disabled { opacity: .55; }
-.df-hint { color: var(--dsw-alias-label-secondary); font-size: 11px; line-height: 1.5; }
-.df-error { color: var(--dsw-alias-state-error-primary); font-size: 12px; line-height: 1.5; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.df-hint { color: var(--dsw-alias-label-secondary); font-size: calc(var(--dsh-content-font-size, 14px) * .875); line-height: 1.5; }
+.df-error { color: var(--dsw-alias-state-error-primary); font-size: calc(var(--dsh-content-font-size, 14px) * .92); line-height: 1.5; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
 .df-inline { display: flex; align-items: center; gap: 8px; }
 .df-form-row { display: flex; flex-direction: column; gap: 7px; margin-bottom: 16px; }
-.df-form-row > label { font-size: 12px; font-weight: 600; }
+.df-form-row > label { font-size: calc(var(--dsh-content-font-size, 14px) * .92); font-weight: 600; }
+
+.df-prefs { margin: 18px 0; padding: 12px; min-width: 0; border: 1px solid var(--dsw-alias-border-l2); border-radius: 10px; }
+.df-prefs legend { padding: 0 5px; font-weight: 600; }
+.df-orb-controls { display: grid; grid-template-columns: minmax(100px, .65fr) minmax(150px, 1fr); align-items: center; gap: 14px; }
+.df-orb-preview { height: 145px; position: relative; overflow: hidden; display: grid; place-items: center; border-radius: 8px; background: var(--dsw-alias-bg-base); border: 1px solid var(--dsw-alias-border-l1); }
+.df-orb-preview img { position: absolute; pointer-events: none; max-width: none; }
+.df-orb-row, .df-key-row { display: flex; align-items: center; gap: 8px; min-height: 37px; }
+.df-orb-row input { margin-left: auto; accent-color: var(--dsw-alias-brand-primary); }
+.df-orb-row input[type=range] { width: min(46%, 180px); }
+.df-orb-row output { min-width: 4ch; text-align: right; font-variant-numeric: tabular-nums; }
+.df-key-row { justify-content: space-between; }
+.df-key-row button { min-width: 110px; }
+.df-key-row button[aria-pressed=true] { border-color: var(--dsw-alias-brand-primary); }
+@media(max-width: 520px) { .df-orb-controls { grid-template-columns: 1fr; } }
 
 /* Full-page Inbox */
 .df-page { height: 100%; min-height: 0; display: flex; flex-direction: column; background: var(--dsw-alias-bg-base); overflow: hidden; }
@@ -1582,7 +1832,7 @@ var CSS = String.raw`
 .df-search-field input:focus-visible { outline: 0; }
 .df-time-filter { flex: 0 0 132px; width: 132px; }
 .df-tabs { display: flex; gap: 4px; padding: 0 26px; border-bottom: 1px solid var(--dsw-alias-border-l1); }
-.df-tabs button { border: 0; border-bottom: 2px solid transparent; border-radius: 0; background: transparent; padding: 9px 12px 8px; color: var(--dsw-alias-label-secondary); font-size: 12px; }
+.df-tabs button { border: 0; border-bottom: 2px solid transparent; border-radius: 0; background: transparent; padding: 9px 12px 8px; color: var(--dsw-alias-label-secondary); font-size: calc(var(--dsh-content-font-size, 14px) * .92); }
 .df-tabs button.active { color: var(--dsw-alias-label-primary); border-bottom-color: var(--dsw-alias-brand-primary); }
 .df-page-error { margin: 10px 26px 0; }
 .df-inbox-layout { flex: 1; min-height: 0; display: flex; }
@@ -1591,27 +1841,27 @@ var CSS = String.raw`
 .df-inbox-row:hover { background: var(--dsw-alias-bg-layer-1); }
 .df-inbox-row.selected { background: var(--dsw-alias-bg-layer-2); border-color: var(--dsw-alias-border-l1); }
 .df-row-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; }
-.df-row-title, .df-row-top strong { font-size: 13px; font-weight: 600; line-height: 1.45; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
-.df-row-top time { flex: 0 0 auto; color: var(--dsw-alias-label-secondary); font-size: 10px; padding-top: 2px; }
-.df-row-summary { color: var(--dsw-alias-label-secondary); font-size: 11px; line-height: 1.55; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
-.df-row-meta { display: flex; align-items: center; gap: 7px; flex-wrap: wrap; color: var(--dsw-alias-label-secondary); font-size: 10px; }
+.df-row-title, .df-row-top strong { font-size: var(--dsh-content-font-size, 14px); font-weight: 600; line-height: 1.45; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+.df-row-top time { flex: 0 0 auto; color: var(--dsw-alias-label-secondary); font-size: calc(var(--dsh-content-font-size, 14px) * .8); padding-top: 2px; }
+.df-row-summary { color: var(--dsw-alias-label-secondary); font-size: calc(var(--dsh-content-font-size, 14px) * .875); line-height: 1.55; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+.df-row-meta { display: flex; align-items: center; gap: 7px; flex-wrap: wrap; color: var(--dsw-alias-label-secondary); font-size: calc(var(--dsh-content-font-size, 14px) * .8); }
 .df-badge { display: inline-flex; align-items: center; gap: 3px; padding: 2px 5px; border-radius: 5px; background: var(--dsw-alias-bg-layer-1); border: 1px solid var(--dsw-alias-border-l1); }
 .df-detail { flex: 1; min-width: 0; min-height: 0; display: flex; flex-direction: column; background: var(--dsw-alias-bg-layer-1); }
 .df-detail-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 18px; padding: 17px 20px; border-bottom: 1px solid var(--dsw-alias-border-l1); }
-.df-detail-head h2 { font-size: 15px; line-height: 1.45; margin-bottom: 4px; }
+.df-detail-head h2 { font-size: calc(var(--dsh-content-font-size, 14px) * 1.1); line-height: 1.45; margin-bottom: 4px; }
 .df-detail-transcript { flex: 1; min-height: 0; overflow-y: auto; padding: 18px 20px 24px; }
 .df-inline-chat { flex: 0 0 auto; padding: 8px 20px 14px; border-top: 1px solid var(--dsw-alias-border-l1); background: var(--dsw-alias-bg-layer-1); }
 .df-inline-chat .df-composer { margin: 0; }
 .df-inline-chat .df-image-drafts { padding: 0 0 8px; }
 .df-inline-chat .df-error, .df-inline-chat > .df-hint { margin: 0 0 7px; }
 .df-empty-state { min-height: 220px; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; gap: 10px; color: var(--dsw-alias-label-secondary); padding: 30px; }
-.df-empty-state h2 { font-size: 14px; color: var(--dsw-alias-label-primary); }
-.df-empty-state p { margin: 0; font-size: 12px; }
-.df-empty-small { padding: 36px 16px; text-align: center; color: var(--dsw-alias-label-secondary); font-size: 12px; }
+.df-empty-state h2 { font-size: var(--dsh-content-font-size, 14px); color: var(--dsw-alias-label-primary); }
+.df-empty-state p { margin: 0; font-size: calc(var(--dsh-content-font-size, 14px) * .92); }
+.df-empty-small { padding: 36px 16px; text-align: center; color: var(--dsw-alias-label-secondary); font-size: calc(var(--dsh-content-font-size, 14px) * .92); }
 
 /* Quick conversation */
 .df-overlay-root { position: fixed; inset: 0; z-index: 80; pointer-events: none; }
-.df-quick { --dsw-alias-bg-layer-1: #fff; --dsw-alias-bg-overlay: rgba(246, 246, 249, .76); --dsw-alias-label-primary: rgba(28, 28, 32, .94); --dsw-alias-label-secondary: rgba(60, 60, 68, .64); pointer-events: auto; position: absolute; top: max(56px, 8vh); left: 50%; transform: translateX(-50%); width: min(720px, calc(100vw - 36px)); max-height: min(760px, 84vh); display: flex; flex-direction: column; overflow: hidden; border: 1px solid color-mix(in srgb, var(--dsw-alias-border-l2) 34%, transparent); border-radius: 18px; background: var(--dsw-alias-bg-layer-1); box-shadow: 0 0 0 8px color-mix(in srgb, var(--dsw-alias-bg-overlay) 22%, transparent), 0 18px 60px color-mix(in srgb, var(--dsw-alias-label-primary) 15%, transparent); animation: df-enter .16s ease-out; }
+.df-quick { pointer-events: auto; position: absolute; top: max(56px, 8vh); left: 50%; transform: translateX(-50%); width: min(720px, calc(100vw - 36px)); max-height: min(760px, 84vh); display: flex; flex-direction: column; overflow: hidden; border: 1px solid color-mix(in srgb, var(--dsw-alias-border-l2) 34%, transparent); border-radius: 18px; background: var(--dsw-alias-bg-layer-1); box-shadow: 0 0 0 8px color-mix(in srgb, var(--dsw-alias-bg-overlay) 22%, transparent), 0 18px 60px color-mix(in srgb, var(--dsw-alias-label-primary) 15%, transparent); animation: df-enter .16s ease-out; }
 .df-quick.positioned { animation: df-fade .12s ease-out; }
 .df-quick.compact { max-height: none; }
 .df-quick.expanded { height: min(560px, calc(100vh - 72px)); min-height: 0; }
@@ -1621,24 +1871,24 @@ var CSS = String.raw`
 .df-quick-head:active { cursor: grabbing; }
 .df-quick-head button { cursor: pointer; }
 .df-quick-brand { min-width: 0; display: flex; align-items: center; gap: 9px; }
-.df-quick-brand strong { overflow: hidden; white-space: nowrap; text-overflow: ellipsis; font-size: 12px; font-weight: 600; }
+.df-quick-brand strong { overflow: hidden; white-space: nowrap; text-overflow: ellipsis; font-size: calc(var(--dsh-content-font-size, 14px) * .92); font-weight: 600; }
 .df-brand-dot { width: 8px; height: 8px; flex: 0 0 auto; border-radius: 50%; background: var(--dsw-alias-brand-primary); box-shadow: 0 0 0 4px color-mix(in srgb, var(--dsw-alias-brand-primary) 12%, transparent); }
 .df-quick-actions { display: flex; align-items: center; gap: 2px; }
 .df-quick-empty { padding: 24px 22px 15px; text-align: center; color: var(--dsw-alias-label-secondary); }
-.df-quick-empty span { color: var(--dsw-alias-brand-primary); font-size: 22px; font-weight: 650; letter-spacing: -.03em; }
-.df-quick-empty p { margin-top: 5px; font-size: 12px; }
+.df-quick-empty span { color: var(--dsw-alias-brand-primary); font-size: calc(var(--dsh-content-font-size, 14px) * 1.55); font-weight: 650; letter-spacing: -.03em; }
+.df-quick-empty p { margin-top: 5px; font-size: calc(var(--dsh-content-font-size, 14px) * .92); }
 .df-quick-transcript { flex: 1; min-height: 120px; overflow-y: auto; padding: 12px 15px; }
 .df-composer { display: flex; align-items: center; gap: 8px; margin: 8px 10px 6px; padding: 6px; border: 1px solid color-mix(in srgb, var(--dsw-alias-border-l2) 82%, transparent); border-radius: 13px; background: color-mix(in srgb, var(--dsw-alias-bg-layer-1) 76%, transparent); }
 .df-composer:focus-within { border-color: var(--dsw-alias-brand-primary); }
 .df-composer button { line-height: 0; }
 .df-composer button svg { display: block; }
 .df-composer-attach { width: 34px; height: 34px; flex: 0 0 34px; }
-.df-composer textarea { flex: 1; min-width: 0; min-height: 34px; max-height: 140px; resize: none; overflow-y: auto; border: 0; outline: 0; padding: 7px 4px; background: transparent; color: var(--dsw-alias-label-primary); line-height: 20px; }
+.df-composer textarea { flex: 1; min-width: 0; min-height: max(34px, calc(1.45em + 14px)); max-height: 140px; resize: none; overflow-y: auto; border: 0; outline: 0; padding: 7px 4px; background: transparent; color: var(--dsw-alias-label-primary); line-height: 1.45; }
 .df-composer textarea:focus-visible { outline: 0; }
 .df-composer textarea::placeholder { color: color-mix(in srgb, var(--dsw-alias-label-secondary) 62%, transparent); }
 .df-search-field input::placeholder { color: var(--dsw-alias-label-secondary); }
 .df-quick-error { margin: 5px 14px; }
-.df-thinking { display: flex; align-items: center; gap: 8px; padding: 14px 4px; color: var(--dsw-alias-label-secondary); font-size: 12px; }
+.df-thinking { display: flex; align-items: center; gap: 8px; padding: 14px 4px; color: var(--dsw-alias-label-secondary); font-size: calc(var(--dsh-content-font-size, 14px) * .92); }
 .df-thinking span { width: 7px; height: 7px; border-radius: 50%; background: var(--dsw-alias-brand-primary); animation: df-pulse 1s infinite alternate; }
 @keyframes df-pulse { to { opacity: .25; } }
 .df-answer-actions { display: flex; gap: 6px; padding: 0 15px 4px; }
@@ -1652,71 +1902,72 @@ var CSS = String.raw`
 /* Standalone macOS panel uses the same surface, dimensions, and outer ring. */
 .df-overlay-root.df-native { inset: 0; padding: 8px; }
 .df-native .df-quick { position: relative; inset: auto; width: 100%; height: auto; min-height: 0; max-height: calc(100vh - 16px); transform: none; animation: none; }
-.df-native .df-quick.compact { height: auto; }
+.df-native .df-quick.compact { height: auto; max-height: none; }
 .df-native .df-quick.expanded { height: 560px; max-height: calc(100vh - 16px); }
 .df-native .df-quick-head { flex: 0 0 46px; }
 .df-native .df-modal-backdrop { background: color-mix(in srgb, var(--dsw-alias-label-primary) 12%, transparent); }
-.df-native-fatal { margin: 24px; padding: 14px; border-radius: 12px; color: var(--dsw-alias-state-error-primary); background: var(--dsw-alias-bg-overlay); font: 13px/1.5 -apple-system, BlinkMacSystemFont, sans-serif; }
+.df-native-fatal { margin: 24px; padding: 14px; border-radius: 12px; color: var(--dsw-alias-state-error-primary); background: var(--dsw-alias-bg-overlay); font: var(--dsh-content-font-size, 14px)/1.5 -apple-system, BlinkMacSystemFont, sans-serif; }
 
 /* Messages and safe Markdown */
 .df-messages { display: flex; flex-direction: column; gap: 15px; }
 .df-message { min-width: 0; padding: 0 2px; }
 .df-message.user { padding: 11px 13px; border-radius: 11px; background: color-mix(in srgb, var(--dsw-alias-brand-primary) 8%, var(--dsw-alias-bg-layer-1)); border: 1px solid color-mix(in srgb, var(--dsw-alias-brand-primary) 15%, var(--dsw-alias-border-l1)); }
 .df-message.assistant { padding: 2px 3px; }
-.df-message-role { margin-bottom: 6px; color: var(--dsw-alias-label-secondary); font-size: 9px; font-weight: 650; text-transform: uppercase; letter-spacing: .08em; }
-.df-markdown { font-size: 12px; line-height: 1.7; overflow-wrap: anywhere; }
+.df-message-role { margin-bottom: 6px; color: var(--dsw-alias-label-secondary); font-size: calc(var(--dsh-content-font-size, 14px) * .75); font-weight: 650; text-transform: uppercase; letter-spacing: .08em; }
+.df-markdown { font-size: var(--dsh-content-font-size, 14px); line-height: 1.7; overflow-wrap: anywhere; }
 .df-markdown p { margin: 0 0 9px; white-space: pre-wrap; }
 .df-markdown p:last-child { margin-bottom: 0; }
 .df-markdown h2, .df-markdown h3, .df-markdown h4 { margin: 15px 0 7px; line-height: 1.4; }
-.df-markdown h2 { font-size: 16px; } .df-markdown h3 { font-size: 14px; } .df-markdown h4 { font-size: 12px; }
+.df-markdown h2 { font-size: calc(var(--dsh-content-font-size, 14px) * 1.15); } .df-markdown h3 { font-size: var(--dsh-content-font-size, 14px); } .df-markdown h4 { font-size: calc(var(--dsh-content-font-size, 14px) * .92); }
 .df-markdown ul, .df-markdown ol { margin: 6px 0 10px; padding-left: 22px; }
 .df-markdown li { margin: 3px 0; }
-.df-markdown code { padding: 1px 4px; border-radius: 4px; background: var(--dsw-alias-bg-layer-2); font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: .92em; }
+.df-markdown code { padding: 1px 4px; border-radius: 4px; background: var(--dsw-alias-bg-layer-2); font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: calc(var(--dsh-code-font-size, 11px) + 1px); }
 .df-markdown pre { margin: 10px 0; padding: 12px; overflow-x: auto; border: 1px solid var(--dsw-alias-border-l1); border-radius: 9px; background: var(--dsw-alias-bg-base); }
-.df-markdown pre code { padding: 0; background: transparent; line-height: 1.55; }
+.df-markdown pre code { font-size: var(--dsh-code-font-size, 11px); padding: 0; background: transparent; line-height: 1.55; }
 .df-markdown a, .df-sources a { color: var(--dsw-alias-brand-primary); text-decoration: none; }
 .df-markdown a:hover, .df-sources a:hover { text-decoration: underline; }
 .df-markdown blockquote { margin: 9px 0; padding: 4px 10px; border-left: 3px solid var(--dsw-alias-border-l2); color: var(--dsw-alias-label-secondary); white-space: pre-wrap; }
 .df-table-scroll { margin: 10px 0; overflow-x: auto; border: 1px solid var(--dsw-alias-border-l1); border-radius: 8px; }
-.df-markdown table { width: 100%; border-collapse: collapse; font-size: 11px; }
+.df-markdown table { width: 100%; border-collapse: collapse; font-size: inherit; }
 .df-markdown th, .df-markdown td { padding: 7px 9px; text-align: left; border-bottom: 1px solid var(--dsw-alias-border-l1); }
 .df-markdown th { background: var(--dsw-alias-bg-layer-2); font-weight: 600; }
 .df-markdown tr:last-child td { border-bottom: 0; }
 .df-sources { margin-top: 10px; padding-top: 9px; border-top: 1px solid var(--dsw-alias-border-l1); }
-.df-sources-title { color: var(--dsw-alias-label-secondary); font-size: 10px; font-weight: 600; }
+.df-sources-title:focus-visible { outline: 2px solid var(--dsw-alias-brand-primary); outline-offset: 2px; }
+.df-sources-title { cursor: pointer; color: var(--dsw-alias-label-secondary); font-size: calc(var(--dsh-content-font-size, 14px) * .8); font-weight: 600; }
 .df-sources ol { margin: 6px 0 0; padding-left: 18px; }
-.df-sources li { margin: 5px 0; font-size: 10px; }
+.df-sources li { margin: 5px 0; font-size: calc(var(--dsh-content-font-size, 14px) * .8); }
 .df-sources li span { display: block; margin-top: 2px; color: var(--dsw-alias-label-secondary); line-height: 1.45; }
 .df-attachment-grid { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 9px; }
-.df-attachment { width: min(240px, 100%); min-height: 70px; display: grid; place-items: center; overflow: hidden; border: 1px solid var(--dsw-alias-border-l1); border-radius: 9px; background: var(--dsw-alias-bg-layer-2); color: var(--dsw-alias-label-secondary); font-size: 10px; }
+.df-attachment { width: min(240px, 100%); min-height: 70px; display: grid; place-items: center; overflow: hidden; border: 1px solid var(--dsw-alias-border-l1); border-radius: 9px; background: var(--dsw-alias-bg-layer-2); color: var(--dsw-alias-label-secondary); font-size: calc(var(--dsh-content-font-size, 14px) * .8); }
 .df-attachment img { display: block; width: 100%; max-height: 320px; object-fit: contain; }
 
 /* Dialogs and settings */
 .df-modal-backdrop { position: fixed; inset: 0; z-index: 100; display: grid; place-items: center; padding: 22px; pointer-events: auto; background: color-mix(in srgb, var(--dsw-alias-label-primary) 20%, transparent); }
 .df-modal { width: min(580px, 100%); max-height: min(740px, 90vh); display: flex; flex-direction: column; overflow: hidden; border: 1px solid var(--dsw-alias-border-l2); border-radius: 14px; background: var(--dsw-alias-bg-overlay); box-shadow: 0 20px 70px color-mix(in srgb, var(--dsw-alias-label-primary) 20%, transparent); }
 .df-modal-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; padding: 18px 18px 13px; border-bottom: 1px solid var(--dsw-alias-border-l1); }
-.df-modal-head h2 { font-size: 15px; }
-.df-modal-head p { margin: 6px 0 0; color: var(--dsw-alias-label-secondary); font-size: 11px; line-height: 1.55; }
+.df-modal-head h2 { font-size: calc(var(--dsh-content-font-size, 14px) * 1.1); }
+.df-modal-head p { margin: 6px 0 0; color: var(--dsw-alias-label-secondary); font-size: calc(var(--dsh-content-font-size, 14px) * .875); line-height: 1.55; }
 .df-modal-body { overflow-y: auto; padding: 17px 18px; }
 .df-modal-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 18px; }
 .df-upgrade-modal { width: min(720px, 100%); }
-.df-upgrade-context textarea { width: 100%; min-height: 260px; max-height: 420px; resize: vertical; padding: 13px 14px; border: 1px solid var(--dsw-alias-border-l1); border-radius: 10px; outline: none; background: var(--dsw-alias-bg-layer-1); color: var(--dsw-alias-label-primary); font: 13px/1.65 ui-monospace, SFMono-Regular, Menlo, monospace; }
+.df-upgrade-context textarea { width: 100%; min-height: 260px; max-height: 420px; resize: vertical; padding: 13px 14px; border: 1px solid var(--dsw-alias-border-l1); border-radius: 10px; outline: none; background: var(--dsw-alias-bg-layer-1); color: var(--dsw-alias-label-primary); font: var(--dsh-content-font-size, 14px)/1.65 ui-monospace, SFMono-Regular, Menlo, monospace; }
 .df-upgrade-context textarea:focus { border-color: var(--dsw-alias-brand-primary); }
 .df-workspace-picker { align-items: flex-start; }
 .df-workspace-choice { flex: 1; min-width: 0; }
 .df-workspace-choice select { color: var(--dsw-alias-label-primary); font-weight: 550; }
-.df-workspace-path { margin: 5px 2px 0; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; color: var(--dsw-alias-label-secondary); font-size: 11px; font-weight: 400; }
+.df-workspace-path { margin: 5px 2px 0; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; color: var(--dsw-alias-label-secondary); font-size: calc(var(--dsh-content-font-size, 14px) * .875); font-weight: 400; }
 .df-find-modal { width: min(660px, 100%); }
 .df-find-results { max-height: 460px; overflow-y: auto; margin-top: 12px; }
 .df-find-row { width: 100%; display: flex; flex-direction: column; gap: 5px; padding: 11px 8px; text-align: left; border: 0; border-bottom: 1px solid var(--dsw-alias-border-l1); background: transparent; color: var(--dsw-alias-label-primary); cursor: pointer; }
 .df-find-row:hover { background: var(--dsw-alias-bg-layer-1); }
-.df-find-row > span:not(.df-row-title) { overflow: hidden; white-space: nowrap; text-overflow: ellipsis; color: var(--dsw-alias-label-secondary); font-size: 11px; }
+.df-find-row > span:not(.df-row-title) { overflow: hidden; white-space: nowrap; text-overflow: ellipsis; color: var(--dsw-alias-label-secondary); font-size: calc(var(--dsh-content-font-size, 14px) * .875); }
 .df-find-row small { color: var(--dsw-alias-label-secondary); }
 .df-settings-block { max-width: 760px; padding: 4px 0; }
 .df-settings-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
 .df-capability-note { padding: 10px 12px; border: 1px solid var(--dsw-alias-border-l1); border-radius: 8px; background: var(--dsw-alias-bg-layer-1); }
 .df-settings-actions { display: flex; justify-content: flex-end; margin-top: 12px; }
-.df-toast { position: fixed; right: 22px; bottom: 22px; z-index: 120; max-width: min(420px, calc(100vw - 44px)); padding: 10px 14px; pointer-events: auto; border: 1px solid var(--dsw-alias-border-l2); border-radius: 10px; background: var(--dsw-alias-bg-overlay); box-shadow: 0 8px 32px color-mix(in srgb, var(--dsw-alias-label-primary) 16%, transparent); font-size: 12px; }
+.df-toast { position: fixed; right: 22px; bottom: 22px; z-index: 120; max-width: min(420px, calc(100vw - 44px)); padding: 10px 14px; pointer-events: auto; border: 1px solid var(--dsw-alias-border-l2); border-radius: 10px; background: var(--dsw-alias-bg-overlay); box-shadow: 0 8px 32px color-mix(in srgb, var(--dsw-alias-label-primary) 16%, transparent); font-size: calc(var(--dsh-content-font-size, 14px) * .92); }
 .df-toast.success { border-color: var(--dsw-alias-state-success-primary); }
 .df-toast.error { border-color: var(--dsw-alias-state-error-primary); color: var(--dsw-alias-state-error-primary); }
 .df-list, .df-detail-transcript, .df-quick-transcript, .df-modal-body, .df-find-results { scrollbar-width: thin; scrollbar-color: var(--dsw-alias-border-l2) transparent; }
@@ -1731,7 +1982,7 @@ var CSS = String.raw`
   .df-page-actions { justify-content: flex-end; }
   .df-toolbar, .df-tabs { padding-left: 16px; padding-right: 16px; }
   .df-list { width: 42%; }
-  .df-detail-actions .df-btn { font-size: 0; gap: 0; }
+  .df-detail-actions { flex-wrap: wrap; }
   .df-detail-actions .df-btn svg { width: 17px; height: 17px; }
   .df-settings-grid { grid-template-columns: 1fr; gap: 0; }
 }
@@ -1743,7 +1994,7 @@ var CSS = String.raw`
 
 // src/client/main.jsx
 var NS = "dsh-friday";
-var FridayBoundary = class extends import_react9.default.Component {
+var FridayBoundary = class extends import_react10.default.Component {
   constructor(props) {
     super(props);
     this.state = { error: null };
@@ -1755,12 +2006,12 @@ var FridayBoundary = class extends import_react9.default.Component {
     console.error("dsh-friday: view crashed", error);
   }
   render() {
-    if (this.state.error) return /* @__PURE__ */ import_react9.default.createElement("div", { className: "df-page" }, /* @__PURE__ */ import_react9.default.createElement("div", { className: "df-error" }, "Friday: ", String(this.state.error.message || this.state.error)));
+    if (this.state.error) return /* @__PURE__ */ import_react10.default.createElement("div", { className: "df-page" }, /* @__PURE__ */ import_react10.default.createElement("div", { className: "df-error" }, "Friday: ", String(this.state.error.message || this.state.error)));
     return this.props.children;
   }
 };
 function InboxGlyph({ size = 18, active = false }) {
-  return /* @__PURE__ */ import_react9.default.createElement("svg", { width: size, height: size, viewBox: "0 0 24 24", fill: "none", "aria-hidden": "true", style: { display: "block" } }, /* @__PURE__ */ import_react9.default.createElement(
+  return /* @__PURE__ */ import_react10.default.createElement("svg", { width: size, height: size, viewBox: "0 0 24 24", fill: "none", "aria-hidden": "true", style: { display: "block" } }, /* @__PURE__ */ import_react10.default.createElement(
     "path",
     {
       d: "M3.5 13 6.2 6.4A2 2 0 0 1 8.1 5h7.8a2 2 0 0 1 1.9 1.4L20.5 13v5a2 2 0 0 1-2 2h-13a2 2 0 0 1-2-2v-5Z",
@@ -1768,15 +2019,15 @@ function InboxGlyph({ size = 18, active = false }) {
       strokeWidth: "1.55",
       strokeLinejoin: "round"
     }
-  ), /* @__PURE__ */ import_react9.default.createElement("path", { d: "M3.8 13.5h4.2l1.5 2.5h5l1.5-2.5h4.2", stroke: active ? "var(--dsw-alias-brand-primary)" : "currentColor", strokeWidth: "1.55", strokeLinecap: "round", strokeLinejoin: "round" }), /* @__PURE__ */ import_react9.default.createElement("path", { d: "m16.8 2 .8 2.2 2.2.8-2.2.8-.8 2.2-.8-2.2-2.2-.8 2.2-.8.8-2.2Z", fill: active ? "var(--dsw-alias-brand-primary)" : "currentColor" }));
+  ), /* @__PURE__ */ import_react10.default.createElement("path", { d: "M3.8 13.5h4.2l1.5 2.5h5l1.5-2.5h4.2", stroke: active ? "var(--dsw-alias-brand-primary)" : "currentColor", strokeWidth: "1.55", strokeLinecap: "round", strokeLinejoin: "round" }), /* @__PURE__ */ import_react10.default.createElement("path", { d: "m16.8 2 .8 2.2 2.2.8-2.2.8-.8 2.2-.8-2.2-2.2-.8 2.2-.8.8-2.2Z", fill: active ? "var(--dsw-alias-brand-primary)" : "currentColor" }));
 }
 function Toast() {
   const value = useFridayState((state2) => state2.toast);
   if (!value) return null;
-  return /* @__PURE__ */ import_react9.default.createElement("div", { className: `df-toast ${value.tone}`, role: "status" }, value.message);
+  return /* @__PURE__ */ import_react10.default.createElement("div", { className: `df-toast ${value.tone}`, role: "status" }, value.message);
 }
 function GlobalUI({ t }) {
-  return /* @__PURE__ */ import_react9.default.createElement(import_react9.default.Fragment, null, /* @__PURE__ */ import_react9.default.createElement("style", null, CSS), /* @__PURE__ */ import_react9.default.createElement(QuickOverlay, { t }), /* @__PURE__ */ import_react9.default.createElement(Toast, null));
+  return /* @__PURE__ */ import_react10.default.createElement(import_react10.default.Fragment, null, /* @__PURE__ */ import_react10.default.createElement("style", null, CSS), /* @__PURE__ */ import_react10.default.createElement(QuickOverlay, { t }), /* @__PURE__ */ import_react10.default.createElement(Toast, null));
 }
 function translator() {
   const dictionary = String(navigator.language || "").toLowerCase().startsWith("zh") ? zh_default : en_default;
@@ -1810,14 +2061,7 @@ function apply(ctx) {
   window.addEventListener("focus", loadHotkey);
   ctx.effect(() => {
     const onKey = (event) => {
-      if (event.key === "Escape") {
-        if (document.querySelector(".df-modal-backdrop")) return;
-        if (getState().overlayOpen) {
-          event.preventDefault();
-          closeOverlay();
-        }
-        return;
-      }
+      if (event.isComposing || event.target.closest?.("[data-recording]")) return;
       if (getState().config?.native?.running && !getState().config?.native?.hotkeyError) return;
       if (event.defaultPrevented || event.repeat || !matchesHotkey(event, hotkey)) return;
       event.preventDefault();
@@ -1837,21 +2081,21 @@ function apply(ctx) {
     id: "inbox",
     order: 30,
     label: () => "Inbox"
-  }, (props) => /* @__PURE__ */ import_react9.default.createElement(InboxGlyph, { size: props?.size || 18, active: Boolean(props?.active) })));
+  }, (props) => /* @__PURE__ */ import_react10.default.createElement(InboxGlyph, { size: props?.size || 18, active: Boolean(props?.active) })));
   ctx.slots.inject("main", () => ctx.slots.register({
     name: "main",
     key: "inbox"
-  }, () => /* @__PURE__ */ import_react9.default.createElement(FridayBoundary, null, /* @__PURE__ */ import_react9.default.createElement("style", null, CSS), /* @__PURE__ */ import_react9.default.createElement(InboxPage, { t }))));
+  }, () => /* @__PURE__ */ import_react10.default.createElement(FridayBoundary, null, /* @__PURE__ */ import_react10.default.createElement("style", null, CSS), /* @__PURE__ */ import_react10.default.createElement(InboxPage, { t }))));
   ctx.slots.inject("plugins.row.config", () => ctx.slots.register({
     name: "plugins.row.config",
     key: "dsh-friday#friday"
-  }, (props) => /* @__PURE__ */ import_react9.default.createElement(FridayBoundary, null, /* @__PURE__ */ import_react9.default.createElement("style", null, CSS), /* @__PURE__ */ import_react9.default.createElement(SettingsForm, { ...props, t }))));
+  }, (props) => /* @__PURE__ */ import_react10.default.createElement(FridayBoundary, null, /* @__PURE__ */ import_react10.default.createElement("style", null, CSS), /* @__PURE__ */ import_react10.default.createElement(SettingsForm, { ...props, t }))));
   ctx.slots.inject("shell.overlay", () => ctx.slots.register({
     name: "shell.overlay",
     id: "dsh-friday.quick",
     order: 40,
     label: "Friday quick conversation"
-  }, () => /* @__PURE__ */ import_react9.default.createElement(FridayBoundary, null, /* @__PURE__ */ import_react9.default.createElement(GlobalUI, { t }))));
+  }, () => /* @__PURE__ */ import_react10.default.createElement(FridayBoundary, null, /* @__PURE__ */ import_react10.default.createElement(GlobalUI, { t }))));
 }
 
     })(module, exports, require);

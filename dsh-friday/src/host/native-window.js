@@ -22,12 +22,18 @@ function errorMessage(error) {
   return error instanceof Error ? error.message : String(error || 'Friday native request failed')
 }
 
-export function createNativeWindow(ctx, { repository, configStore, chat, upgrades }, initialHotkey) {
+export function createNativeWindow(ctx, { repository, configStore, chat, upgrades }, initialConfig) {
   const available = process.platform === 'darwin' && existsSync(BINARY) && existsSync(HTML)
   const streams = new Map()
   let child = null
   let disposed = false
-  let hotkey = initialHotkey
+  let config = initialConfig
+  let hotkey = config.hotkey
+  const previews = new Map()
+  let registration
+  let nextPreview = 0
+  let recordingId
+  let recordingTimer
   let pageReady = false
   let visible = false
   let hotkeyError = null
@@ -40,6 +46,19 @@ export function createNativeWindow(ctx, { repository, configStore, chat, upgrade
     if (!child?.stdin.writable) throw new Error('Friday native helper is not running')
     child.stdin.write(`${JSON.stringify(message)}\n`)
   }
+
+  // WKWebView has its own document; mirror the effective DSH theme there.
+  function sendFontSizes() {
+    if (!pageReady || !child?.stdin.writable) return
+    const theme = ctx.get('settings')?.describe({ redactSecrets: true })
+      .find((section) => section.ns === 'ui-theme')?.value
+    send({ type: 'fontSizes', appearance: theme?.preference ?? 'system', text: theme?.fontSize ?? 14, code: theme?.codeFontSize ?? 11 })
+  }
+
+  ctx.on('settings/document-updated', (ns) => {
+    // describe() emits invalidations while building its snapshot.
+    if (ns === 'ui-theme') queueMicrotask(sendFontSizes)
+  })
 
   function reply(id, ok, value) {
     try { send({ type: 'response', id, ok, value }) } catch (error) { lastError = errorMessage(error) }
@@ -91,9 +110,7 @@ export function createNativeWindow(ctx, { repository, configStore, chat, upgrade
       let result
       if (method === 'config') result = await publicConfig(ctx, repository, configStore, api)
       else if (method === 'saveConfig') {
-        const config = await saveConfig(configStore, params)
-        hotkey = config.hotkey
-        send({ type: 'hotkey', hotkey })
+        const config = await saveConfig(configStore, params, configure)
         result = { config }
       } else if (method === 'inbox') {
         result = { items: await repository.list({
@@ -149,8 +166,20 @@ export function createNativeWindow(ctx, { repository, configStore, chat, upgrade
   function onLine(line) {
     let message
     try { message = JSON.parse(line) } catch { return }
+    if (message.type === 'registeredHotkey') {
+      if (message.id === registration?.id) registration.finish(message.error)
+      return
+    }
+    if (message.type === 'orbPreview') {
+      const finish = previews.get(message.id)
+      if (finish) finish(message.image)
+      return
+    }
     if (message.type === 'status') {
-      if (typeof message.pageReady === 'boolean') pageReady = message.pageReady
+      if (typeof message.pageReady === 'boolean') {
+        pageReady = message.pageReady
+        sendFontSizes()
+      }
       if (typeof message.visible === 'boolean') visible = message.visible
       if (Object.hasOwn(message, 'hotkeyError')) hotkeyError = message.hotkeyError || null
       if (message.message) lastError = String(message.message)
@@ -195,7 +224,7 @@ export function createNativeWindow(ctx, { repository, configStore, chat, upgrade
           if (decision.action === 'respawn') restartTimer = setTimeout(start, decision.delayMs)
         }
       })
-      send({ type: 'configure', htmlPath: HTML, hotkey })
+      send({ type: 'configure', htmlPath: HTML, hotkey, orb: config.orb })
     } catch (error) {
       child = null
       lastError = errorMessage(error)
@@ -203,11 +232,27 @@ export function createNativeWindow(ctx, { repository, configStore, chat, upgrade
     }
   }
 
-  async function configure(nextHotkey) {
-    hotkey = nextHotkey || hotkey
-    hotkeyError = null
+  async function configure(nextConfig) {
     await start()
-    if (child) send({ type: 'hotkey', hotkey })
+    if (child && (hotkey !== nextConfig.hotkey || hotkeyError)) {
+      await new Promise((resolve, reject) => {
+        const id = ++nextPreview
+        const timer = setTimeout(() => finish('Friday shortcut registration timed out'), 4000)
+        function finish(error) {
+          clearTimeout(timer)
+          registration = null
+          if (error) reject(new Error(error))
+          else resolve()
+        }
+        registration = { id, finish }
+        try { send({ type: 'registerHotkey', id, hotkey: nextConfig.hotkey }) }
+        catch (error) { finish(error.message) }
+      })
+      hotkeyError = null
+    }
+    config = nextConfig
+    hotkey = config.hotkey
+    if (child) send({ type: 'preferences', orb: config.orb, shortcuts: config.shortcuts })
   }
 
   function snapshot() {
@@ -226,6 +271,28 @@ export function createNativeWindow(ctx, { repository, configStore, chat, upgrade
     pendingTask: null,
     start,
     configure,
+    recordShortcut(id, active) {
+      if (!active && id !== recordingId) return
+      clearTimeout(recordingTimer)
+      recordingId = active ? id : undefined
+      if (child?.stdin.writable) send({ type: 'recording', active, hotkey })
+      if (active) recordingTimer = setTimeout(() => api.recordShortcut(id, false), 22000)
+    },
+    previewOrb(orb) {
+      if (!child?.stdin.writable) throw new Error('Friday desktop renderer is unavailable')
+      const id = ++nextPreview
+      return new Promise((resolve, reject) => {
+        const timer = setTimeout(() => finish(null), 4000)
+        function finish(image) {
+          clearTimeout(timer)
+          previews.delete(id)
+          if (image) resolve({ image })
+          else reject(new Error('Could not render orb preview'))
+        }
+        previews.set(id, finish)
+        try { send({ type: 'orbPreview', id, orb }) } catch { finish(null) }
+      })
+    },
     snapshot,
     show(sessionId) {
       if (!pageReady) throw new Error('Friday desktop panel is not ready')
@@ -237,7 +304,10 @@ export function createNativeWindow(ctx, { repository, configStore, chat, upgrade
 
   ctx.effect(() => () => {
     disposed = true
+    registration?.finish('Friday desktop renderer stopped')
+    for (const finish of previews.values()) finish(null)
     supervisor.markDisposed()
+    clearTimeout(recordingTimer)
     clearTimeout(restartTimer)
     for (const res of streams.values()) { res.destroyed = true; res.emit('close') }
     streams.clear()

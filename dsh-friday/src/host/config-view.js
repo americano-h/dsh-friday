@@ -2,7 +2,8 @@ import { defaultSelection, modelCatalog, readConfig, supportsImages } from './co
 
 export async function publicConfig(ctx, repository, configStore, nativeWindow) {
   const config = await readConfig(configStore)
-  const selection = defaultSelection(ctx, config)
+  const hostDefaultModel = defaultSelection(ctx, {})
+  const selection = config.defaultModel || hostDefaultModel
   let recent = null
   try {
     recent = (await repository.list({ status: 'active', limit: 1 }))[0] || null
@@ -13,6 +14,7 @@ export async function publicConfig(ctx, repository, configStore, nativeWindow) {
   const native = nativeWindow?.snapshot() || null
   return {
     config,
+    hostDefaultModel,
     effectiveDefaultModel: selection || null,
     models: await modelCatalog(ctx),
     defaultSupportsImages: await supportsImages(ctx, selection),

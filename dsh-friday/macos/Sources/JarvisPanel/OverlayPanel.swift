@@ -44,8 +44,8 @@ final class OverlayPanel: NSPanel {
       return super.performKeyEquivalent(with: event)
     }
     let key = event.charactersIgnoringModifiers?.lowercased() ?? ""
-    if let n = Int(key), (1...9).contains(n), !flags.contains(.shift) {
-      onCommandDigit?(n)
+    if let onCommandDigit, let n = Int(key), (1...9).contains(n), !flags.contains(.shift) {
+      onCommandDigit(n)
       return true
     }
     guard let editor = firstResponder as? NSTextView else { return super.performKeyEquivalent(with: event) }

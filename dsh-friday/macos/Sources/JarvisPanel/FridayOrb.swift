@@ -50,6 +50,31 @@ final class FridayOrb {
     orb.orderFrontRegardless()
   }
 
+  var radius: CGFloat { Placement.orbRadius * orb.frame.width / Placement.orbWindow }
+
+  func setAppearance(color: UInt32, brightness: Float, opacity: CGFloat, scale: CGFloat) {
+    orb.orbView.setAppearance(color: color, brightness: brightness)
+    orb.alphaValue = opacity
+    let width = Placement.orbWindow * scale
+    guard width != orb.frame.width, let screen = orb.screen ?? NSScreen.main else { return }
+    let old = orb.frame
+    var frame = CGRect(x: old.midX - width / 2, y: old.midY - width / 2, width: width, height: width)
+    let visible = screen.visibleFrame
+    switch dock {
+    case .left, .topLeft, .bottomLeft: frame.origin.x = visible.minX
+    case .right, .topRight, .bottomRight: frame.origin.x = visible.maxX - width
+    default: break
+    }
+    switch dock {
+    case .top, .topLeft, .topRight: frame.origin.y = visible.maxY - width
+    case .bottom, .bottomLeft, .bottomRight: frame.origin.y = visible.minY
+    default: break
+    }
+    frame.origin = Placement.clampOrigin(frame: frame, visible: visible)
+    orb.setFrame(frame, display: true)
+    onMove?()
+  }
+
   private var pointerScreen: NSScreen? {
     NSScreen.screens.first { $0.frame.contains(NSEvent.mouseLocation) } ?? NSScreen.main
   }
@@ -68,7 +93,12 @@ final class FridayOrb {
 
   private func trackCursor() {
     guard dragStart == nil else { return }
-    let hit = Placement.overOrb(NSEvent.mouseLocation, frame: orb.frame, strip: dock, stripOpen: hovering)
+    let frame = orb.frame
+    let scale = Placement.orbWindow / frame.width
+    let cursor = NSEvent.mouseLocation
+    let local = CGPoint(x: (cursor.x - frame.minX) * scale, y: (cursor.y - frame.minY) * scale)
+    let bounds = CGRect(x: 0, y: 0, width: Placement.orbWindow, height: Placement.orbWindow)
+    let hit = Placement.overOrb(local, frame: bounds, strip: dock, stripOpen: hovering)
     orb.ignoresMouseEvents = !hit
     guard hit != hovering else { return }
     hovering = hit

@@ -90,7 +90,25 @@ export async function openNativeTask(sessionId) {
   return result
 }
 
+function syncAppearance() {
+  const root = document.documentElement
+  const preference = root.dataset.appearance || 'system'
+  root.toggleAttribute('data-dark', preference === 'dark' || (preference === 'system' && systemAppearance?.matches))
+}
+const systemAppearance = window.matchMedia?.('(prefers-color-scheme: dark)')
+systemAppearance?.addEventListener('change', syncAppearance)
+if (systemAppearance) syncAppearance()
+
 window.FridayNative = {
+  fontSizes(text, code, preference = 'system') {
+    document.documentElement.dataset.appearance = preference
+    syncAppearance()
+    document.body.style.setProperty('--dsh-content-font-size', `${text}px`)
+    document.body.style.setProperty('--dsh-code-font-size', `${code}px`)
+  },
+  shortcuts(value) {
+    window.dispatchEvent(new CustomEvent('dsh-friday:shortcuts', { detail: value }))
+  },
   resolve(id, ok, value) {
     const request = pending.get(id)
     if (!request) return

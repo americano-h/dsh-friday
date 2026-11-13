@@ -65,7 +65,9 @@ export function InboxPage({ t }) {
   const [findOpen, setFindOpen] = useState(false)
   const [upgradeId, setUpgradeId] = useState(null)
   const [confirm, setConfirm] = useState(null)
-  const [config, setLocalConfig] = useState(null)
+  const [initialConfig, setLocalConfig] = useState(null)
+  const currentConfig = useFridayState((state) => state.config)
+  const config = currentConfig || initialConfig
   const [draft, setDraft] = useState('')
   const [generating, setGenerating] = useState(false)
   const [streamingText, setStreamingText] = useState('')
@@ -318,7 +320,7 @@ export function InboxPage({ t }) {
         <section className="df-list" aria-label={t('inbox.title')}>
           {loading && !items.length ? <div className="df-empty-small">{t('state.loading')}</div> : null}
           {!loading && !items.length ? (
-            <div className="df-empty-state"><Icon name="inbox" size={28} /><h2>{query ? t('state.noResults') : t('inbox.empty')}</h2><p>{t('inbox.emptyHint')}</p></div>
+            <div className="df-empty-state"><Icon name="inbox" size={28} /><h2>{query ? t('state.noResults') : t('inbox.empty')}</h2><p>{t('inbox.emptyHint').replace('{hotkey}', config?.config?.hotkey || 'Alt+Space')}</p></div>
           ) : null}
           {items.map((item) => (
             <button className={`df-inbox-row ${selectedId === item.id ? 'selected' : ''}`} type="button" key={item.id} onClick={() => select(item.id)}>
@@ -359,7 +361,7 @@ export function InboxPage({ t }) {
                 <ConversationComposer t={t} draft={draft} setDraft={setDraft} images={images} addFiles={addFiles}
                   generating={generating || detail.running} archived={Boolean(detail.archived || detail.upgraded)}
                   imageEnabled={Boolean(config && (config.defaultSupportsImages || config.visionAvailable))} inputRef={inputRef}
-                  onSubmit={runStream} onStop={stop} />
+                  shortcuts={config?.config?.shortcuts} onSubmit={runStream} onStop={stop} />
               </footer>
             </>
           )}

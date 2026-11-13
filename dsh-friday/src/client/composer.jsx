@@ -1,3 +1,5 @@
+import { actionMatches } from './hotkey.js'
+import { defaultShortcuts } from '../shared/preferences.js'
 import React, { useCallback, useRef, useState } from 'react'
 import { Icon } from './messages.jsx'
 
@@ -56,7 +58,7 @@ export function ImageDrafts({ images, setImages }) {
 
 export function ConversationComposer({
   t, draft, setDraft, images, addFiles, generating, archived, imageEnabled,
-  onSubmit, onStop, onEscape, inputRef, className = '',
+  onSubmit, onStop, shortcuts = defaultShortcuts, inputRef, className = '',
 }) {
   const fileRef = useRef(null)
   return (
@@ -73,10 +75,16 @@ export function ConversationComposer({
           if (files.length) { event.preventDefault(); void addFiles(files) }
         }}
         onKeyDown={(event) => {
-          if (event.key === 'Escape' && onEscape) { event.preventDefault(); event.stopPropagation(); onEscape() }
-          if (event.key === 'Enter' && !event.shiftKey && !event.nativeEvent.isComposing) {
+          if (event.nativeEvent.isComposing || event.nativeEvent.keyCode === 229) return
+          if (actionMatches(event, shortcuts.send)) {
             event.preventDefault()
-            void onSubmit()
+            if (!event.repeat) void onSubmit()
+          } else if (actionMatches(event, shortcuts.newline)) {
+            event.preventDefault()
+            const field = event.currentTarget
+            const at = field.selectionStart
+            setDraft(draft.slice(0, at) + '\n' + draft.slice(field.selectionEnd))
+            requestAnimationFrame(() => field.setSelectionRange(at + 1, at + 1))
           }
         }} />
       <button className="df-send" type="button" disabled={generating ? false : archived || (!draft.trim() && !images.length)}

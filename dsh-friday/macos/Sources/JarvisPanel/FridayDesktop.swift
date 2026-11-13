@@ -6,6 +6,7 @@ import JarvisPanelCore
 
 final class FridayAppDelegate: NSObject, NSApplicationDelegate, WKScriptMessageHandler, WKNavigationDelegate, WKUIDelegate {
   private var panel: OverlayPanel?
+  private lazy var preview = OrbMetalView(frame: CGRect(x: 0, y: 0, width: Placement.orbWindow, height: Placement.orbWindow), count: 1600)
   private var webView: WKWebView?
   private var documentURL: URL?
   private lazy var hotkey = HotKey { [weak self] _ in self?.togglePanel() }
@@ -58,7 +59,7 @@ final class FridayAppDelegate: NSObject, NSApplicationDelegate, WKScriptMessageH
           let message = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
           let type = message["type"] as? String else { continue }
         switch type {
-        case "configure", "hotkey", "show", "terminate":
+        case "configure", "preferences", "orbPreview", "recording", "registerHotkey", "fontSizes", "show", "terminate":
           DispatchQueue.main.async { self.handleHostCommand(message) }
         case "response":
           guard let id = message["id"] as? String else { continue }
@@ -85,17 +86,43 @@ final class FridayAppDelegate: NSObject, NSApplicationDelegate, WKScriptMessageH
   }
 
   private func handleHostCommand(_ message: [String: Any]) {
+    let orb = message["orb"] as? [String: Any]
+    let color = (orb?["color"] as? String).flatMap { UInt32($0.dropFirst(), radix: 16) } ?? 0x5ce1ff
+    let brightness = (orb?["brightness"] as? Float ?? 100) / 100
     switch message["type"] as? String {
-    case "configure":
-      registerHotkey(message["hotkey"] as? String ?? "Alt+Space")
+    case "configure", "preferences":
+      desktop.setAppearance(color: color, brightness: brightness, opacity: CGFloat(orb?["opacity"] as? Double ?? 100) / 100,
+                            scale: CGFloat(orb?["size"] as? Double ?? 100) / 100)
+      if let key = message["hotkey"] as? String { registerHotkey(key) }
+      if let shortcuts = message["shortcuts"] {
+        evaluate("window.FridayNative?.shortcuts(\(json(shortcuts)))")
+      }
       setupPanel()
       if let path = message["htmlPath"] as? String {
         let url = URL(fileURLWithPath: path)
         documentURL = url.standardizedFileURL
         webView?.loadFileURL(url, allowingReadAccessTo: url.deletingLastPathComponent())
       }
-    case "hotkey":
-      registerHotkey(message["hotkey"] as? String ?? "Alt+Space")
+    case "fontSizes":
+      if let text = message["text"] as? Int, let code = message["code"] as? Int {
+        let preference = message["appearance"] as? String ?? "system"
+        panel?.appearance = preference == "dark" ? NSAppearance(named: .darkAqua) : preference == "light" ? NSAppearance(named: .aqua) : nil
+        evaluate("window.FridayNative?.fontSizes(\(text),\(code),\(json(preference)))")
+      }
+    case "registerHotkey":
+      if let key = message["hotkey"] as? String, let id = message["id"] as? Int {
+        let error = registerHotkey(key, reportStatus: false)
+        send(["type": "registeredHotkey", "id": id, "error": error as Any? ?? NSNull()])
+      }
+    case "recording":
+      if message["active"] as? Bool == true { hotkey.suspend() }
+      else { registerHotkey(message["hotkey"] as? String ?? "Alt+Space") }
+    case "orbPreview":
+      guard let id = message["id"] as? Int else { return }
+      preview.setAppearance(color: color, brightness: brightness)
+      preview.advance(seconds: 1.0 / 30)
+      let png = preview.snapshot(scale: 2).flatMap { NSBitmapImageRep(cgImage: $0).representation(using: .png, properties: [:]) }
+      send(["type": "orbPreview", "id": id, "image": png.map { "data:image/png;base64," + $0.base64EncodedString() } as Any? ?? NSNull()])
     case "show":
       showPanel(sessionId: message["sessionId"] as? String)
     case "terminate":
@@ -108,6 +135,7 @@ final class FridayAppDelegate: NSObject, NSApplicationDelegate, WKScriptMessageH
   private func setupPanel() {
     guard panel == nil else { return }
     let panel = OverlayPanel(root: EmptyView())
+    panel.appearance = nil
     panel.setMissionControlHidden(true)
     panel.ignoresMouseEvents = false
     let container = NSView(frame: NSRect(x: 0, y: 0, width: 508, height: 92))
@@ -145,7 +173,7 @@ final class FridayAppDelegate: NSObject, NSApplicationDelegate, WKScriptMessageH
     let visible = screen.visibleFrame
     let size = CGSize(width: min(size.width, visible.width), height: min(size.height, visible.height))
     let layout = Placement.quickBar(center: desktop.orb.center, visible: visible,
-                                    barSize: CGSize(width: size.width, height: 76))
+                                    barSize: CGSize(width: size.width, height: 76), radius: desktop.radius)
     var frame = CGRect(x: layout.bar.minX, y: layout.growsUp ? layout.bar.minY : layout.bar.maxY - size.height,
                        width: size.width, height: size.height)
     frame.origin = Placement.clampOrigin(frame: frame, visible: visible)
@@ -175,11 +203,13 @@ final class FridayAppDelegate: NSObject, NSApplicationDelegate, WKScriptMessageH
     evaluate("window.FridayNative?.visibility(false)")
   }
 
-  private func registerHotkey(_ spec: String) {
+  @discardableResult
+  private func registerHotkey(_ spec: String, reportStatus: Bool = true) -> String? {
     let parts = spec.split(separator: "+").map(String.init)
     guard let key = parts.last, let keyCode = carbonKeyCode(key) else {
-      send(["type": "status", "hotkeyError": "Unsupported hotkey: \(spec)"])
-      return
+      let error = "Unsupported hotkey: \(spec)"
+      if reportStatus { send(["type": "status", "hotkeyError": error]) }
+      return error
     }
     var modifiers: UInt32 = 0
     for modifier in parts.dropLast() {
@@ -193,8 +223,9 @@ final class FridayAppDelegate: NSObject, NSApplicationDelegate, WKScriptMessageH
     }
     let keySpec = HotKeySpec(keyCode: UInt32(keyCode), modifiers: modifiers)
     let registered = keySpec.map { hotkey.replace(with: $0) } ?? false
-    let error: Any = registered ? NSNull() : "Could not register " + spec
-    send(["type": "status", "hotkeyError": error])
+    let error = registered ? nil : "Could not register " + spec
+    if reportStatus { send(["type": "status", "hotkeyError": error as Any? ?? NSNull()]) }
+    return error
   }
 
   private func carbonKeyCode(_ key: String) -> Int? {

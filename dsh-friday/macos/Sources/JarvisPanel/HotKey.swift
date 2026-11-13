@@ -52,6 +52,8 @@ final class HotKey {
     }
   }
 
+  func suspend() { binding.unregister() }
+
   func invalidate() {
     binding.unregister()
     if let handler { RemoveEventHandler(handler) }

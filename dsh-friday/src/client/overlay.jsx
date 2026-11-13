@@ -1,4 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react'
+import { actionMatches } from './hotkey.js'
+import { defaultShortcuts } from '../shared/preferences.js'
 import { api, streamChat } from './api.js'
 import { ConversationComposer, ImageDrafts, useImageDrafts } from './composer.jsx'
 import { Icon, MessageList } from './messages.jsx'
@@ -9,6 +11,7 @@ export function QuickOverlay({ t }) {
   const open = useFridayState((state) => state.overlayOpen)
   const sessionId = useFridayState((state) => state.sessionId)
   const config = useFridayState((state) => state.config)
+  const shortcuts = config?.config?.shortcuts || defaultShortcuts
   const [conversation, setConversation] = useState(null)
   const [draft, setDraft] = useState('')
   const [generating, setGenerating] = useState(false)
@@ -30,7 +33,7 @@ export function QuickOverlay({ t }) {
       if (getState().sessionId === id) setConversation(value.conversation)
       return value.conversation
     } catch (requestError) {
-      setError(requestError.message)
+      if (getState().sessionId === id) setError(requestError.message)
       return null
     }
   }, [])
@@ -41,7 +44,7 @@ export function QuickOverlay({ t }) {
   }, [open, config])
 
   useEffect(() => {
-    if (!open || !config || sessionId !== undefined) return
+    if (runtime.native || !open || !config || sessionId !== undefined) return
     const recent = config.recent
     const resume = recent && Date.now() - recent.updatedAt <= 5 * 60 * 1000
     setState({ sessionId: resume ? recent.id : null })
@@ -86,7 +89,16 @@ export function QuickOverlay({ t }) {
   useEffect(() => {
     if (!open || !runtime.native) return
     const expanded = Boolean(conversation?.messages?.length || streamingText || generating)
-    const height = upgradeOpen ? 700 : (expanded ? 480 : 106) + (images.length ? 68 : 0) + (error ? 42 : 0)
+    const quick = inputRef.current?.closest('.df-quick')
+    if (!expanded && !upgradeOpen && quick) {
+      // Keep an enlarged or multiline composer visible in the compact native window.
+      const resize = () => runtime.native.resize({ width: 490, height: Math.ceil(quick.scrollHeight) + 2 })
+      resize()
+      const observer = new ResizeObserver(resize)
+      for (const child of quick.children) observer.observe(child)
+      return () => observer.disconnect()
+    }
+    const height = upgradeOpen ? 700 : 480 + (images.length ? 68 : 0) + (error ? 42 : 0)
     runtime.native.resize({ width: upgradeOpen ? 730 : 490, height })
   }, [open, conversation?.messages?.length, streamingText, generating, images.length, error, upgradeOpen])
 
@@ -104,7 +116,9 @@ export function QuickOverlay({ t }) {
     setCitations([])
     setImages([])
     setError(null)
+    setDraft('')
     newConversation()
+    inputRef.current?.focus()
   }, [])
 
   const runStream = useCallback(async (regenerate = false) => {
@@ -130,10 +144,10 @@ export function QuickOverlay({ t }) {
         regenerate,
         signal: controller.signal,
         onEvent: (event) => {
+          if (controller.signal.aborted) return
           if (event.type === 'meta') {
             activeId = event.sessionId
             markRecent(activeId)
-            if (controller.signal.aborted) return
             if (getState().sessionId !== activeId) setState({ sessionId: activeId })
           } else if (event.type === 'delta') {
             setStreamingText((current) => current + event.text)
@@ -219,6 +233,14 @@ export function QuickOverlay({ t }) {
     <div className={`df-overlay-root${runtime.native ? ' df-native' : ''}`}>
       <section className={`df-quick ${expanded ? 'expanded' : 'compact'}${position ? ' positioned' : ''}`} aria-label="Friday quick conversation"
         style={position ? { left: position.left, top: position.top, transform: 'none' } : undefined}
+        tabIndex={-1} onKeyDownCapture={(event) => {
+          if (upgradeOpen || event.nativeEvent.isComposing) return
+          const newChat = actionMatches(event, shortcuts.newChat)
+          if (!newChat && !actionMatches(event, shortcuts.close)) return
+          event.preventDefault()
+          event.stopPropagation()
+          if (!event.repeat) (newChat ? createNew : hide)()
+        }}
         onPointerDown={startDrag} onPointerMove={moveDrag} onPointerUp={endDrag} onPointerCancel={endDrag}
         onDragOver={(event) => { event.preventDefault(); event.dataTransfer.dropEffect = 'copy' }}
         onDrop={(event) => { event.preventDefault(); void addFiles(event.dataTransfer.files) }}>
@@ -227,7 +249,7 @@ export function QuickOverlay({ t }) {
             <div className="df-quick-brand"><span className="df-brand-dot" /><strong>{conversation?.title || 'Friday'}</strong></div>
             <div className="df-quick-actions">
               <button className="df-btn" type="button" onClick={openInbox}><Icon name="inbox" size={14} />Inbox</button>
-              <button className="df-icon-btn" type="button" onClick={createNew} title={t('quick.new')} aria-label={t('quick.new')}><Icon name="plus" /></button>
+              <button className="df-icon-btn" type="button" onClick={createNew} title={t('quick.new') + ' · ' + shortcuts.newChat} aria-label={t('quick.new')}><Icon name="plus" /></button>
               {sessionId && messages.length && !archived ? <button className="df-icon-btn" type="button" disabled={generating || conversation?.running} onClick={() => setUpgradeOpen(true)} title={t('quick.upgrade')} aria-label={t('quick.upgrade')}><Icon name="upgrade" /></button> : null}
               <button className="df-icon-btn" type="button" onClick={hide} title={t('quick.close')} aria-label={t('quick.close')}><Icon name="close" /></button>
             </div>
@@ -235,7 +257,7 @@ export function QuickOverlay({ t }) {
         ) : null}
 
         {expanded ? (
-          <div className="df-quick-transcript" ref={scrollRef}>
+          <div className="df-quick-transcript" tabIndex={0} ref={scrollRef}>
             <MessageList conversation={conversation} sessionId={sessionId} streamingText={streamingText || conversation?.liveText} streamingCitations={citations} t={t} />
             {generating && !streamingText ? <div className="df-thinking" aria-label={t('quick.thinking')}><span /></div> : null}
           </div>
@@ -254,7 +276,7 @@ export function QuickOverlay({ t }) {
         {archived ? <div className="df-hint df-quick-error">{t('inbox.upgraded')}</div> : null}
         <ConversationComposer t={t} draft={draft} setDraft={setDraft} images={images} addFiles={addFiles}
           generating={generating || Boolean(conversation?.running)} archived={archived} imageEnabled={imageEnabled} inputRef={inputRef}
-          onSubmit={() => runStream(false)} onStop={stop} onEscape={hide} />
+          onSubmit={() => runStream(false)} onStop={stop} shortcuts={shortcuts} />
       </section>
       {upgradeOpen && sessionId ? <UpgradeDialog sessionId={sessionId} t={t} onClose={() => setUpgradeOpen(false)} /> : null}
     </div>

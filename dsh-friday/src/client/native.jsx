@@ -2,6 +2,8 @@ import React, { useEffect } from 'react'
 import { createRoot } from 'react-dom/client'
 import en from '../../locale/en.json'
 import zh from '../../locale/zh.json'
+import { actionMatches } from './hotkey.js'
+import { defaultShortcuts } from '../shared/preferences.js'
 import { api } from './api.js'
 import { nativeCommand, openNativeTask } from './native-transport.js'
 import { InboxPage } from './inbox.jsx'
@@ -68,17 +70,24 @@ function NativeApp() {
         const config = await api.config()
         if (request !== sequence || !getState().overlayOpen) return
         setConfig(config)
+        if (getState().sessionId !== undefined) return
         const recent = config.recent
         openOverlay(recent && (recent.running || Date.now() - recent.updatedAt <= 300000) ? recent.id : null)
       } catch { if (request === sequence) openOverlay(null) }
     }
     const onKey = (event) => {
-      if (event.key === 'Escape' && getState().inboxOpen && !document.querySelector('.df-modal')) runtime.native.hide()
+      if (!event.isComposing && actionMatches(event, getState().config?.config?.shortcuts?.close || defaultShortcuts.close) && getState().inboxOpen && !document.querySelector('.df-modal')) runtime.native.hide()
     }
+    const onShortcuts = (event) => {
+      const current = getState().config
+      if (current) setConfig({ ...current, config: { ...current.config, shortcuts: event.detail } })
+    }
+    window.addEventListener('dsh-friday:shortcuts', onShortcuts)
     window.addEventListener('keydown', onKey)
     window.addEventListener('dsh-friday:native-visibility', onVisibility)
     nativeCommand('clientReady')
     return () => {
+      window.removeEventListener('dsh-friday:shortcuts', onShortcuts)
       window.removeEventListener('keydown', onKey)
       window.removeEventListener('dsh-friday:native-visibility', onVisibility)
     }

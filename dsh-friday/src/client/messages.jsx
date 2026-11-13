@@ -1,4 +1,7 @@
 import React, { useEffect, useState } from 'react'
+import { getState } from './store.js'
+import { actionMatches } from './hotkey.js'
+import { defaultShortcuts } from '../shared/preferences.js'
 import { api } from './api.js'
 import { Markdown, safeHref } from './markdown.jsx'
 
@@ -45,17 +48,18 @@ function Attachment({ sessionId, image }) {
 }
 
 export function Sources({ sources = [], t }) {
-  if (!sources.length) return null
+  const links = sources.filter((source) => safeHref(source?.url))
+  if (!links.length) return null
   return (
-    <div className="df-sources">
-      <div className="df-sources-title">{t('quick.sources')}</div>
-      <ol>{sources.filter((source) => safeHref(source.url)).map((source) => (
+    <details className="df-sources">
+      <summary className="df-sources-title">{t('quick.sources')} ({links.length})</summary>
+      <ol>{links.map((source) => (
         <li key={source.url}>
           <a href={safeHref(source.url)} target="_blank" rel="noreferrer noopener">{source.title || source.url}</a>
           {source.snippet ? <span>{source.snippet}</span> : null}
         </li>
       ))}</ol>
-    </div>
+    </details>
   )
 }
 
@@ -65,7 +69,7 @@ export function MessageList({ conversation, sessionId, streamingText, streamingC
   return (
     <div className="df-messages">
       {messages.map((message) => (
-        <article className={`df-message ${message.role}`} key={`${message.id}-${message.seq || ''}`}>
+        <article className={`df-message ${message.role}`} key={`${sessionId || conversation?.id}-${message.id}-${message.seq || ''}`}>
           <div className="df-message-role">{message.role === 'user' ? 'You' : 'Friday'}</div>
           {message.images?.length ? (
             <div className="df-attachment-grid">
@@ -92,7 +96,8 @@ export function Modal({ title, description, children, onClose, className = '' })
     const preferred = dialog?.querySelector('[data-autofocus]')
     ;(preferred || focusable()[0])?.focus()
     const onKey = (event) => {
-      if (event.key === 'Escape') {
+      if (event.isComposing) return
+      if (actionMatches(event, getState().config?.config?.shortcuts?.close || defaultShortcuts.close)) {
         event.preventDefault()
         event.stopPropagation()
         onCloseRef.current?.()

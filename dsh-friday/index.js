@@ -35,7 +35,7 @@ export async function apply(ctx) {
   const chat = createChatRuntime(ctx, repository, configStore, readConfig, (id) => upgrades.locks.has(id))
   const upgrades = createUpgradeService(ctx, repository, readConfig, configStore, defaultSelection, chat.busy)
   const initialConfig = await readConfig(configStore)
-  const nativeWindow = createNativeWindow(ctx, { repository, configStore, chat, upgrades }, initialConfig.hotkey)
+  const nativeWindow = createNativeWindow(ctx, { repository, configStore, chat, upgrades }, initialConfig)
   createApi(ctx, { repository, configStore, chat, upgrades, nativeWindow })
   await nativeWindow.start()
 
@@ -54,5 +54,5 @@ export async function apply(ctx) {
     return () => clearInterval(timer)
   }, 'dsh-friday: retention')
   queueMicrotask(cleanup)
-  ctx.logger.info('dsh-friday: Friday 1.0.0 ready')
+  ctx.logger.info('dsh-friday: Friday 1.1.4 ready')
 }

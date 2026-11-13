@@ -1,4 +1,5 @@
 import { readConfig, saveConfig } from './config.js'
+import { normalizeOrb } from '../shared/preferences.js'
 import { publicConfig } from './config-view.js'
 import { isFridayId } from './policy.js'
 
@@ -68,16 +69,26 @@ export function createApi(ctx, { repository, configStore, chat, upgrades, native
       const rejection = ctx.connection.requestRejection(req)
       if (rejection !== undefined) throw new HttpError(rejection, 'Request was rejected by DSH Connection')
 
-      if (path === '/health' && req.method === 'GET') return json(res, 200, { ok: true, version: '1.0.0' })
+      if (path === '/health' && req.method === 'GET') return json(res, 200, { ok: true, version: '1.1.4' })
 
       if (path === '/config') {
         if (req.method === 'GET') return json(res, 200, await publicConfig(ctx, repository, configStore, nativeWindow))
         if (req.method === 'PUT') {
-          const config = await saveConfig(configStore, await bodyJson(req))
-          try { await nativeWindow?.configure(config.hotkey) } catch (error) { ctx.logger.warn(`dsh-friday: hotkey update failed: ${String(error)}`) }
+          const config = await saveConfig(configStore, await bodyJson(req), nativeWindow?.configure)
           return json(res, 200, { config })
         }
         throw new HttpError(405, 'Method not allowed')
+      }
+
+      if (path === '/shortcut-recording' && req.method === 'POST') {
+        const { id, active } = await bodyJson(req)
+        if (typeof id !== 'string' || id.length > 64 || typeof active !== 'boolean') throw new HttpError(400, 'Invalid recording')
+        nativeWindow.recordShortcut(id, active)
+        return json(res, 200, { accepted: true })
+      }
+
+      if (path === '/orb-preview' && req.method === 'POST') {
+        return json(res, 200, await nativeWindow.previewOrb(normalizeOrb(await bodyJson(req))))
       }
 
       if (path === '/native/show' && req.method === 'POST') {
