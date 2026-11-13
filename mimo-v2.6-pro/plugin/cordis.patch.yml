@@ -1,0 +1,6 @@
+# dsh-friday bundle patch: one Host row for the plugin half.
+# The Client half is declared through dsh.client in package.json.
+- insert:
+    - id: dsh-friday
+      name: 'dsh-friday'
+      config: {}

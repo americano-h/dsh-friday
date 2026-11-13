@@ -1,0 +1,20 @@
+# macOS
+.DS_Store
+
+# Dependencies
+node_modules/
+npm-cache/
+
+# Build artifacts
+coverage/
+*.tmp
+*.log
+__pycache__/
+*.pyc
+
+# Local backup of the former nested dsh-friday git repository
+# (its history is preserved on GitHub under branch archive/pre-monorepo-history)
+dsh-friday/.git-backup/
+
+# Obsidian workspace cache
+.obsidian/workspace.json

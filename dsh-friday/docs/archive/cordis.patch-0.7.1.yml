@@ -1,0 +1,27 @@
+# dsh-harness-jarvis bundle layer. Configure provider/model for your profile.
+# Required inject services: tools, userQuestions, jobs.
+# agentLoop creates Jarvis; llm, systemPrompt, webServer, settings and title
+# services are attached by the plugin when available, not instantiated here.
+# Users override per-profile in their own cordis.patch.yml, addressing this
+# row BY ID (never insert a second row with the same id).
+#
+# The Jarvis agent is created by the plugin itself via ctx.agentLoop.createAgent()
+# (SPEC §9.1) — NOT declared in deployment cordis.yml. The provider/model/cwd
+# below configure that createAgent call.
+- insert:
+    - id: dsh-harness-jarvis
+      name: 'dsh-harness-jarvis'
+      config:
+        locale: zh                 # zh | en
+        audioDir: ~/.dsh/jarvis    # speech cache and debug.log
+        managedFile: ~/.dsh/jarvis/managed.json   # 托管集 (SPEC §9.2)
+        lockFile: ~/.dsh/jarvis/lock.json         # memory write diagnostics; not a cross-process lock
+        runtimeFile: ~/.dsh/jarvis/runtime.json   # 悬浮窗 runtime (origin+token, SPEC §12)
+        titlePrefix: '贾维斯-'     # reserved; no worker renaming
+        ttsBackend: edge           # built-in TTS currently supports edge only
+        edgeVoice: zh-CN-YunjianNeural  # 成熟男声(贾维斯默认)
+        archiveIdleDays: 7         # reserved; automatic archival is not implemented
+        provider: bailian          # 百炼 provider (SPEC §9.1)
+        model: qwen3.8-max-0902  # replace with a model configured in your DSH profile
+        jarvisSessionId: jarvis    # createAgent sessionId
+        jarvisCwd: ~/jarvis  # visible workspace (not hidden ~/.dsh/)

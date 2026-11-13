@@ -1,0 +1,82 @@
+{
+  "meta": {
+    "title": "Friday",
+    "description": "Quick answers with web-search-only tools, a durable Inbox, and compressed promotion into workspace tasks."
+  },
+  "inbox": {
+    "title": "Inbox",
+    "subtitle": "Lightweight questions, kept outside your workspaces.",
+    "new": "New conversation",
+    "search": "Search questions and answers",
+    "find": "Find conversation",
+    "active": "Active",
+    "archived": "Upgraded archive",
+    "empty": "No conversations yet",
+    "emptyHint": "Press Option + Space to ask your first quick question.",
+    "clear": "Clear Inbox",
+    "cleanup": "Clear expired",
+    "continue": "Continue",
+    "upgrade": "Upgrade",
+    "delete": "Delete",
+    "images": "Images",
+    "upgraded": "Upgraded",
+    "openTask": "Open task"
+  },
+  "quick": {
+    "placeholder": "Ask Friday",
+    "send": "Send",
+    "stop": "Stop",
+    "new": "New conversation",
+    "close": "Close",
+    "attach": "Add images",
+    "searching": "Searching the web…",
+    "thinking": "Thinking…",
+    "copy": "Copy",
+    "copied": "Copied",
+    "regenerate": "Regenerate",
+    "sources": "Sources",
+    "upgrade": "Upgrade to task",
+    "hint": "Enter to send · Shift + Enter for a new line · Esc to hide"
+  },
+  "settings": {
+    "defaultModel": "Default model",
+    "defaultHint": "Used by the next new conversation. Existing conversations keep their model.",
+    "visionModel": "Vision model",
+    "visionHint": "Used automatically for image turns when the default model cannot read images.",
+    "inherit": "Inherit DSH default",
+    "none": "Not configured",
+    "hotkey": "Quick-open hotkey",
+    "hotkeyHint": "Default: Alt+Space (Option + Space on macOS). Works system-wide while DSH is running.",
+    "retention": "Retention (days)",
+    "retentionHint": "Expired active conversations are archived and removed from the Inbox. Upgraded archives are retained.",
+    "save": "Save settings",
+    "saved": "Settings saved",
+    "globalLimit": "The native Friday panel starts with DSH and supports a system-wide hotkey, free dragging, and macOS Liquid Glass."
+  },
+  "dialog": {
+    "findTitle": "Find a conversation",
+    "upgradeTitle": "Upgrade to a full task",
+    "upgradeDescription": "Review and edit the compressed context. Creating a task only injects it and waits for your instruction; the Inbox original is archived.",
+    "context": "Compressed context",
+    "contextPlaceholder": "Generating compressed context…",
+    "workspace": "Destination workspace",
+    "newWorkspace": "New workspace",
+    "cancel": "Cancel",
+    "confirm": "Compress and create",
+    "deleteTitle": "Delete this conversation?",
+    "deleteDescription": "It will disappear from Inbox and be archived in DSH. This cannot be undone from Inbox.",
+    "clearTitle": "Clear active conversations?",
+    "clearDescription": "All active Inbox conversations will be archived and hidden. Upgraded archives are not affected.",
+    "confirmDelete": "Delete"
+  },
+  "state": {
+    "loading": "Loading…",
+    "retry": "Retry",
+    "error": "Something went wrong",
+    "noResults": "No matching conversations",
+    "allTime": "Any time",
+    "today": "Last 24 hours",
+    "week": "Last 7 days",
+    "month": "Last 30 days"
+  }
+}

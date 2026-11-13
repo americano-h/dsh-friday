@@ -1,0 +1,99 @@
+{
+  "meta": {
+    "title": "Friday Inbox",
+    "description": "A hotkey quick-chat overlay whose conversations settle into a searchable Inbox, ready to continue or upgrade into a workspace task."
+  },
+  "nav": {
+    "inbox": "Inbox",
+    "settings": "Inbox settings"
+  },
+  "overlay": {
+    "title": "Quick chat",
+    "placeholder": "Ask anything. Only web search is available.",
+    "newChat": "New chat",
+    "send": "Send",
+    "stop": "Stop",
+    "openInbox": "Open Inbox",
+    "empty": "Ask a question, or paste an image.",
+    "thinking": "Thinking…",
+    "searching": "Searching the web…",
+    "references": "References",
+    "upgrade": "Upgrade to task",
+    "retry": "Retry",
+    "collapse": "Collapse",
+    "error": "Something went wrong.",
+    "imageLimit": "Up to 4 images, each under 10 MB.",
+    "visionRequired": "Add a vision model in Inbox settings before sending images."
+  },
+  "inbox": {
+    "title": "Inbox",
+    "subtitle": "Lightweight conversations that can become real tasks.",
+    "search": "Search questions and answers",
+    "finder": "Find conversations",
+    "newChat": "New chat",
+    "continue": "Continue",
+    "upgrade": "Upgrade",
+    "delete": "Delete",
+    "clear": "Clear Inbox",
+    "cleanup": "Run retention cleanup",
+    "settings": "Settings",
+    "empty": "No conversations yet. Press Option + Space to start one.",
+    "emptySearch": "No conversations match this search.",
+    "active": "Active",
+    "archived": "Archived",
+    "all": "All",
+    "hasImage": "Image",
+    "upgraded": "Upgraded",
+    "model": "Model",
+    "updated": "Updated",
+    "noSelection": "Select a conversation to read it here.",
+    "loading": "Loading…",
+    "deleteConfirm": "Delete this conversation from Inbox?",
+    "clearConfirm": "Move every active conversation out of Inbox?",
+    "deleted": "Conversation removed from Inbox.",
+    "cleared": "Inbox cleared.",
+    "cleanupDone": "Retention cleanup finished.",
+    "archive": "Archive",
+    "unarchive": "Restore"
+  },
+  "finder": {
+    "title": "Find a conversation",
+    "placeholder": "Search everything in Inbox",
+    "hint": "Type a keyword from a question or an answer.",
+    "open": "Open"
+  },
+  "upgradeDialog": {
+    "title": "Upgrade to a workspace task",
+    "description": "Friday compresses this conversation, then starts a full-tool task in the workspace you pick.",
+    "workspace": "Workspace",
+    "newWorkspace": "New workspace",
+    "cancel": "Cancel",
+    "confirm": "Upgrade",
+    "working": "Compressing and creating the task…",
+    "noWorkspaces": "No workspaces yet. Create one to continue.",
+    "success": "Task created.",
+    "failed": "Upgrade failed."
+  },
+  "settings": {
+    "title": "Friday Inbox",
+    "description": "Models and behavior for the quick-chat overlay and Inbox.",
+    "defaultModel": "Default model",
+    "defaultModelHint": "Used by the next conversation. Existing conversations keep their model.",
+    "visionModel": "Vision model",
+    "visionModelHint": "Image turns are routed here when the default model cannot read images.",
+    "hotkey": "Hotkey",
+    "hotkeyHint": "Active inside the DSH window. Example: Alt+Space.",
+    "retention": "Retention",
+    "retentionHint": "Active conversations older than this are archived automatically.",
+    "days": "days",
+    "save": "Save",
+    "saved": "Saved. Applies to the next conversation.",
+    "readOnly": "Settings are read-only in this deployment.",
+    "loading": "Loading settings…",
+    "none": "None"
+  },
+  "error": {
+    "network": "Cannot reach the Friday service.",
+    "unknown": "Unexpected error."
+  }
+}

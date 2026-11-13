@@ -1,0 +1,51 @@
+import { describe, it } from 'node:test';
+import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
+import { Config, SettingsSchema } from '../src/index.ts';
+import { renderConfigTable, replaceConfigTable, PUBLIC_FIELDS } from '../scripts/readme-config.mjs';
+
+describe('等价类', () => {
+  it('README configuration is generated from the actual Config and settings schema (both languages)', () => {
+    for (const name of ['docs/archive/README-0.7.1.md', 'docs/archive/README.en-0.7.1.md']) {
+      const readme = readFileSync(new URL('../' + name, import.meta.url), 'utf8');
+      assert.equal(replaceConfigTable(readme, renderConfigTable(Config, SettingsSchema)), readme, `${name} table is stale`);
+      for (const key of Object.keys(Config.dict!)) {
+        // Public fields must appear in both READMEs; internal fields must NOT
+        // be advertised there (they stay configurable but undocumented).
+        if (PUBLIC_FIELDS.has(key)) {
+          assert.ok(readme.includes('`' + key + '`'), `${name} should document ${key}`);
+        } else {
+          assert.ok(!readme.includes('`' + key + '`'), `internal field ${key} should not be in ${name}`);
+        }
+      }
+    }
+  });
+  it('renders enum choices, defaults and settings availability without applying the plugin', () => {
+    const table = renderConfigTable(Config, SettingsSchema);
+    assert.match(table, /locale.*zh.*en/);
+    assert.match(table, /edgeVoice.*YunjianNeural.*是/);
+    assert.match(table, /audioDir.*否/);
+  });
+});
+describe('边界值', () => {
+  it('escapes pipes, backticks and HTML in defaults so values cannot break the table', () => {
+    const schema = Object.assign(() => ({ locale: '<b>|`\n' }), { dict: { locale: { type: 'string' } } });
+    const table = renderConfigTable(schema, { dict: {} });
+    assert.ok(table.includes('&lt;b&gt;&#124;&#96;\\n'));
+    assert.equal(table.split('\n').length, 3);
+  });
+  it('replaces only the generated section, preserves surrounding prose, and is idempotent', () => {
+    const before = 'intro\n<!-- CONFIG:START -->\nold\n<!-- CONFIG:END -->\nend\n';
+    const after = replaceConfigTable(before, 'table');
+    assert.equal(after, 'intro\n<!-- CONFIG:START -->\ntable\n<!-- CONFIG:END -->\nend\n');
+    assert.equal(replaceConfigTable(after, 'table'), after);
+  });
+});
+describe('异常路径', () => {
+  it('refuses missing, duplicated or reversed markers instead of overwriting README prose', () => {
+    for (const value of ['', '<!-- CONFIG:END --><!-- CONFIG:START -->',
+      '<!-- CONFIG:START --><!-- CONFIG:START --><!-- CONFIG:END -->']) {
+      assert.throws(() => replaceConfigTable(value, 'table'), /marker/i);
+    }
+  });
+});

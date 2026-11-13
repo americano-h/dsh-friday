@@ -1,0 +1,101 @@
+{
+  "name": "dsh-friday",
+  "version": "1.0.0",
+  "description": "Friday provides lightweight web-search-only quick answers, durable Inbox conversations, and reviewed promotion into DSH workspace tasks.",
+  "license": "MIT",
+  "author": "zane",
+  "keywords": [
+    "dsh",
+    "friday",
+    "inbox",
+    "web-search",
+    "macos",
+    "desktop-assistant"
+  ],
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/americano-h/dsh-friday.git"
+  },
+  "homepage": "https://github.com/americano-h/dsh-friday",
+  "bugs": {
+    "url": "https://github.com/americano-h/dsh-friday/issues"
+  },
+  "main": "./index.js",
+  "exports": {
+    ".": "./index.js",
+    "./client": "./client.js",
+    "./locale/*.json": "./locale/*.json",
+    "./icon": "./icon.svg",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "index.js",
+    "client.js",
+    "src/host",
+    "native",
+    "locale",
+    "icon.svg",
+    "macos/jarvis-panel",
+    "cordis.patch.yml",
+    "LICENSE",
+    "README.md",
+    "README.en.md",
+    "docs/archive",
+    "docs/design/*.gif",
+    "docs/design/orb-states.html",
+    "docs/design/orb-visual-direction.html",
+    "docs/images/19-approval-presets.png"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "build": "npm run build:client && npm run build:native",
+    "build:client": "node scripts/build-client.mjs && node scripts/build-native.mjs",
+    "build:native": "sh macos/build.sh",
+    "test": "node --test tests/*.test.js",
+    "test:upstream": "node --test tests/*.test.ts"
+  },
+  "dsh": {
+    "manifestVersion": 1,
+    "bundle": {
+      "patch": "./cordis.patch.yml",
+      "platforms": [
+        "darwin"
+      ]
+    },
+    "client": {
+      "platform": "web",
+      "immediately": true,
+      "inject": [
+        "@deepseek-ai/dsh-client-locale",
+        "@deepseek-ai/dsh-client-ui-layout",
+        "@deepseek-ai/dsh-client-ui-sidebar",
+        "@deepseek-ai/dsh-client-ui-plugin-manager",
+        "@deepseek-ai/dsh-client-ui-workspace"
+      ]
+    }
+  },
+  "peerDependencies": {
+    "@deepseek-ai/cordis": "^4.0.1",
+    "@deepseek-ai/schemastery": "^3.18.1"
+  },
+  "devDependencies": {
+    "@deepseek-ai/cordis": "^4.0.1",
+    "@deepseek-ai/schemastery": "^3.18.1",
+    "@deepseek-ai/dsh-tools": "^0.1.5-rc.1",
+    "@deepseek-ai/dsh-llm": "^0.1.5-rc.1",
+    "@deepseek-ai/dsh-scope": "^0.1.5-rc.1",
+    "@types/node": "^20",
+    "typescript": "^5.9.0",
+    "esbuild": "0.25.10",
+    "react": "19.1.0",
+    "react-dom": "19.1.0",
+    "node-edge-tts": "^1.2.10"
+  },
+  "icon": "./icon.svg",
+  "contributors": [
+    "dsh-friday contributors"
+  ]
+}

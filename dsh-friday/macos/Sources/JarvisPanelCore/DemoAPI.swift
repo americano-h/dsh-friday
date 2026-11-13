@@ -1,0 +1,212 @@
+import Foundation
+
+/// Offline stand-in for the host (JARVIS_DEMO=1). Cycles through every orb
+/// state on a fixed period so the whole UI can be reviewed without DSH.
+public actor DemoAPI: JarvisAPI {
+  public static let scenePeriod: TimeInterval = 6
+
+  private let start: Date
+  private var muted = false
+  private var answered: Set<String> = []
+  private var answeredCycle = -1
+  private var extraMessages: [ChatMessage] = []
+  private var read = false
+  private var pinned: Int?
+  private var savedRules: [ApprovalRule] = []
+
+  public init(start: Date = Date()) {
+    self.start = start
+  }
+
+  private enum Scene: Int, CaseIterable {
+    case idle, awaiting, thinking, speaking, attention, failed, narrating, taskStates, approvalPreset, autoApprovals
+  }
+
+  /// Freezes the demo on one scene (0 idle … 9 automatic approvals, wrapping); nil resumes the clock.
+  public func setScene(_ index: Int?) {
+    pinned = index
+    if index == 9, !savedRules.contains(where: { $0.identity == demoAutoRule.identity }) {
+      savedRules.append(demoAutoRule)
+    }
+  }
+
+  private func scene(at now: Date) -> (Scene, cycle: Int) {
+    if let pinned { return (Scene(rawValue: pinned % Scene.allCases.count)!, 0) }
+    let elapsed = max(0, now.timeIntervalSince(start))
+    let index = Int(elapsed / Self.scenePeriod)
+    return (Scene(rawValue: index % Scene.allCases.count)!, index / Scene.allCases.count)
+  }
+
+  private let sessions = [
+    SessionInfo(id: "demo-hammer", title: "贾维斯-hammer", status: .running, unread: false, workspace: "hammer"),
+    SessionInfo(id: "demo-anvil", title: "贾维斯-anvil", status: .waiting, unread: false, workspace: "anvil"),
+    SessionInfo(id: "demo-docs", title: "贾维斯-docs", status: .done, unread: true, workspace: "docs", narration: .relay),
+    SessionInfo(id: "demo-quant", title: "量化回测", status: .idle, unread: false, workspace: "Quant", managed: false),
+    SessionInfo(id: "demo-dev", title: "贾维斯", status: .idle, unread: false, workspace: "dsh-plugin-discovery", managed: false),
+  ]
+  private var managedOverride: [String: Bool] = [:]
+  private var narrationOverride: [String: Narration] = [:]
+
+  private let demoPending = [
+    PendingItem(id: "demo-p1", kind: .approval, session: "demo-hammer", title: "请求执行",
+                detail: "rm -rf node_modules && pnpm i", note: "依赖损坏后重装，只影响项目目录。"),
+    PendingItem(id: "demo-p2", kind: .question, session: "demo-anvil", title: "数据库迁移用哪个方案？",
+                choices: ["保留旧表", "直接替换"]),
+  ]
+
+  private let demoAutoRule = ApprovalRule(fingerprint: "shell:npm-install", tool: "shell", workspace: "/Users/demo/hammer", createdAt: 1000)
+  private var autoApprovalEntries: [AutoApproval] {
+    let rule = savedRules.contains(where: { $0.identity == demoAutoRule.identity }) ? demoAutoRule.identity : nil
+    return [
+      AutoApproval(id: "auto-5", session: "demo-hammer", title: "安装工作区依赖", tool: "shell", command: "npm install", tier: .medium, at: 5000, rule: rule),
+      AutoApproval(id: "auto-4", session: "demo-hammer", title: "检查改动", tool: "shell", command: "git diff --stat", tier: .safe, at: 4000),
+      AutoApproval(id: "auto-3", session: "demo-anvil", title: "运行项目测试", tool: "shell", command: "npm test", tier: .grey, at: 3000),
+      AutoApproval(id: "auto-2", session: "demo-docs", title: "查看配置", tool: "read", command: "package.json", tier: .safe, at: 2000),
+      AutoApproval(id: "auto-1", session: "demo-hammer", title: "创建工作区文件", tool: "shell", command: "touch build.txt", tier: .medium, at: 1000),
+    ]
+  }
+
+  private let presetPending = PendingItem(id: "demo-p3", kind: .approval, session: "demo-hammer",
+    title: "请求执行", detail: "npm install", note: "只允许此工具和工作区中的相同请求。", canAlwaysAllow: true)
+
+  /// Answers and read state last for one pass through the scenes.
+  @discardableResult
+  private func syncCycle() -> Scene {
+    let (scene, cycle) = scene(at: Date())
+    if cycle != answeredCycle { answered = []; answeredCycle = cycle; read = false }
+    return scene
+  }
+
+  public func snapshot() async throws -> Snapshot {
+    let scene = syncCycle()
+    let items = scene == .approvalPreset ? [presetPending] + demoPending : (scene == .attention ? demoPending : [])
+    let pending = items.filter { !answered.contains($0.id) }
+    let activity: Activity
+    switch scene {
+    case .awaiting: activity = .awaiting
+    case .thinking: activity = .thinking
+    case .speaking, .narrating: activity = .speaking
+    default: activity = .idle
+    }
+    var list = sessions.map { s -> SessionInfo in
+      var s = s
+      if let on = managedOverride[s.id] { s.managed = on }
+      return s
+    }
+    if read { list = list.map { var s = $0; s.unread = false; return s } }
+    list = list.map { s in
+      var s = s
+      s.narration = s.managed ? narrationOverride[s.id] ?? s.narration ?? .session : nil
+      return s
+    }
+    if scene == .failed { list[0].status = .failed }
+    if scene == .taskStates {
+      list[0].title = "修复回归测试并检查工作区的全部构建结果"
+      list[0].task = TaskInfo(status: .open, summary: "修复测试后跑一遍 lint")
+      list[1].task = TaskInfo(status: .judging, summary: "确认数据库迁移已完成并通过回归测试")
+      list[2].task = TaskInfo(status: .unsatisfied, summary: "还缺少部署文档中的回滚步骤，以及迁移失败后的恢复流程和实际运行验证结果。")
+      list[3].title = "这是一个没有未结任务的长会话标题，用于确认目标选择和快捷键仍然可见且布局正常"
+      list[3].managed = managedOverride[list[3].id] ?? true
+    }
+    let voice: VoiceState
+    switch scene {
+    case .speaking: voice = VoiceState(speaking: true, source: .jarvis, text: "先生，测试已经全部通过，部署文档也已更新。", muted: muted, queued: 2)
+    case .narrating: voice = VoiceState(speaking: true, source: .session, sessionId: "demo-docs", text: "文档已更新，包含安装步骤、配置说明和常见问题。", muted: muted)
+    default: voice = VoiceState(muted: muted)
+    }
+    return Snapshot(
+      agentId: "demo-jarvis",
+      activity: activity,
+      error: nil,
+      voice: voice,
+      counts: Counts(running: scene == .failed ? 1 : 2, pending: pending.count,
+                     unread: read ? 0 : 1, failed: scene == .failed ? 1 : 0),
+      sessions: list,
+      pending: pending,
+      autoApprovals: scene == .autoApprovals ? autoApprovalEntries : []
+    )
+  }
+
+  public func waitForChange(after: Int, timeout: TimeInterval) async throws -> Int {
+    try await Task.sleep(for: .seconds(max(0, timeout)))
+    return after + 1
+  }
+
+  public func setManaged(session: String, managed: Bool) async throws {
+    guard sessions.contains(where: { $0.id == session }) else { throw JarvisAPIError.http(404) }
+    managedOverride[session] = managed
+    if !managed { narrationOverride[session] = nil }
+  }
+
+  public func setNarration(session: String, narration: Narration?) async throws {
+    guard let s = sessions.first(where: { $0.id == session }), managedOverride[session] ?? s.managed else {
+      throw JarvisAPIError.http(404)
+    }
+    narrationOverride[session] = narration
+  }
+
+  public func messages(session: String?) async throws -> [ChatMessage] {
+    if let session {
+      return [
+        ChatMessage(id: "\(session)-u", role: "user", text: "修完测试后跑一遍 lint"),
+        ChatMessage(id: "\(session)-a", role: "assistant", text: "lint 通过，改了 2 个文件的导入顺序。"),
+        ChatMessage(id: "\(session)-r", role: "assistant", text: "## 本轮报告\n"
+          + (1...40).map { "- 第 \($0) 项：检查了模块依赖、导入顺序和测试覆盖，没有发现新的问题。" }.joined(separator: "\n")),
+      ]
+    }
+    return [
+      ChatMessage(id: "d1", role: "assistant", text: "hammer 的测试还剩 28 个在跑。"),
+      ChatMessage(id: "d2", role: "user", text: "让 hammer 修完测试后跑一遍 lint"),
+      ChatMessage(id: "d3", role: "assistant", text: "好的，已转告。", routedTo: "demo-hammer"),
+      ChatMessage(id: "d4", role: "assistant", text: "docs 那边完成了，更新了 3 个文件。"),
+    ] + extraMessages
+  }
+
+  public func send(text: String, target: String?) async throws {
+    let n = extraMessages.count
+    extraMessages.append(ChatMessage(id: "u\(n)", role: "user", text: text))
+    let reply = target == nil ? "收到。" : "好的，已转告。"
+    extraMessages.append(ChatMessage(id: "a\(n)", role: "assistant", text: reply, routedTo: target))
+  }
+
+  public func answer(_ answer: PendingAnswer) async throws {
+    syncCycle()
+    switch answer {
+    case .always(let id):
+      guard let item = (demoPending + [presetPending]).first(where: { $0.id == id }), !answered.contains(id) else {
+        throw JarvisAPIError.http(404)
+      }
+      guard item.canAlwaysAllow else { throw JarvisAPIError.http(400) }
+      savedRules.append(ApprovalRule(fingerprint: "shell:npm-install", tool: "shell",
+                                    workspace: "/Users/demo/hammer", createdAt: Date().timeIntervalSince1970 * 1000))
+      answered.insert(id)
+    case .decision(let id, _), .choice(let id, _), .text(let id, _):
+      guard (demoPending + [presetPending]).contains(where: { $0.id == id }), !answered.contains(id) else {
+        throw JarvisAPIError.http(404)
+      }
+      answered.insert(id)
+    }
+  }
+
+  public func approvalRules() async throws -> [ApprovalRule] { savedRules }
+
+  public func removeApprovalRule(_ identity: ApprovalRule.Identity) async throws {
+    guard savedRules.contains(where: { $0.identity == identity }) else { throw JarvisAPIError.http(404) }
+    savedRules.removeAll { $0.identity == identity }
+  }
+
+  public func voice(_ action: VoiceAction) async throws {
+    switch action {
+    case .mute: muted = true
+    case .unmute: muted = false
+    case .pause, .resume, .skip, .clear: break
+    }
+  }
+
+  public func markRead(session: String?) async throws {
+    syncCycle()
+    read = true
+  }
+
+  public func open(session: String) async throws {}
+}

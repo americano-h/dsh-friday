@@ -1,0 +1,62 @@
+{
+  "name": "dsh-friday",
+  "version": "0.2.10",
+  "private": true,
+  "description": "Friday provides lightweight web-search-only quick answers, durable Inbox conversations, and reviewed promotion into DSH workspace tasks.",
+  "type": "module",
+  "icon": "./icon.svg",
+  "exports": {
+    ".": "./index.js",
+    "./client": "./client.js",
+    "./locale/*.json": "./locale/*.json",
+    "./icon": "./icon.svg"
+  },
+  "files": [
+    "index.js",
+    "client.js",
+    "src/**/*.js",
+    "src/**/*.jsx",
+    "cordis.patch.yml",
+    "locale/*.json",
+    "icon.svg",
+    "native/friday-native",
+    "native/window.html",
+    "native/window.js",
+    "native/FridayNative.swift",
+    "README.md",
+    "CHANGELOG.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "pnpm run build:client && pnpm run build:native",
+    "build:client": "node scripts/build-client.mjs",
+    "build:native": "node scripts/build-native.mjs && bash scripts/build-native.sh",
+    "check": "node --check index.js && node --check src/host/native-window.js && node scripts/check-client.mjs && node --check native/window.js",
+    "test": "node --test tests/*.test.js",
+    "verify": "pnpm run check && pnpm test"
+  },
+  "devDependencies": {
+    "esbuild": "0.25.10",
+    "react": "19.1.0",
+    "react-dom": "19.1.0"
+  },
+  "dsh": {
+    "manifestVersion": 1,
+    "bundle": {
+      "patch": "./cordis.patch.yml",
+      "platforms": ["darwin"]
+    },
+    "client": {
+      "platform": "web",
+      "immediately": true,
+      "inject": [
+        "@deepseek-ai/dsh-client-locale",
+        "@deepseek-ai/dsh-client-ui-layout",
+        "@deepseek-ai/dsh-client-ui-sidebar",
+        "@deepseek-ai/dsh-client-ui-plugin-manager",
+        "@deepseek-ai/dsh-client-ui-workspace"
+      ]
+    }
+  },
+  "license": "MIT"
+}

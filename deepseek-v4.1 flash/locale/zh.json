@@ -1,0 +1,99 @@
+{
+  "meta": {
+    "title": "Friday Inbox",
+    "description": "快捷键唤起的轻量问答浮层，会话沉淀到可检索的 Inbox，并可压缩升级为正式工作区任务。"
+  },
+  "nav": {
+    "inbox": "Inbox",
+    "settings": "Inbox 设置"
+  },
+  "overlay": {
+    "title": "快捷对话",
+    "placeholder": "问点什么。仅启用 Web Search。",
+    "newChat": "新对话",
+    "send": "发送",
+    "stop": "停止",
+    "openInbox": "打开 Inbox",
+    "empty": "输入问题，或粘贴一张图片。",
+    "thinking": "思考中…",
+    "searching": "正在搜索网页…",
+    "references": "参考来源",
+    "upgrade": "升级为任务",
+    "retry": "重试",
+    "collapse": "收起",
+    "error": "出了点问题。",
+    "imageLimit": "最多 4 张图片，每张不超过 10 MB。",
+    "visionRequired": "请先在 Inbox 设置中配置视觉模型，再发送图片。"
+  },
+  "inbox": {
+    "title": "Inbox",
+    "subtitle": "轻量对话的沉淀处，随时可以变成正式任务。",
+    "search": "搜索问题与回答",
+    "finder": "查找对话",
+    "newChat": "新对话",
+    "continue": "继续对话",
+    "upgrade": "升级",
+    "delete": "删除",
+    "clear": "清空 Inbox",
+    "cleanup": "执行保留期清理",
+    "settings": "设置",
+    "empty": "还没有对话。按 Option + Space 开始一段。",
+    "emptySearch": "没有匹配的对话。",
+    "active": "活动",
+    "archived": "已归档",
+    "all": "全部",
+    "hasImage": "含图",
+    "upgraded": "已升级",
+    "model": "模型",
+    "updated": "更新于",
+    "noSelection": "选择一段对话，在这里阅读。",
+    "loading": "加载中…",
+    "deleteConfirm": "从 Inbox 删除这段对话？",
+    "clearConfirm": "将全部活动对话移出 Inbox？",
+    "deleted": "对话已移出 Inbox。",
+    "cleared": "Inbox 已清空。",
+    "cleanupDone": "保留期清理完成。",
+    "archive": "归档",
+    "unarchive": "恢复"
+  },
+  "finder": {
+    "title": "查找对话",
+    "placeholder": "搜索 Inbox 中的全部内容",
+    "hint": "输入问题或回答里的关键词。",
+    "open": "打开"
+  },
+  "upgradeDialog": {
+    "title": "升级为工作区任务",
+    "description": "Friday 会压缩这段对话，然后在所选工作区创建一个具备完整工具的任务。",
+    "workspace": "工作区",
+    "newWorkspace": "新建工作区",
+    "cancel": "取消",
+    "confirm": "升级",
+    "working": "正在压缩上下文并创建任务…",
+    "noWorkspaces": "还没有工作区。先创建一个再继续。",
+    "success": "任务已创建。",
+    "failed": "升级失败。"
+  },
+  "settings": {
+    "title": "Friday Inbox",
+    "description": "快捷对话与 Inbox 的模型和行为设置。",
+    "defaultModel": "默认模型",
+    "defaultModelHint": "下一段对话生效；已有对话保持原模型。",
+    "visionModel": "视觉模型",
+    "visionModelHint": "默认模型不能读图时，带图轮次路由到这里。",
+    "hotkey": "快捷键",
+    "hotkeyHint": "在 DSH 窗口内生效。示例：Alt+Space。",
+    "retention": "保留期",
+    "retentionHint": "超过该天数的活动对话会被自动归档。",
+    "days": "天",
+    "save": "保存",
+    "saved": "已保存，下一段对话生效。",
+    "readOnly": "当前部署下设置为只读。",
+    "loading": "正在加载设置…",
+    "none": "无"
+  },
+  "error": {
+    "network": "无法连接 Friday 服务。",
+    "unknown": "未知错误。"
+  }
+}

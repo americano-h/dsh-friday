@@ -1,0 +1,7 @@
+# dsh-friday-hy4 0.1.0 bundle patch.
+# One row: the package main entry is the Host half; dsh.client loads ./client.js
+# as the Web half. No config is declared: settings live in the plugin's own
+# settings.json and are edited from a plugins.bundle.config page.
+- insert:
+    - id: dsh-friday-hy4
+      name: '@local/dsh-friday-hy4'

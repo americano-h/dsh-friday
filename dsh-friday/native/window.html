@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'none'; object-src 'none'; base-uri 'none'">
+  <title>Friday</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --dsw-alias-bg-base: rgb(13 21 35 / 97%);
+      --dsw-alias-bg-layer-1: #101a29;
+      --dsw-alias-bg-layer-2: #1c3043;
+      --dsw-alias-bg-overlay: #132131;
+      --dsw-alias-border-l1: rgb(92 225 255 / 22%);
+      --dsw-alias-border-l2: rgb(92 225 255 / 38%);
+      --dsw-alias-brand-primary: #5ce1ff;
+      --dsw-alias-label-primary: #edf5ff;
+      --dsw-alias-label-secondary: #b0c0ce;
+      --dsw-alias-state-error-primary: #ff8888;
+      --dsw-alias-state-idle-primary: #93a0ae;
+      --dsw-alias-state-success-primary: #88debe;
+      --dsw-alias-state-warn-primary: #ffc24d;
+    }
+    html, body, #root { width: 100%; height: 100%; margin: 0; overflow: hidden; background: transparent; }
+    body { font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif; -webkit-font-smoothing: antialiased; user-select: none; }
+    .df-native .df-quick { --dsw-alias-bg-layer-1: #101a29; --dsw-alias-bg-overlay: #132131; --dsw-alias-label-primary: #edf5ff; --dsw-alias-label-secondary: #b0c0ce; background: rgb(10 16 30 / 94%); border: 1px solid rgb(92 225 255 / 26%); border-radius: 12px; box-shadow: none; }
+    #root > .df-page { border-radius: 12px; border: 1px solid var(--dsw-alias-border-l1); }
+    textarea, input, .df-markdown, .df-sources { user-select: text; }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+  <script defer src="./window.js"></script>
+</body>
+</html>

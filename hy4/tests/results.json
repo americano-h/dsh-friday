@@ -1,0 +1,125 @@
+{
+  "at": "2026-11-10T02:46:14.141Z",
+  "base": "http://127.0.0.1:51777",
+  "profile": "web",
+  "dataDir": "/Users/mac/.dsh/storages/dsh-friday-hy4/web",
+  "passed": 23,
+  "total": 23,
+  "results": [
+    {
+      "name": "authenticate",
+      "ok": true,
+      "detail": "status=303"
+    },
+    {
+      "name": "health",
+      "ok": true,
+      "detail": "v=0.1.0 profile=web"
+    },
+    {
+      "name": "profile isolation",
+      "ok": true,
+      "detail": "/Users/mac/.dsh/storages/dsh-friday-hy4/web"
+    },
+    {
+      "name": "state",
+      "ok": true,
+      "detail": "conversations=0"
+    },
+    {
+      "name": "default retention = 30",
+      "ok": true,
+      "detail": "retentionDays=30"
+    },
+    {
+      "name": "capabilities",
+      "ok": true,
+      "detail": "{\"globalHotkey\":false,\"hotkeyScope\":\"in-app\",\"visionRoutes\":5,\"nativeSessionBackup\":false}"
+    },
+    {
+      "name": "models.list",
+      "ok": true,
+      "detail": "routes=7"
+    },
+    {
+      "name": "settings.update",
+      "ok": true,
+      "detail": "hotkey=Alt+Space"
+    },
+    {
+      "name": "conversation.create",
+      "ok": true,
+      "detail": "896a8f5a-e1b2-4788-8a61-c464da4523ad"
+    },
+    {
+      "name": "ask accepted",
+      "ok": true,
+      "detail": "\"\""
+    },
+    {
+      "name": "poll settles",
+      "ok": true,
+      "detail": "messages=2"
+    },
+    {
+      "name": "user turn persisted",
+      "ok": true,
+      "detail": "用一句话说明 Inbox 快捷问答插件是什么？"
+    },
+    {
+      "name": "assistant turn created",
+      "ok": true,
+      "detail": "status=done"
+    },
+    {
+      "name": "streaming model call",
+      "ok": true,
+      "detail": "done (101 chars)"
+    },
+    {
+      "name": "search hits question and answer",
+      "ok": true,
+      "detail": "hits=1"
+    },
+    {
+      "name": "conversation.get",
+      "ok": true,
+      "detail": "messages=2"
+    },
+    {
+      "name": "image.get rejects unknown",
+      "ok": true,
+      "detail": "图片不存在"
+    },
+    {
+      "name": "promote.prepare compresses",
+      "ok": true,
+      "detail": "compressed=246 workspaces=6"
+    },
+    {
+      "name": "promote is idempotent (no double promotion)",
+      "ok": true,
+      "detail": "second=该会话已升级，不允许重复升级"
+    },
+    {
+      "name": "promote.commit archives",
+      "ok": true,
+      "detail": "status=archived"
+    },
+    {
+      "name": "archived conversation rejects new asks",
+      "ok": true,
+      "detail": "该会话已归档，不能继续提问"
+    },
+    {
+      "name": "conversation.delete",
+      "ok": true,
+      "detail": "remaining=0"
+    },
+    {
+      "name": "retention cleanup",
+      "ok": true,
+      "detail": "removed=0"
+    }
+  ]
+}
