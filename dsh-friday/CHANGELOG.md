@@ -1,5 +1,17 @@
 # 更新日志
 
+## 1.1.7 · 2026-11-24
+
+- 设置页的五个快捷键、Inbox 空状态和快捷面板提示按客户端系统显示键名。macOS 显示 Option、Command、Control 和 Return，Windows 和 Linux 显示各自的键名。已保存的组合键无需重新录制。
+- 包含 DSH 0.2.3-alpha.2 的设置页鉴权兼容修复。在该宿主的隔离环境中确认运行版本为 1.1.7，设置可读取和保存，未认证请求仍被拒绝。
+
+## 1.1.5 · 2026-11-24
+
+- 修复升级到 DSH 0.2.3-alpha.2 后，Friday 设置页因调用已移除的 `ctx.connection.requestRejection` 而无法加载和保存的问题。新版由 DSH WebServer 在路由分发前认证，旧版继续使用 Connection 检查。
+- 在隔离的 DSH 0.2.3-alpha.2 中验证了设置读取、保存及回读。未认证请求返回 401，缺少 Friday 请求头的已认证请求返回 403。
+- [归档 1.1.5 使用说明](docs/archive/README-1.1.5.md) · [English](docs/archive/README.en-1.1.5.md)
+- [归档 1.1.4 使用说明](docs/archive/README-1.1.4.md) · [English](docs/archive/README.en-1.1.4.md)
+
 ## 1.1.4 · 2026-11-13
 
 - **优化显示**：快捷面板跟随 DSH 的浅色、深色或系统外观，背景、文字和图标随设置即时更新。

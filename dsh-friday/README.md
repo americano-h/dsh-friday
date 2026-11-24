@@ -1,4 +1,4 @@
-# DSH Friday 1.1.4
+# DSH Friday 1.1.7
 
 [English](README.en.md) · [更新日志](CHANGELOG.md)
 
@@ -14,9 +14,13 @@ Friday 把 Jarvis 的 macOS 粒子光球和桌面面板接到 DSH 的 Inbox。�
 
 快捷面板跟随 DSH 的浅色、深色或系统外观。插件配置中的「桌面光球」可以预览颜色、亮度、不透明度和大小，保存后应用到桌面。点击「快捷键」中的当前组合，再按下新组合即可录制。默认在快捷面板按 `Option + N` 开始新对话，之前的问答可在 Inbox 找回。
 
-## 验证
+快捷键按操作界面所在的系统显示。macOS 上会看到 `Option + Space`、`Return` 等键名，Windows 和 Linux 的界面则显示 `Alt + Space`、`Enter` 等键名。更新后可继续使用原先录制的组合键。
 
-更新已有安装时，在 DSH 插件管理页关闭并重新启用 Friday 即可重载。在已认证的 DSH 窗口内，带 `X-DSH-Friday: 1` 请求头访问 `/dsh-friday/api/v1/health`，响应中的 `version` 即为宿主实际加载的版本。此次重载的 Inbox 与设置保留核验见 [1.1.4 更新日志](CHANGELOG.md)。
+## 宿主兼容性与验证
+
+如果升级到 DSH 0.2.3-alpha.2 后，Friday 配置页报错 `ctx.connection.requestRejection is not a function`，请更新到 Friday 1.1.7。该版本适配 DSH 的路由鉴权，更新无需迁移 Inbox 或插件设置。修复和验证记录见 [1.1.7 更新日志](CHANGELOG.md#117--2026-11-24)。
+
+更新已有安装时，在 DSH 插件管理页关闭并重新启用 Friday 即可重载。在已认证的 DSH 窗口内，带 `X-DSH-Friday: 1` 请求头访问 `/dsh-friday/api/v1/health`，响应中的 `version` 即为宿主实际加载的版本。
 
 - `npm test` 运行 Friday 宿主、工具策略、会话恢复及发布测试。
 - `npm run test:upstream` 运行保留的 Jarvis 测试；`swift test --package-path macos` 运行原生套件，需要带 XCTest 的 Xcode。

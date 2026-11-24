@@ -1,11 +1,22 @@
-import { recordedShortcut, shortcutId } from '../shared/preferences.js'
+import { defaultHotkey, recordedShortcut, shortcutId } from '../shared/preferences.js'
+
+const keyLabels = { Escape: 'Esc', ArrowUp: '↑', ArrowDown: '↓', ArrowLeft: '←', ArrowRight: '→' }
+const macKeyLabels = { Ctrl: 'Control', Alt: 'Option', Meta: 'Command', Enter: 'Return', Backspace: 'Delete', Delete: 'Forward Delete' }
+
+export function formatShortcut(spec, platform = globalThis.navigator?.userAgentData?.platform || globalThis.navigator?.platform || '') {
+  const id = shortcutId(spec)
+  if (!id) return ''
+  const meta = /^win/i.test(platform) ? 'Windows' : /^linux/i.test(platform) ? 'Super' : 'Meta'
+  const labels = /^mac/i.test(platform) ? macKeyLabels : { Meta: meta }
+  return id.split('+').map((key) => labels[key] || keyLabels[key] || key).join(' + ')
+}
 
 export function actionMatches(event, spec) {
   const id = recordedShortcut(event)
   return Boolean(id && id === shortcutId(spec))
 }
 
-export function parseHotkey(spec = 'Alt+Space') {
+export function parseHotkey(spec = defaultHotkey) {
   const parts = String(spec).split('+').map((part) => part.trim()).filter(Boolean)
   const key = parts.pop()?.toLowerCase() || 'space'
   const result = { key, alt: false, ctrl: false, meta: false, shift: false }

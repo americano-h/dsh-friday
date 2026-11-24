@@ -37,8 +37,7 @@
     "copied": "Copied",
     "regenerate": "Regenerate",
     "sources": "Sources",
-    "upgrade": "Upgrade to task",
-    "hint": "Enter to send · Shift + Enter for a new line · Esc to hide"
+    "upgrade": "Upgrade to task"
   },
   "settings": {
     "defaultModel": "Default model",
@@ -49,7 +48,6 @@
     "inherit": "Inherit DSH default",
     "none": "Not configured",
     "hotkey": "Quick-open hotkey",
-    "hotkeyHint": "Default: Alt+Space (Option + Space on macOS). Works system-wide while DSH is running.",
     "retention": "Retention (days)",
     "retentionHint": "Expired active conversations are archived and removed from the Inbox. Upgraded archives are retained.",
     "save": "Save settings",

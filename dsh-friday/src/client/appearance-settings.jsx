@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { api } from './api.js'
+import { formatShortcut } from './hotkey.js'
 import { defaultShortcuts, normalizeShortcuts, orbRanges, recordedShortcut } from '../shared/preferences.js'
 
 export function OrbControls({ orb, change, t }) {
@@ -86,7 +87,7 @@ export function ShortcutControls({ draft, change, t }) {
       <button type="button" id={'df-' + action} className="df-btn" data-recording={recording === action ? '' : undefined}
         aria-pressed={recording === action} onBlur={() => { if (recording === action) finish() }}
         onClick={() => recording === action ? finish() : begin(action)} onKeyDown={(e) => capture(e, action)}>
-        {recording === action ? t('settings.pressKeys') : (action === 'hotkey' ? draft.hotkey : draft.shortcuts[action])}
+        {recording === action ? t('settings.pressKeys') : formatShortcut(action === 'hotkey' ? draft.hotkey : draft.shortcuts[action])}
       </button>
     </div>)}
     {error && <p className="df-error" role="alert">{error}</p>}

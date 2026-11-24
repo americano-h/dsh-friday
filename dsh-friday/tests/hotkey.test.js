@@ -1,6 +1,7 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
-import { matchesHotkey, parseHotkey } from '../src/client/hotkey.js'
+import { formatShortcut, matchesHotkey, parseHotkey } from '../src/client/hotkey.js'
+import { defaultHotkey, defaultShortcuts, recordedShortcut } from '../src/shared/preferences.js'
 
 const base = { altKey: false, ctrlKey: false, metaKey: false, shiftKey: false }
 
@@ -21,4 +22,22 @@ test('macOS Option+N matches the physical key even for dead-key input', () => {
   const spec = parseHotkey('Alt+N')
   assert.ok(matchesHotkey({ ...base, key: 'Dead', code: 'KeyN', altKey: true }, spec))
   assert.ok(!matchesHotkey({ ...base, key: 'n', code: 'KeyN' }, spec))
+})
+
+test('default shortcuts use macOS key names in both Chromium and WebKit', () => {
+  const specs = [defaultHotkey, ...Object.values(defaultShortcuts)]
+  const expected = ['Option + Space', 'Option + N', 'Esc', 'Return', 'Shift + Return']
+  for (const platform of ['macOS', 'MacIntel']) {
+    assert.deepEqual(specs.map((spec) => formatShortcut(spec, platform)), expected)
+  }
+})
+
+test('recorded and legacy shortcuts display according to the client platform', () => {
+  const spec = recordedShortcut({ ...base, code: 'KeyK', metaKey: true, altKey: true })
+  assert.equal(spec, 'Alt+Meta+K')
+  assert.equal(formatShortcut(spec, 'MacIntel'), 'Option + Command + K')
+  assert.equal(formatShortcut(spec, 'Win32'), 'Alt + Windows + K')
+  assert.equal(formatShortcut(spec, 'Linux x86_64'), 'Alt + Super + K')
+  assert.equal(formatShortcut('Option+Ctrl+Backspace', 'macOS'), 'Control + Option + Delete')
+  assert.equal(formatShortcut('Cmd+Delete', 'macOS'), 'Command + Forward Delete')
 })

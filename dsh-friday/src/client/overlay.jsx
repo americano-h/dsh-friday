@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react'
-import { actionMatches } from './hotkey.js'
+import { actionMatches, formatShortcut } from './hotkey.js'
 import { defaultShortcuts } from '../shared/preferences.js'
 import { api, streamChat } from './api.js'
 import { ConversationComposer, ImageDrafts, useImageDrafts } from './composer.jsx'
@@ -249,9 +249,9 @@ export function QuickOverlay({ t }) {
             <div className="df-quick-brand"><span className="df-brand-dot" /><strong>{conversation?.title || 'Friday'}</strong></div>
             <div className="df-quick-actions">
               <button className="df-btn" type="button" onClick={openInbox}><Icon name="inbox" size={14} />Inbox</button>
-              <button className="df-icon-btn" type="button" onClick={createNew} title={t('quick.new') + ' · ' + shortcuts.newChat} aria-label={t('quick.new')}><Icon name="plus" /></button>
+              <button className="df-icon-btn" type="button" onClick={createNew} title={t('quick.new') + ' · ' + formatShortcut(shortcuts.newChat)} aria-label={t('quick.new')}><Icon name="plus" /></button>
               {sessionId && messages.length && !archived ? <button className="df-icon-btn" type="button" disabled={generating || conversation?.running} onClick={() => setUpgradeOpen(true)} title={t('quick.upgrade')} aria-label={t('quick.upgrade')}><Icon name="upgrade" /></button> : null}
-              <button className="df-icon-btn" type="button" onClick={hide} title={t('quick.close')} aria-label={t('quick.close')}><Icon name="close" /></button>
+              <button className="df-icon-btn" type="button" onClick={hide} title={t('quick.close') + ' · ' + formatShortcut(shortcuts.close)} aria-label={t('quick.close')}><Icon name="close" /></button>
             </div>
           </header>
         ) : null}

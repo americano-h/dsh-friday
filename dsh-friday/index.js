@@ -54,5 +54,5 @@ export async function apply(ctx) {
     return () => clearInterval(timer)
   }, 'dsh-friday: retention')
   queueMicrotask(cleanup)
-  ctx.logger.info('dsh-friday: Friday 1.1.4 ready')
+  ctx.logger.info('dsh-friday: Friday 1.1.7 ready')
 }

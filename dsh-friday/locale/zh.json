@@ -37,8 +37,7 @@
     "copied": "已复制",
     "regenerate": "重新生成",
     "sources": "引用来源",
-    "upgrade": "升级为正式任务",
-    "hint": "Enter 发送 · Shift + Enter 换行 · Esc 收起"
+    "upgrade": "升级为正式任务"
   },
   "settings": {
     "defaultModel": "默认模型",
@@ -49,7 +48,6 @@
     "inherit": "继承 DSH 默认模型",
     "none": "未配置",
     "hotkey": "快捷唤起键",
-    "hotkeyHint": "默认 Alt+Space（macOS 的 Option + Space）；DSH 运行时可在任意应用中唤起。",
     "retention": "保留期（天）",
     "retentionHint": "到期的活动会话会归档并移出 Inbox；已升级归档会话不受影响。",
     "save": "保存设置",

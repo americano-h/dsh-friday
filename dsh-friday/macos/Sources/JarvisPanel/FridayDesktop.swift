@@ -207,7 +207,7 @@ final class FridayAppDelegate: NSObject, NSApplicationDelegate, WKScriptMessageH
   private func registerHotkey(_ spec: String, reportStatus: Bool = true) -> String? {
     let parts = spec.split(separator: "+").map(String.init)
     guard let key = parts.last, let keyCode = carbonKeyCode(key) else {
-      let error = "Unsupported hotkey: \(spec)"
+      let error = "Unsupported hotkey"
       if reportStatus { send(["type": "status", "hotkeyError": error]) }
       return error
     }
@@ -223,7 +223,7 @@ final class FridayAppDelegate: NSObject, NSApplicationDelegate, WKScriptMessageH
     }
     let keySpec = HotKeySpec(keyCode: UInt32(keyCode), modifiers: modifiers)
     let registered = keySpec.map { hotkey.replace(with: $0) } ?? false
-    let error = registered ? nil : "Could not register " + spec
+    let error = registered ? nil : "Could not register " + (keySpec?.displayString ?? "hotkey")
     if reportStatus { send(["type": "status", "hotkeyError": error as Any? ?? NSNull()]) }
     return error
   }

@@ -1,4 +1,4 @@
-# DSH Friday 1.1.4
+# DSH Friday 1.1.7
 
 [简体中文](README.md) · [Changelog](CHANGELOG.md)
 
@@ -13,9 +13,13 @@ Click the Jarvis particle orb or press `Option + Space` to ask Friday a question
 
 The quick panel follows DSH’s light, dark, or system appearance. Preview orb color, brightness, opacity, and size in plugin settings, then save to apply them to the desktop. Click a shortcut and press the replacement combination to record it. In the quick panel, `Option + N` starts a new conversation. Previous conversations remain in Inbox.
 
-## Verification
+Shortcut labels follow the device where you use the interface. On macOS they show names such as `Option + Space` and `Return`. On Windows and Linux they show names such as `Alt + Space` and `Enter`. Previously recorded combinations still work after updating.
 
-To reload an existing installation, turn Friday off and back on in the DSH plugin manager. To verify the running version, request `/dsh-friday/api/v1/health` from the authenticated DSH window with the `X-DSH-Friday: 1` header. The `version` field identifies the loaded plugin. See the [1.1.4 changelog](CHANGELOG.md) for the Inbox and settings preservation check.
+## Host compatibility and verification
+
+If Friday settings show `ctx.connection.requestRejection is not a function` after upgrading to DSH 0.2.3-alpha.2, update to Friday 1.1.7. This release uses DSH's route authentication and requires no Inbox or settings migration. See the [1.1.7 changelog](CHANGELOG.md#117--2026-11-24) for the fix and verification results.
+
+To reload an existing installation, turn Friday off and back on in the DSH plugin manager. To verify the running version, request `/dsh-friday/api/v1/health` from the authenticated DSH window with the `X-DSH-Friday: 1` header. The `version` field identifies the loaded plugin.
 
 Run `npm test` for Friday and `npm run test:upstream` for the retained Jarvis tests. The native suite uses `swift test --package-path macos` and requires Xcode with XCTest.
 

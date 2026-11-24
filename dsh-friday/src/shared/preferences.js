@@ -1,5 +1,6 @@
 export const defaultOrb = Object.freeze({ color: '#5ce1ff', brightness: 100, opacity: 100, size: 100 })
 export const orbRanges = Object.freeze({ brightness: [25, 175], opacity: [10, 100], size: [50, 150] })
+export const defaultHotkey = 'Alt+Space'
 export const defaultShortcuts = Object.freeze({ newChat: 'Alt+N', close: 'Escape', send: 'Enter', newline: 'Shift+Enter' })
 
 const aliases = { Option: 'Alt', Control: 'Ctrl', Cmd: 'Meta', Command: 'Meta' }

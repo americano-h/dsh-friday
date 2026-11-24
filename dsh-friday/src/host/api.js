@@ -61,15 +61,20 @@ function timestamp(value, name) {
 }
 
 export function createApi(ctx, { repository, configStore, chat, upgrades, nativeWindow }) {
-  async function handle(req, res) {
+  async function handle(req, res, peer) {
     const url = new URL(req.url || '/', 'http://127.0.0.1')
     const path = url.pathname.slice(PREFIX.length)
     try {
       if (req.headers['x-dsh-friday'] !== '1') throw new HttpError(403, 'Missing Friday request header')
-      const rejection = ctx.connection.requestRejection(req)
-      if (rejection !== undefined) throw new HttpError(rejection, 'Request was rejected by DSH Connection')
+      if (typeof ctx.connection.requestRejection === 'function') {
+        const rejection = ctx.connection.requestRejection(req)
+        if (rejection !== undefined) throw new HttpError(rejection, 'Request was rejected by DSH Connection')
+      } else if (!peer) {
+        // Newer DSH authenticates at route dispatch and supplies the admitted peer.
+        throw new HttpError(401, 'An authenticated DSH peer is required')
+      }
 
-      if (path === '/health' && req.method === 'GET') return json(res, 200, { ok: true, version: '1.1.4' })
+      if (path === '/health' && req.method === 'GET') return json(res, 200, { ok: true, version: '1.1.7' })
 
       if (path === '/config') {
         if (req.method === 'GET') return json(res, 200, await publicConfig(ctx, repository, configStore, nativeWindow))
@@ -202,5 +207,5 @@ export function createApi(ctx, { repository, configStore, chat, upgrades, native
     }
   }
 
-  ctx.effect(() => ctx.webServer.register({ kind: 'prefix', path: PREFIX, handler: handle }), 'dsh-friday: authenticated API')
+  ctx.effect(() => ctx.webServer.register({ kind: 'prefix', path: PREFIX, auth: 'required', handler: handle }), 'dsh-friday: authenticated API')
 }

@@ -1,6 +1,8 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react'
+import { defaultHotkey } from '../shared/preferences.js'
 import { api, streamChat } from './api.js'
 import { ConversationComposer, ImageDrafts, useImageDrafts } from './composer.jsx'
+import { formatShortcut } from './hotkey.js'
 import { Icon, MessageList, Modal } from './messages.jsx'
 import { newConversation, openOverlay, openTask, runtime, setState, toast, useFridayState } from './store.js'
 import { UpgradeDialog } from './upgrade.jsx'
@@ -320,7 +322,7 @@ export function InboxPage({ t }) {
         <section className="df-list" aria-label={t('inbox.title')}>
           {loading && !items.length ? <div className="df-empty-small">{t('state.loading')}</div> : null}
           {!loading && !items.length ? (
-            <div className="df-empty-state"><Icon name="inbox" size={28} /><h2>{query ? t('state.noResults') : t('inbox.empty')}</h2><p>{t('inbox.emptyHint').replace('{hotkey}', config?.config?.hotkey || 'Alt+Space')}</p></div>
+            <div className="df-empty-state"><Icon name="inbox" size={28} /><h2>{query ? t('state.noResults') : t('inbox.empty')}</h2><p>{t('inbox.emptyHint').replace('{hotkey}', formatShortcut(config?.config?.hotkey || defaultHotkey))}</p></div>
           ) : null}
           {items.map((item) => (
             <button className={`df-inbox-row ${selectedId === item.id ? 'selected' : ''}`} type="button" key={item.id} onClick={() => select(item.id)}>

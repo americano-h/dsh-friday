@@ -2,7 +2,7 @@
 
 # Friday Inbox · DSH 快捷问答插件
 
-当前桌面插件为 **DSH Friday 1.1.4**。[安装与使用](dsh-friday/README.md) · [更新日志](dsh-friday/CHANGELOG.md)
+当前桌面插件为 **DSH Friday 1.1.7**。[安装与使用](dsh-friday/README.md) · [更新日志](dsh-friday/CHANGELOG.md)
 
 ## 早期 Web 实现
 

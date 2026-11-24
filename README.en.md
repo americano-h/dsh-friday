@@ -2,7 +2,7 @@
 
 # Friday Inbox · a DSH quick-chat plugin
 
-The current desktop plugin is **DSH Friday 1.1.4**. [Installation and usage](dsh-friday/README.en.md) · [Changelog](dsh-friday/CHANGELOG.md)
+The current desktop plugin is **DSH Friday 1.1.7**. [Installation and usage](dsh-friday/README.en.md) · [Changelog](dsh-friday/CHANGELOG.md)
 
 ## Earlier web implementation
 

@@ -1,6 +1,6 @@
 import { homedir } from 'node:os'
 import { join } from 'node:path'
-import { defaultOrb, defaultShortcuts, normalizeOrb, normalizeShortcuts, shortcutId } from '../shared/preferences.js'
+import { defaultHotkey, defaultOrb, defaultShortcuts, normalizeOrb, normalizeShortcuts, shortcutId } from '../shared/preferences.js'
 import { JsonStore } from './store.js'
 
 export const DATA_DIR = join(process.env.DSH_HOME || join(homedir(), '.dsh'), 'dsh-friday-kimi')
@@ -8,7 +8,7 @@ export const DEFAULT_CONFIG = Object.freeze({
   version: 1,
   defaultModel: null,
   visionModel: null,
-  hotkey: 'Alt+Space',
+  hotkey: defaultHotkey,
   orb: defaultOrb,
   shortcuts: defaultShortcuts,
   retentionDays: 30,
