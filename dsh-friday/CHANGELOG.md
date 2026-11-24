@@ -1,5 +1,9 @@
 # 更新日志
 
+## 仓库维护 · 2026-11-24
+
+- 主分支保留 Friday 1.1.7 的安装与构建文件、核心测试、使用说明及许可。旧实现、实验工具和过程文档移入本地归档。
+
 ## 1.1.7 · 2026-11-24
 
 - 设置页的五个快捷键、Inbox 空状态和快捷面板提示按客户端系统显示键名。macOS 显示 Option、Command、Control 和 Return，Windows 和 Linux 显示各自的键名。已保存的组合键无需重新录制。
@@ -9,8 +13,6 @@
 
 - 修复升级到 DSH 0.2.3-alpha.2 后，Friday 设置页因调用已移除的 `ctx.connection.requestRejection` 而无法加载和保存的问题。新版由 DSH WebServer 在路由分发前认证，旧版继续使用 Connection 检查。
 - 在隔离的 DSH 0.2.3-alpha.2 中验证了设置读取、保存及回读。未认证请求返回 401，缺少 Friday 请求头的已认证请求返回 403。
-- [归档 1.1.5 使用说明](docs/archive/README-1.1.5.md) · [English](docs/archive/README.en-1.1.5.md)
-- [归档 1.1.4 使用说明](docs/archive/README-1.1.4.md) · [English](docs/archive/README.en-1.1.4.md)
 
 ## 1.1.4 · 2026-11-13
 

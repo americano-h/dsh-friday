@@ -15,6 +15,7 @@ await build({
   minify: true,
   platform: 'browser',
   target: ['chrome120'],
+  tsconfigRaw: { compilerOptions: { alwaysStrict: true } },
   jsx: 'transform',
   jsxFactory: 'React.createElement',
   jsxFragment: 'React.Fragment',

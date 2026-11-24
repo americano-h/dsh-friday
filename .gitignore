@@ -16,5 +16,8 @@ __pycache__/
 # (its history is preserved on GitHub under branch archive/pre-monorepo-history)
 dsh-friday/.git-backup/
 
-# Obsidian workspace cache
-.obsidian/workspace.json
+# Local project records and historical implementations
+AGENTS.md
+.obsidian/
+docs/
+/archive/

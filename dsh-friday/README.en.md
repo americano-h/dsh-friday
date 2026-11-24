@@ -7,7 +7,7 @@ Click the Jarvis particle orb or press `Option + Space` to ask Friday a question
 ## Install and use
 
 1. On macOS 14 or later, install Node.js 22.18 or later and a Swift 6 toolchain. Run `npm ci` and `npm run build` from this directory.
-2. Install this directory in the DSH plugin manager. If an earlier Friday installation uses the same package name, update its local source. The plugin reads existing Friday session IDs and promotion mappings.
+2. In the DSH plugin manager, install from a local folder and select `dsh-friday/` inside the clone. If an earlier Friday installation uses the same package name, update its local source. The plugin reads existing Friday session IDs and promotion mappings.
 3. Select and save a model in Friday’s plugin settings, or inherit the DSH default shown there. The selection applies to new conversations. Existing conversations keep their model. Configure a vision model, hotkey, and retention on the same settings page. The Inbox and desktop panel follow the text and code sizes in DSH General settings as they change. Web search uses the search service configured in DSH.
 4. Choose **Upgrade** in the panel or Inbox, edit the compressed brief, select or create a workspace, and confirm. The task opens with the reviewed brief and waits for your next instruction. The archived Inbox record links back to that task.
 
@@ -21,8 +21,8 @@ If Friday settings show `ctx.connection.requestRejection is not a function` afte
 
 To reload an existing installation, turn Friday off and back on in the DSH plugin manager. To verify the running version, request `/dsh-friday/api/v1/health` from the authenticated DSH window with the `X-DSH-Friday: 1` header. The `version` field identifies the loaded plugin.
 
-Run `npm test` for Friday and `npm run test:upstream` for the retained Jarvis tests. The native suite uses `swift test --package-path macos` and requires Xcode with XCTest.
+Run `npm test` for Friday. The native suite uses `swift test --package-path macos` and requires Xcode with XCTest.
 
 The local integration check used an isolated DSH profile with deterministic model and search providers. DSH can briefly display live quick sessions under Ungrouped until the agent is released. Inbox cleanup uses native archival.
 
-[Archived upstream documentation](docs/archive/README.en-0.7.1.md) · [MIT license](LICENSE)
+The desktop panel uses code from Jarvis. See the [MIT license and attribution](LICENSE).
